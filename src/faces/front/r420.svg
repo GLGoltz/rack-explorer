@@ -1,0 +1,16 @@
+<rect class="f-bezel" x="0" y="0" width="152" height="12.8" />
+<rect class="f-ear-d" x="0" y="0" width="10" height="12.8" />
+<rect class="f-ear-d" x="142" y="0" width="10" height="12.8" />
+<circle class="f-btn" cx="5" cy="5.2" r="2.4" />
+<circle class="f-btn-in" cx="5" cy="5.2" r="1.2" />
+<circle class="led" data-dev="r420" data-led="pwr" cx="5" cy="10.6" r="0.8" />
+<rect class="f-intel" x="143.8" y="8.2" width="6.4" height="3.6" rx="0.6" />
+<circle class="f-sock" cx="147" cy="3.4" r="1.1" />
+<rect class="" x="41" y="0" width="1" height="0" />
+<circle class="f-dell" cx="74" cy="11.1" r="3.3" />
+<text class="ft f-dell-t" x="74" y="12.2" font-size="1.7" text-anchor="middle">DELL</text>
+<text class="ft f-tx2" x="138" y="12" font-size="1.7" text-anchor="end">PowerEdge R420</text>
+<rect class="f-socket" x="14" y="2.4" width="24" height="5.6" />
+<rect class="f-socket" x="42" y="1.6" width="30" height="7.2" />
+<rect class="f-socket" x="76" y="1.6" width="30" height="7.2" />
+<rect class="f-socket" x="110" y="1.6" width="28" height="7.2" />

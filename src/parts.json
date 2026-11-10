@@ -1,0 +1,381 @@
+{
+ "front": {
+  "dongle": {
+   "host": "drawer",
+   "kind": "up",
+   "lift": 26
+  },
+  "pi-web": {
+   "host": "drawer",
+   "kind": "up",
+   "lift": 30
+  },
+  "kvm-cable": {
+   "host": "drawer",
+   "kind": "up",
+   "lift": 26
+  },
+  "pi-vuln": {
+   "host": "drawer",
+   "kind": "up",
+   "lift": 30
+  },
+  "usb-b": {
+   "host": "drawer",
+   "kind": "up",
+   "lift": 26
+  },
+  "usb-a": {
+   "host": "drawer",
+   "kind": "up",
+   "lift": 26
+  },
+  "console": {
+   "host": "drawer",
+   "kind": "up",
+   "lift": 26
+  },
+  "nas-d1": {
+   "host": "nas",
+   "kind": "face",
+   "x0": -69,
+   "x1": -37,
+   "zt": 62.599999999999994,
+   "zb": 54.599999999999994,
+   "y0": 68,
+   "s": 1,
+   "out": 46
+  },
+  "nas-d2": {
+   "host": "nas",
+   "kind": "face",
+   "x0": -35,
+   "x1": -3,
+   "zt": 62.599999999999994,
+   "zb": 54.599999999999994,
+   "y0": 68,
+   "s": 1,
+   "out": 46
+  },
+  "nas-d3": {
+   "host": "nas",
+   "kind": "face",
+   "x0": -1,
+   "x1": 31,
+   "zt": 62.599999999999994,
+   "zb": 54.599999999999994,
+   "y0": 68,
+   "s": 1,
+   "out": 46
+  },
+  "nas-d4": {
+   "host": "nas",
+   "kind": "face",
+   "x0": 33,
+   "x1": 65,
+   "zt": 62.599999999999994,
+   "zb": 54.599999999999994,
+   "y0": 68,
+   "s": 1,
+   "out": 46
+  },
+  "aux-d1": {
+   "host": "aux",
+   "kind": "face",
+   "x0": -59,
+   "x1": -40,
+   "zt": 94,
+   "zb": 85,
+   "y0": 68,
+   "s": 1,
+   "out": 44
+  },
+  "aux-d2": {
+   "host": "aux",
+   "kind": "face",
+   "x0": -37,
+   "x1": -18,
+   "zt": 94,
+   "zb": 85,
+   "y0": 68,
+   "s": 1,
+   "out": 44
+  },
+  "aux-d3": {
+   "host": "aux",
+   "kind": "face",
+   "x0": -15,
+   "x1": 4,
+   "zt": 94,
+   "zb": 85,
+   "y0": 68,
+   "s": 1,
+   "out": 44
+  },
+  "aux-d4": {
+   "host": "aux",
+   "kind": "face",
+   "x0": 7,
+   "x1": 26,
+   "zt": 94,
+   "zb": 85,
+   "y0": 68,
+   "s": 1,
+   "out": 44
+  },
+  "aux-d5": {
+   "host": "aux",
+   "kind": "face",
+   "x0": 29,
+   "x1": 48,
+   "zt": 94,
+   "zb": 85,
+   "y0": 68,
+   "s": 1,
+   "out": 44
+  },
+  "sg3100": {
+   "host": "bk",
+   "kind": "up",
+   "lift": 36
+  },
+  "fw60e": {
+   "host": "bk",
+   "kind": "up",
+   "lift": 36
+  },
+  "fw-unit": {
+   "host": "fw",
+   "kind": "up",
+   "lift": 36
+  },
+  "hv-d1": {
+   "host": "hv",
+   "kind": "face",
+   "x0": -59,
+   "x1": -40,
+   "zt": 234,
+   "zb": 225,
+   "y0": 68,
+   "s": 1,
+   "out": 44
+  },
+  "hv-d2": {
+   "host": "hv",
+   "kind": "face",
+   "x0": -37,
+   "x1": -18,
+   "zt": 234,
+   "zb": 225,
+   "y0": 68,
+   "s": 1,
+   "out": 44
+  },
+  "hv-d3": {
+   "host": "hv",
+   "kind": "face",
+   "x0": -15,
+   "x1": 4,
+   "zt": 234,
+   "zb": 225,
+   "y0": 68,
+   "s": 1,
+   "out": 44
+  },
+  "hv-d4": {
+   "host": "hv",
+   "kind": "face",
+   "x0": 7,
+   "x1": 26,
+   "zt": 234,
+   "zb": 225,
+   "y0": 68,
+   "s": 1,
+   "out": 44
+  },
+  "hv-d5": {
+   "host": "hv",
+   "kind": "face",
+   "x0": 29,
+   "x1": 48,
+   "zt": 234,
+   "zb": 225,
+   "y0": 68,
+   "s": 1,
+   "out": 44
+  },
+  "r420-lcd": {
+   "host": "r420",
+   "kind": "face",
+   "x0": -62,
+   "x1": -38,
+   "zt": 260.40000000000003,
+   "zb": 254.8,
+   "y0": 68,
+   "s": 1,
+   "out": 26
+  },
+  "r420-bayA": {
+   "host": "r420",
+   "kind": "face",
+   "x0": -34,
+   "x1": -4,
+   "zt": 261.2,
+   "zb": 254,
+   "y0": 68,
+   "s": 1,
+   "out": 40
+  },
+  "r420-bayB": {
+   "host": "r420",
+   "kind": "face",
+   "x0": 0,
+   "x1": 30,
+   "zt": 261.2,
+   "zb": 254,
+   "y0": 68,
+   "s": 1,
+   "out": 40
+  },
+  "r420-bayC": {
+   "host": "r420",
+   "kind": "face",
+   "x0": 34,
+   "x1": 62,
+   "zt": 261.2,
+   "zb": 254,
+   "y0": 68,
+   "s": 1,
+   "out": 40
+  },
+  "kvm-tray": {
+   "host": "kvm",
+   "kind": "face",
+   "x0": -66,
+   "x1": 66,
+   "zt": 340.40000000000003,
+   "zb": 334.6,
+   "y0": 68,
+   "s": 1,
+   "out": 56
+  }
+ },
+ "rear": {
+  "console": {
+   "host": "drawer",
+   "kind": "up",
+   "lift": 26
+  },
+  "usb-a": {
+   "host": "drawer",
+   "kind": "up",
+   "lift": 26
+  },
+  "usb-b": {
+   "host": "drawer",
+   "kind": "up",
+   "lift": 26
+  },
+  "pi-vuln": {
+   "host": "drawer",
+   "kind": "up",
+   "lift": 30
+  },
+  "kvm-cable": {
+   "host": "drawer",
+   "kind": "up",
+   "lift": 26
+  },
+  "pi-web": {
+   "host": "drawer",
+   "kind": "up",
+   "lift": 30
+  },
+  "dongle": {
+   "host": "drawer",
+   "kind": "up",
+   "lift": 26
+  },
+  "aux-psu1": {
+   "host": "aux",
+   "kind": "face",
+   "x0": 24,
+   "x1": 69,
+   "zt": 93.6,
+   "zb": 83.2,
+   "y0": -62,
+   "s": -1,
+   "out": 44
+  },
+  "aux-psu2": {
+   "host": "aux",
+   "kind": "face",
+   "x0": -4,
+   "x1": 22,
+   "zt": 93.6,
+   "zb": 83.2,
+   "y0": -62,
+   "s": -1,
+   "out": 44
+  },
+  "fw60e": {
+   "host": "bk",
+   "kind": "up",
+   "lift": 36
+  },
+  "sg3100": {
+   "host": "bk",
+   "kind": "up",
+   "lift": 36
+  },
+  "fw-unit": {
+   "host": "fw",
+   "kind": "up",
+   "lift": 36
+  },
+  "hv-psu1": {
+   "host": "hv",
+   "kind": "face",
+   "x0": 24,
+   "x1": 69,
+   "zt": 233.60000000000002,
+   "zb": 223.20000000000002,
+   "y0": -62,
+   "s": -1,
+   "out": 44
+  },
+  "hv-psu2": {
+   "host": "hv",
+   "kind": "face",
+   "x0": -4,
+   "x1": 22,
+   "zt": 233.60000000000002,
+   "zb": 223.20000000000002,
+   "y0": -62,
+   "s": -1,
+   "out": 44
+  },
+  "r420-psu1": {
+   "host": "r420",
+   "kind": "face",
+   "x0": 24,
+   "x1": 69,
+   "zt": 261.6,
+   "zb": 251.20000000000002,
+   "y0": -62,
+   "s": -1,
+   "out": 44
+  },
+  "r420-psu2": {
+   "host": "r420",
+   "kind": "face",
+   "x0": -4,
+   "x1": 22,
+   "zt": 261.6,
+   "zb": 251.20000000000002,
+   "y0": -62,
+   "s": -1,
+   "out": 44
+  }
+ }
+}

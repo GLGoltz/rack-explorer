@@ -1,0 +1,29 @@
+<rect class="f-ear" x="0" y="0" width="5" height="12.8" />
+<rect class="f-ear" x="147" y="0" width="5" height="12.8" />
+<circle class="f-screw" cx="2.5" cy="3.46" r="1.3" />
+<line class="f-slot" x1="1.7" y1="3.46" x2="3.3" y2="3.46" />
+<circle class="f-screw" cx="2.5" cy="9.34" r="1.3" />
+<line class="f-slot" x1="1.7" y1="9.34" x2="3.3" y2="9.34" />
+<circle class="f-screw" cx="149.5" cy="3.46" r="1.3" />
+<line class="f-slot" x1="148.7" y1="3.46" x2="150.3" y2="3.46" />
+<circle class="f-screw" cx="149.5" cy="9.34" r="1.3" />
+<line class="f-slot" x1="148.7" y1="9.34" x2="150.3" y2="9.34" />
+<rect class="f-panel" x="5" y="0" width="142" height="12.8" />
+<circle class="f-fan" cx="30" cy="6.4" r="5.2" />
+<circle class="f-btn-in" cx="30" cy="6.4" r="1.6" />
+<circle class="f-fan" cx="58" cy="6.4" r="5.2" />
+<circle class="f-btn-in" cx="58" cy="6.4" r="1.6" />
+<g class="port" data-dev="nas" data-port="LAN1" data-tip="LAN LAN1" data-tipb="Check its LED: solid = link up, blinking = traffic. Where the cable goes is for you to trace.">
+<rect class="f-port" x="82.94" y="2.79" width="6.12" height="4.42" rx="0.4" />
+<rect class="f-sock" x="83.79" y="3.64" width="4.42" height="2.21" />
+<circle class="led" data-dev="nas" data-led="port" cx="88.04" cy="2.03" r="0.65" data-n="LAN1" />
+</g>
+<g class="port" data-dev="nas" data-port="LAN2" data-tip="LAN LAN2" data-tipb="Check its LED: solid = link up, blinking = traffic. Where the cable goes is for you to trace.">
+<rect class="f-port" x="91.94" y="2.79" width="6.12" height="4.42" rx="0.4" />
+<rect class="f-sock" x="92.79" y="3.64" width="4.42" height="2.21" />
+<circle class="led" data-dev="nas" data-led="port" cx="97.04" cy="2.03" r="0.65" data-n="LAN2" />
+</g>
+<rect class="f-port" x="104" y="3" width="6" height="4" rx="0.4" />
+<rect class="f-port" x="112" y="3" width="6" height="4" rx="0.4" />
+<rect class="f-socket" x="124" y="2" width="18" height="9" rx="0.6" />
+<text class="ft f-tx2" x="86" y="11" font-size="1.3" text-anchor="start">LAN 1  LAN 2</text>

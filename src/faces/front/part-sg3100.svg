@@ -1,0 +1,5 @@
+<rect class="f-w" x="0" y="0" width="54" height="10" />
+<text class="ft f-net" x="5" y="6" font-size="3.4" text-anchor="start">netgate</text>
+<circle class="led" data-dev="bk" data-led="sg" cx="40" cy="5.4" r="0.6" data-n="0" />
+<circle class="led" data-dev="bk" data-led="sg" cx="44" cy="5.4" r="0.6" data-n="1" />
+<circle class="led" data-dev="bk" data-led="sg" cx="48" cy="5.4" r="0.6" data-n="2" />

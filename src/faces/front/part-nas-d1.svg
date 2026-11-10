@@ -1,0 +1,8 @@
+<rect class="f-carr" x="0" y="0" width="32" height="8" />
+<line class="f-vent" x1="3" y1="1.8" x2="12" y2="1.8" />
+<line class="f-vent" x1="3" y1="3.3" x2="12" y2="3.3" />
+<line class="f-vent" x1="3" y1="4.8" x2="12" y2="4.8" />
+<line class="f-vent" x1="3" y1="6.3" x2="12" y2="6.3" />
+<line class="f-vent" x1="3" y1="7.8" x2="12" y2="7.8" />
+<rect class="f-chrome" x="28" y="1" width="1.4" height="6" />
+<circle class="led" data-dev="nas" data-led="drv" cx="24" cy="6.4" r="0.5" />

@@ -1,0 +1,40 @@
+<rect class="f-ear" x="0" y="0" width="5" height="12.8" />
+<rect class="f-ear" x="147" y="0" width="5" height="12.8" />
+<circle class="f-screw" cx="2.5" cy="3.46" r="1.3" />
+<line class="f-slot" x1="1.7" y1="3.46" x2="3.3" y2="3.46" />
+<circle class="f-screw" cx="2.5" cy="9.34" r="1.3" />
+<line class="f-slot" x1="1.7" y1="9.34" x2="3.3" y2="9.34" />
+<circle class="f-screw" cx="149.5" cy="3.46" r="1.3" />
+<line class="f-slot" x1="148.7" y1="3.46" x2="150.3" y2="3.46" />
+<circle class="f-screw" cx="149.5" cy="9.34" r="1.3" />
+<line class="f-slot" x1="148.7" y1="9.34" x2="150.3" y2="9.34" />
+<rect class="f-panel-d" x="5" y="0" width="142" height="12.8" />
+<rect class="f-grill" x="7" y="1.2" width="7.4" height="10.4" />
+<rect class="f-grill" x="16" y="1.2" width="7.4" height="10.4" />
+<rect class="f-grill" x="25" y="1.2" width="7.4" height="10.4" />
+<rect class="f-grill" x="34" y="1.2" width="7.4" height="10.4" />
+<rect class="f-grill" x="43" y="1.2" width="7.4" height="10.4" />
+<rect class="f-grill" x="52" y="1.2" width="7.4" height="10.4" />
+<rect class="f-grill" x="62" y="1.2" width="8" height="10.4" />
+<g class="port" data-dev="r420" data-port="iDRAC" data-tip="iDRAC iDRAC" data-tipb="Check its LED: solid = link up, blinking = traffic. Where the cable goes is for you to trace.">
+<rect class="f-port" x="79.12" y="2.72" width="5.76" height="4.16" rx="0.4" />
+<rect class="f-sock" x="79.92" y="3.52" width="4.16" height="2.08" />
+<circle class="led" data-dev="r420" data-led="port" cx="83.92" cy="2" r="0.65" data-n="iDRAC" />
+</g>
+<g class="port" data-dev="r420" data-port="1" data-tip="NIC 1" data-tipb="Check its LED: solid = link up, blinking = traffic. Where the cable goes is for you to trace.">
+<rect class="f-port" x="88.12" y="2.72" width="5.76" height="4.16" rx="0.4" />
+<rect class="f-sock" x="88.92" y="3.52" width="4.16" height="2.08" />
+<circle class="led" data-dev="r420" data-led="port" cx="92.92" cy="2" r="0.65" data-n="1" />
+</g>
+<g class="port" data-dev="r420" data-port="2" data-tip="NIC 2" data-tipb="Check its LED: solid = link up, blinking = traffic. Where the cable goes is for you to trace.">
+<rect class="f-port" x="97.12" y="2.72" width="5.76" height="4.16" rx="0.4" />
+<rect class="f-sock" x="97.92" y="3.52" width="4.16" height="2.08" />
+<circle class="led" data-dev="r420" data-led="port" cx="101.92" cy="2" r="0.65" data-n="2" />
+</g>
+<rect class="f-port" x="110" y="2.6" width="8.4" height="4.2" rx="0.4" />
+<rect class="f-port" x="121" y="2.6" width="4" height="4.2" rx="0.4" />
+<rect class="f-port" x="127" y="2.6" width="4" height="4.2" rx="0.4" />
+<rect class="f-port" x="110" y="8.2" width="4.4" height="3.2" rx="0.4" />
+<rect class="f-slot" x="74" y="8.4" width="36" height="0.1" />
+<rect class="f-socket" x="7" y="1.2" width="45" height="10.4" />
+<rect class="f-socket" x="54" y="1.2" width="26" height="10.4" />

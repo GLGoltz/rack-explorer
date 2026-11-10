@@ -1,0 +1,18 @@
+<rect class="f-w" x="0" y="0" width="66" height="10.5" />
+<text class="ft f-fort" x="4" y="4.2" font-size="2.6" text-anchor="start">FORTINET</text>
+<rect class="f-label" x="36" y="1.6" width="26" height="3.4" />
+<text class="ft f-tx2" x="37.5" y="4.2" font-size="2" text-anchor="start">CISNTWK70</text>
+<circle class="led" data-dev="bk" data-led="fg" cx="5" cy="8.4" r="0.45" data-n="0" />
+<circle class="led" data-dev="bk" data-led="fg" cx="8.8" cy="8.4" r="0.45" data-n="1" />
+<circle class="led" data-dev="bk" data-led="fg" cx="12.6" cy="8.4" r="0.45" data-n="2" />
+<circle class="led" data-dev="bk" data-led="fg" cx="16.4" cy="8.4" r="0.45" data-n="3" />
+<circle class="led" data-dev="bk" data-led="fg" cx="20.2" cy="8.4" r="0.45" data-n="4" />
+<circle class="led" data-dev="bk" data-led="fg" cx="24" cy="8.4" r="0.45" data-n="5" />
+<circle class="led" data-dev="bk" data-led="fg" cx="27.8" cy="8.4" r="0.45" data-n="6" />
+<circle class="led" data-dev="bk" data-led="fg" cx="31.6" cy="8.4" r="0.45" data-n="7" />
+<circle class="led" data-dev="bk" data-led="fg" cx="35.4" cy="8.4" r="0.45" data-n="8" />
+<circle class="led" data-dev="bk" data-led="fg" cx="39.2" cy="8.4" r="0.45" data-n="9" />
+<circle class="led" data-dev="bk" data-led="fg" cx="43" cy="8.4" r="0.45" data-n="10" />
+<circle class="led" data-dev="bk" data-led="fg" cx="46.8" cy="8.4" r="0.45" data-n="11" />
+<circle class="led" data-dev="bk" data-led="fg" cx="50.6" cy="8.4" r="0.45" data-n="12" />
+<circle class="led" data-dev="bk" data-led="fg" cx="54.4" cy="8.4" r="0.45" data-n="13" />

@@ -1,0 +1,1399 @@
+{
+ "devices": [
+  {
+   "id": "rack",
+   "num": 0,
+   "name": "Equipment Rack",
+   "make": "APC",
+   "model": "NetShelter SX 24U",
+   "u": "1\u201324",
+   "role": "The cabinet that holds, cools and organises everything",
+   "what": "A 19-inch enclosure with 24 rack units (U). One U is 1.75 in (44.45 mm) tall. Every device in the lab is screwed or slid into it.",
+   "how": "Vertical rails with square holes every U take cage nuts and screws, and the U numbers are printed on the rails. A base with levelling feet carries the weight, and perforated doors let air flow front to back. A power strip (PDU) runs down the rear rail.",
+   "uses": [
+    "Rack & Stack: physical installation is the first milestone",
+    "Decabling and tidy-up at the end of the course (Goal 9)",
+    "Nightly shutdown ends with a rack review by the instructor"
+   ],
+   "leds": []
+  },
+  {
+   "id": "kvm",
+   "num": 1,
+   "name": "KVM Console",
+   "make": "Tripp Lite",
+   "model": "B040-008-19",
+   "u": "24",
+   "role": "One keyboard, screen and mouse for the whole rack",
+   "what": "A 1U pull-out drawer with an LCD screen, keyboard and touchpad that folds into the rack. Behind it is an 8-port KVM switch.",
+   "how": "KVM stands for keyboard, video, mouse. A thick USB + VGA cable joins a server to one of the 8 rear ports. Choose a port and that server's video appears on the screen, while your keyboard and mouse control it.",
+   "uses": [
+    "Install Proxmox on the hypervisor host (Goal 6)",
+    "Stage the Raspberry Pis before they join the air-gapped network (Goal 4)",
+    "Nightly shutdown: switch the KVM off, fold it, slide it into the rack"
+   ],
+   "leds": [
+    [
+     "Port LED",
+     "lit: a server is connected / selected"
+    ]
+   ]
+  },
+  {
+   "id": "r420",
+   "num": 2,
+   "name": "Legacy Server",
+   "make": "Dell",
+   "model": "PowerEdge R420",
+   "u": "18",
+   "role": "Older 1U server kept for practice and comparison",
+   "what": "A 1U, two-socket Intel Xeon server from Dell's 12th generation. Hot-swap drive bays and an LCD status panel are on the front; two power supplies, iDRAC and gigabit NICs are at the back.",
+   "how": "Two redundant power supplies share the load, so one can fail without a shutdown. The iDRAC port is a tiny separate computer that lets an admin power the server on or off and see its screen over the network, even when the main system is off.",
+   "uses": [
+    "Legacy host for extra practice VMs",
+    "Compare an older server with the R440: bezel, LCD, drive bays",
+    "Practise reading server status lights"
+   ],
+   "leds": [
+    [
+     "Power button ring",
+     "green: system on \u00b7 off: system off"
+    ],
+    [
+     "LCD panel",
+     "blue: normal \u00b7 amber: fault"
+    ],
+    [
+     "Drive LEDs",
+     "green blink: drive in use"
+    ]
+   ]
+  },
+  {
+   "id": "hv",
+   "num": 3,
+   "name": "Hypervisor Host",
+   "make": "Dell EMC",
+   "model": "PowerEdge R440",
+   "u": "16",
+   "role": "Runs Proxmox VE and the virtual machines",
+   "what": "A 1U Dell EMC server that runs Proxmox VE, a Type-1 hypervisor. Proxmox is installed on the internal SD module (IDSDM), which leaves the drive bays free for virtual machine data.",
+   "how": "A Type-1 hypervisor runs straight on the hardware and divides CPU, RAM and storage between virtual machines. The Linux bridge vmbr0 is VLAN-aware, so a VM can be placed on a VLAN with a tag. VM disks live on the NAS and are mounted over NFS.",
+   "uses": [
+    "Hosts the Ubuntu-FTP virtual machine (Goal 6)",
+    "Managed from the Proxmox web interface on port 8006",
+    "Target of the traffic-analysis and physical-security exercises"
+   ],
+   "leds": [
+    [
+     "Power button",
+     "green: on"
+    ],
+    [
+     "Status (left ear)",
+     "off/white: healthy \u00b7 amber blink: fault"
+    ],
+    [
+     "Drive carrier LED",
+     "green blink: drive activity"
+    ]
+   ]
+  },
+  {
+   "id": "core",
+   "num": 4,
+   "name": "Core Switch",
+   "make": "Cisco",
+   "model": "CBS350-12XT",
+   "u": "14",
+   "role": "Layer 3 switch: VLANs, routing and DHCP",
+   "what": "A managed Layer 3 switch with twelve 10-gigabit RJ45 ports (two shared with SFP+ cages), a separate out-of-band management port and a console port at the back.",
+   "how": "The switch learns which MAC address lives on which port and forwards each frame only there. VLANs split it into separate networks. A trunk port carries several VLANs on one link. A switch virtual interface (SVI) gives each VLAN a gateway address so the switch can route between VLANs.",
+   "uses": [
+    "VLANs, SVIs and inter-VLAN routing (Goal 3)",
+    "DHCP server for the data and storage networks",
+    "In-band and out-of-band management (Goal 1)",
+    "Trunk links to servers and the firewall, access links to hosts"
+   ],
+   "leds": [
+    [
+     "Port LED",
+     "solid: link up \u00b7 blinking: traffic \u00b7 off: no link"
+    ],
+    [
+     "SYS / PWR",
+     "green: running \u00b7 blinking: booting \u00b7 amber: fault"
+    ]
+   ]
+  },
+  {
+   "id": "sw2",
+   "num": 5,
+   "name": "Secondary Switch",
+   "make": "Cisco",
+   "model": "CBS350-12XT",
+   "u": "12",
+   "role": "A second identical switch for extra segments and practice",
+   "what": "The same CBS350-12XT hardware as the core switch. Identical hardware means a config learned on one works on the other.",
+   "how": "Works exactly like the core switch. Used as spare capacity or as a separate segment, depending on what the instructor assigns.",
+   "uses": [
+    "Extra switching capacity or a second segment",
+    "Practise factory reset and sanitising (Goals 1 and 9)",
+    "Compare running-config and startup-config on two units"
+   ],
+   "leds": [
+    [
+     "Port LED",
+     "solid: link up \u00b7 blinking: traffic \u00b7 off: no link"
+    ],
+    [
+     "SYS / PWR",
+     "green: running \u00b7 blinking: booting"
+    ]
+   ]
+  },
+  {
+   "id": "fw",
+   "num": 6,
+   "name": "Firewall",
+   "make": "Fortinet",
+   "model": "FortiGate 50E",
+   "u": "10",
+   "role": "Perimeter firewall between the lab and the (simulated) Internet",
+   "what": "A compact next-generation firewall that sits between the lab LAN and the WAN. In this lab the WAN side is a simulated ISP, so nothing outside will ever reply.",
+   "how": "Every packet is compared with policies from top to bottom: source, destination, service, action. The first match wins and the default is deny. NAT swaps private addresses for the WAN address, Virtual IPs (VIPs) forward chosen outside ports to inside servers, and static routes tell it where the internal VLANs live.",
+   "uses": [
+    "WAN/LAN interfaces and the default route (Goal 2)",
+    "Outbound policies, ping policy and VIPs for FTP, SSH and HTTP",
+    "Hardening: disable ping on the WAN, change the default password",
+    "Backup the config as Goal2_Start_Backup.conf"
+   ],
+   "leds": [
+    [
+     "PWR",
+     "green: power on"
+    ],
+    [
+     "STA",
+     "green: running \u00b7 blinking: booting"
+    ],
+    [
+     "ALARM",
+     "off: healthy \u00b7 red: fault"
+    ],
+    [
+     "Port LEDs",
+     "solid: link up \u00b7 blinking: traffic"
+    ]
+   ]
+  },
+  {
+   "id": "bk",
+   "num": 7,
+   "name": "Backup Appliances",
+   "make": "Netgate / Fortinet",
+   "model": "SG-3100 / FortiWiFi 60E",
+   "u": "8",
+   "role": "Two spare firewall appliances on one rack tray",
+   "what": "A white rack tray holding a Netgate SG-3100 (runs pfSense) and a Fortinet FortiWiFi 60E (a FortiGate with built-in Wi-Fi). Both lift off the tray.",
+   "how": "Both do the same job as the main firewall: inspect and filter traffic between networks. They come from two different vendors, so students can compare pfSense with FortiOS.",
+   "uses": [
+    "Standby if the main firewall is wiped or misconfigured",
+    "Hands-on comparison of two vendors' firewalls"
+   ],
+   "leds": [
+    [
+     "Power LED",
+     "on: powered"
+    ],
+    [
+     "Port LEDs",
+     "solid: link \u00b7 blinking: traffic"
+    ]
+   ]
+  },
+  {
+   "id": "aux",
+   "num": 8,
+   "name": "Auxiliary Server",
+   "make": "Dell EMC",
+   "model": "PowerEdge R440",
+   "u": "6",
+   "role": "Second R440 for practice VMs and extra targets",
+   "what": "A second 1U R440, the same hardware as the hypervisor host.",
+   "how": "Same design: redundant power supplies, iDRAC remote management, two gigabit NICs and front drive carriers. Having two identical servers makes exercises possible that need a second host.",
+   "uses": [
+    "Second host for practice VMs or scan targets",
+    "Hardware swap practice: drive carriers and power supplies"
+   ],
+   "leds": [
+    [
+     "Power button",
+     "green: on"
+    ],
+    [
+     "Drive carrier LED",
+     "green blink: drive activity"
+    ]
+   ]
+  },
+  {
+   "id": "nas",
+   "num": 9,
+   "name": "Storage NAS",
+   "make": "Synology",
+   "model": "RS816",
+   "u": "4",
+   "role": "Central storage for virtual machine disks",
+   "what": "A 4-bay network-attached storage server running DiskStation Manager (DSM). The four drives are grouped into one storage pool.",
+   "how": "RAID 5 spreads data and parity across the four drives, so the pool survives one drive failing. An ext4 volume holds the VM_Datastore shared folder, which is exported over NFS so a server can mount it like a local disk.",
+   "uses": [
+    "Storage on its own VLAN so storage traffic is isolated (Goal 5)",
+    "VM_Datastore holds the Ubuntu-FTP disk (Goal 6)",
+    "DSM upgrade path: 6.2.4 \u2192 7.0.1 \u2192 7.3.2",
+    "'Mode 2' reset clears it at the end of the course"
+   ],
+   "leds": [
+    [
+     "STATUS",
+     "green: healthy \u00b7 orange blink: degraded / fault"
+    ],
+    [
+     "Drive LED",
+     "green: drive OK \u00b7 blink: activity \u00b7 orange: fault"
+    ],
+    [
+     "LAN LED",
+     "green: link \u00b7 blink: traffic"
+    ]
+   ]
+  },
+  {
+   "id": "drawer",
+   "num": 10,
+   "name": "Component Drawer",
+   "make": "StarTech",
+   "model": "SLIDESHELFD",
+   "u": "2",
+   "role": "Sliding shelf for the lab's small hardware",
+   "what": "A sliding 1U shelf with an open top. It stores the Raspberry Pis, cables, adapters and USB sticks.",
+   "how": "Telescoping rails let the shelf slide out of the rack so you can reach the contents, then lock back in. Nothing in the drawer is powered while it is stored.",
+   "uses": [
+    "Inventory check at the start of every shift: tell the instructor about anything missing",
+    "Holds WEB-SRV and VULN-PI (Raspberry Pi 3)",
+    "Console cable, USB-C dongle, KVM cable and two USB sticks"
+   ],
+   "leds": []
+  },
+  {
+   "id": "ups",
+   "num": 11,
+   "name": "UPS Power Supply",
+   "make": "Tripp Lite",
+   "model": "SMART750RM1U",
+   "u": "1",
+   "role": "Battery backup that powers the rack",
+   "what": "A 1U, 750 VA line-interactive UPS. It conditions the wall power and keeps the rack running through a short outage.",
+   "how": "Wall power charges the battery. If the voltage drops or fails, an inverter switches to battery in milliseconds so equipment keeps running long enough for a safe shutdown. It also smooths surges and out-of-range voltage.",
+   "uses": [
+    "Powers the whole rack through the PDU",
+    "Nightly shutdown: hold its power button, then unplug it from the wall",
+    "Protects the NAS and servers from unclean power-offs"
+   ],
+   "leds": [
+    [
+     "Line",
+     "green: wall power OK"
+    ],
+    [
+     "Battery",
+     "amber: running on battery"
+    ],
+    [
+     "Overload / replace",
+     "red: fault"
+    ],
+    [
+     "Beeper",
+     "beeps during a power failure"
+    ]
+   ]
+  },
+  {
+   "id": "pdu",
+   "num": 12,
+   "name": "Rack PDU",
+   "make": "APC",
+   "model": "Basic Rack PDU",
+   "u": "rear rail",
+   "role": "Power strip along the rear rail",
+   "what": "A vertical strip of outlets mounted at the back of the rack. It spreads one power feed to every device.",
+   "how": "One input feeds all outlets in parallel; each device's power cord uses one outlet. It has no battery of its own, so it depends on the UPS.",
+   "uses": [
+    "Distributes power from the UPS to all devices",
+    "Keeps power cords tidy along the rail"
+   ],
+   "leds": []
+  }
+ ],
+ "parts": [
+  {
+   "id": "kvm-tray",
+   "host": "kvm",
+   "name": "LCD + keyboard tray",
+   "side": "front",
+   "what": "The folding console. Pull it forward to use it, push it back to store it.",
+   "how": "Rails let the tray slide. The screen and keyboard connect to the KVM switch behind them."
+  },
+  {
+   "id": "r420-lcd",
+   "host": "r420",
+   "name": "LCD status panel",
+   "side": "front",
+   "what": "A small screen on the front that shows the server's name, IP address and any error codes.",
+   "how": "It reads the same management controller (iDRAC) that handles remote access."
+  },
+  {
+   "id": "r420-bayA",
+   "host": "r420",
+   "name": "Drive bay block A",
+   "side": "front",
+   "what": "A block of hot-swap drive bays.",
+   "how": "Each drive slides in on a carrier and connects to a backplane that carries data and power."
+  },
+  {
+   "id": "r420-bayB",
+   "host": "r420",
+   "name": "Drive bay block B",
+   "side": "front",
+   "what": "A block of hot-swap drive bays.",
+   "how": "Same carriers and backplane as block A."
+  },
+  {
+   "id": "r420-bayC",
+   "host": "r420",
+   "name": "Drive bay block C",
+   "side": "front",
+   "what": "A block of hot-swap drive bays.",
+   "how": "Same carriers and backplane as block A."
+  },
+  {
+   "id": "r420-psu1",
+   "host": "r420",
+   "name": "Power supply 1",
+   "side": "rear",
+   "what": "A hot-swap 550 W power supply with an orange release tab.",
+   "how": "Converts mains AC to the server's DC rails. Pull the orange tab to remove it while the other supply keeps the server running."
+  },
+  {
+   "id": "r420-psu2",
+   "host": "r420",
+   "name": "Power supply 2",
+   "side": "rear",
+   "what": "The redundant second power supply.",
+   "how": "Shares the load with supply 1; either one alone can run the server."
+  },
+  {
+   "id": "hv-d1",
+   "host": "hv",
+   "name": "Drive carrier 1",
+   "side": "front",
+   "what": "A hot-swap drive carrier with a silver release latch.",
+   "how": "Press the latch, pull the carrier out. Proxmox itself is on the SD module, not on these drives."
+  },
+  {
+   "id": "hv-d2",
+   "host": "hv",
+   "name": "Drive carrier 2",
+   "side": "front",
+   "what": "A hot-swap drive carrier.",
+   "how": "Same latch and backplane connector as carrier 1."
+  },
+  {
+   "id": "hv-d3",
+   "host": "hv",
+   "name": "Drive carrier 3",
+   "side": "front",
+   "what": "A hot-swap drive carrier.",
+   "how": "Same latch and backplane connector as carrier 1."
+  },
+  {
+   "id": "hv-d4",
+   "host": "hv",
+   "name": "Drive carrier 4",
+   "side": "front",
+   "what": "A hot-swap drive carrier.",
+   "how": "Same latch and backplane connector as carrier 1."
+  },
+  {
+   "id": "hv-d5",
+   "host": "hv",
+   "name": "Drive carrier 5",
+   "side": "front",
+   "what": "A hot-swap drive carrier.",
+   "how": "Same latch and backplane connector as carrier 1."
+  },
+  {
+   "id": "hv-psu1",
+   "host": "hv",
+   "name": "Power supply 1",
+   "side": "rear",
+   "what": "A hot-swap power supply with an orange release tab.",
+   "how": "Redundant with supply 2. Plugged into the rack PDU."
+  },
+  {
+   "id": "hv-psu2",
+   "host": "hv",
+   "name": "Power supply 2",
+   "side": "rear",
+   "what": "The second, redundant power supply.",
+   "how": "If supply 1 fails the server keeps running on this one."
+  },
+  {
+   "id": "aux-d1",
+   "host": "aux",
+   "name": "Drive carrier 1",
+   "side": "front",
+   "what": "A hot-swap drive carrier.",
+   "how": "Press the latch and pull."
+  },
+  {
+   "id": "aux-d2",
+   "host": "aux",
+   "name": "Drive carrier 2",
+   "side": "front",
+   "what": "A hot-swap drive carrier.",
+   "how": "Press the latch and pull."
+  },
+  {
+   "id": "aux-d3",
+   "host": "aux",
+   "name": "Drive carrier 3",
+   "side": "front",
+   "what": "A hot-swap drive carrier.",
+   "how": "Press the latch and pull."
+  },
+  {
+   "id": "aux-d4",
+   "host": "aux",
+   "name": "Drive carrier 4",
+   "side": "front",
+   "what": "A hot-swap drive carrier.",
+   "how": "Press the latch and pull."
+  },
+  {
+   "id": "aux-d5",
+   "host": "aux",
+   "name": "Drive carrier 5",
+   "side": "front",
+   "what": "A hot-swap drive carrier.",
+   "how": "Press the latch and pull."
+  },
+  {
+   "id": "aux-psu1",
+   "host": "aux",
+   "name": "Power supply 1",
+   "side": "rear",
+   "what": "A hot-swap power supply.",
+   "how": "Redundant with supply 2."
+  },
+  {
+   "id": "aux-psu2",
+   "host": "aux",
+   "name": "Power supply 2",
+   "side": "rear",
+   "what": "The redundant power supply.",
+   "how": "Keeps the server up if supply 1 fails."
+  },
+  {
+   "id": "fw-unit",
+   "host": "fw",
+   "name": "FortiGate 50E appliance",
+   "side": "up",
+   "what": "The firewall itself, a desktop-size appliance resting on the tray. The right half of the tray is empty.",
+   "how": "Network ports are on the back; the front shows power, status and port LEDs and a USB port."
+  },
+  {
+   "id": "sg3100",
+   "host": "bk",
+   "name": "Netgate SG-3100",
+   "side": "up",
+   "what": "A compact pfSense firewall appliance.",
+   "how": "ARM-based, runs pfSense. Ports on the back; three status LEDs on the front."
+  },
+  {
+   "id": "fw60e",
+   "host": "bk",
+   "name": "FortiWiFi 60E",
+   "side": "up",
+   "what": "A FortiGate firewall with built-in Wi-Fi.",
+   "how": "Runs the same FortiOS as the FortiGate 50E, plus a wireless access point."
+  },
+  {
+   "id": "nas-d1",
+   "host": "nas",
+   "name": "Drive tray 1",
+   "side": "front",
+   "what": "A lockable drive tray.",
+   "how": "One of the four drives in the RAID 5 pool. Pull a tray and the pool becomes degraded but keeps working."
+  },
+  {
+   "id": "nas-d2",
+   "host": "nas",
+   "name": "Drive tray 2",
+   "side": "front",
+   "what": "A lockable drive tray.",
+   "how": "One of the four drives in the RAID 5 pool."
+  },
+  {
+   "id": "nas-d3",
+   "host": "nas",
+   "name": "Drive tray 3",
+   "side": "front",
+   "what": "A lockable drive tray.",
+   "how": "One of the four drives in the RAID 5 pool."
+  },
+  {
+   "id": "nas-d4",
+   "host": "nas",
+   "name": "Drive tray 4",
+   "side": "front",
+   "what": "A lockable drive tray.",
+   "how": "One of the four drives in the RAID 5 pool."
+  },
+  {
+   "id": "pi-web",
+   "host": "drawer",
+   "name": "Raspberry Pi 3 \u00b7 WEB-SRV",
+   "side": "up",
+   "what": "The internal intranet web server.",
+   "how": "Runs Raspberry Pi OS and Apache. Students customise its web page (Goal 4)."
+  },
+  {
+   "id": "pi-vuln",
+   "host": "drawer",
+   "name": "Raspberry Pi 3 \u00b7 VULN-PI",
+   "side": "up",
+   "what": "The deliberately vulnerable target machine, marked with a hacker sticker.",
+   "how": "Pre-loaded with weaknesses, including a backdoor page, for testing."
+  },
+  {
+   "id": "usb-a",
+   "host": "drawer",
+   "name": "USB stick A (install)",
+   "side": "up",
+   "what": "Boot media used to install Proxmox.",
+   "how": "Created with an MBR partition scheme so the Dell BIOS can boot it."
+  },
+  {
+   "id": "usb-b",
+   "host": "drawer",
+   "name": "USB stick B (transfer)",
+   "side": "up",
+   "what": "A blank drive for moving screenshots, logs and configs off the air-gapped network.",
+   "how": "The only sanctioned way data leaves the lab."
+  },
+  {
+   "id": "console",
+   "host": "drawer",
+   "name": "Console cable (blue)",
+   "side": "up",
+   "what": "USB-to-RJ45 serial adapter.",
+   "how": "Connects a laptop to the console port of a switch or firewall for first-time setup at 115200 baud."
+  },
+  {
+   "id": "dongle",
+   "host": "drawer",
+   "name": "Multiport dongle",
+   "side": "up",
+   "what": "A USB-C hub for laptops.",
+   "how": "Adds Ethernet and USB so modern laptops can plug into the lab."
+  },
+  {
+   "id": "kvm-cable",
+   "host": "drawer",
+   "name": "KVM cable",
+   "side": "up",
+   "what": "A thick cable with USB and VGA ends. Critical item.",
+   "how": "Joins a server to the KVM console for screen, keyboard and mouse."
+  }
+ ],
+ "power": [
+  {
+   "id": "ups",
+   "at": 0,
+   "dur": 1.6,
+   "note": "UPS powers on and starts supplying the PDU"
+  },
+  {
+   "id": "pdu",
+   "at": 1.2,
+   "dur": 0.6,
+   "note": "PDU outlets live"
+  },
+  {
+   "id": "fw",
+   "at": 2,
+   "dur": 3,
+   "note": "Firewall boots (PWR then STA)"
+  },
+  {
+   "id": "bk",
+   "at": 2.2,
+   "dur": 2.5,
+   "note": "Backup appliances boot"
+  },
+  {
+   "id": "core",
+   "at": 2.6,
+   "dur": 3.4,
+   "note": "Core switch boots, ports come up"
+  },
+  {
+   "id": "sw2",
+   "at": 2.9,
+   "dur": 3.2,
+   "note": "Secondary switch boots"
+  },
+  {
+   "id": "nas",
+   "at": 4.2,
+   "dur": 4,
+   "note": "NAS boots DSM and checks the RAID"
+  },
+  {
+   "id": "hv",
+   "at": 6,
+   "dur": 4,
+   "note": "Hypervisor host starts Proxmox"
+  },
+  {
+   "id": "aux",
+   "at": 6.4,
+   "dur": 3.6,
+   "note": "Auxiliary server boots"
+  },
+  {
+   "id": "r420",
+   "at": 6.8,
+   "dur": 3.6,
+   "note": "Legacy server boots"
+  },
+  {
+   "id": "kvm",
+   "at": 8.6,
+   "dur": 1.2,
+   "note": "KVM console lights up"
+  }
+ ],
+ "traffic": [
+  {
+   "id": "web",
+   "name": "Open the intranet web page",
+   "layer": "Layer 7 \u00b7 HTTP",
+   "route": [
+    "laptop",
+    "core",
+    "drawer",
+    "core",
+    "laptop"
+   ],
+   "steps": [
+    "The laptop asks the DHCP server on the switch for an address, then sends an HTTP request for the web page.",
+    "The core switch looks at the destination MAC address and forwards the frame only toward the web server.",
+    "WEB-SRV (Raspberry Pi) runs Apache. It reads index.html and builds the response.",
+    "The reply goes back the same way. The switch forwards it to the laptop's MAC address."
+   ],
+   "hit": {
+    "laptop": "use",
+    "core": "use",
+    "drawer": "use"
+   },
+   "why": "Static IPs, DHCP and switching working together. The firewall is not involved because the traffic never leaves the data network."
+  },
+  {
+   "id": "out",
+   "name": "Reach the Internet (outbound NAT)",
+   "layer": "Layer 3 \u00b7 routing + NAT",
+   "route": [
+    "laptop",
+    "core",
+    "fw",
+    "wan"
+   ],
+   "steps": [
+    "The laptop sends a packet to an outside address. Its default gateway is the switch.",
+    "The core switch's default route points to the firewall's LAN address, so it forwards the packet there.",
+    "The firewall matches the packet against Outbound_General_Access, then NAT replaces the private source with the WAN address.",
+    "The packet leaves the WAN port toward the simulated ISP. Nothing answers because 10.0.200.1 is not a live device."
+   ],
+   "hit": {
+    "laptop": "use",
+    "core": "use",
+    "fw": "use",
+    "wan": "use"
+   },
+   "why": "Default routes, firewall policy and NAT, step by step. If a hop fails, you can see which layer to check."
+  },
+  {
+   "id": "nfs",
+   "name": "VM disk read/write over NFS",
+   "layer": "Layer 4\u20137 \u00b7 NFS on the storage VLAN",
+   "route": [
+    "hv",
+    "core",
+    "nas",
+    "core",
+    "hv"
+   ],
+   "steps": [
+    "A virtual machine on the hypervisor writes to its virtual disk. Proxmox turns that into NFS requests.",
+    "The requests travel to the core switch, which routes them to the Storage VLAN.",
+    "The NAS receives the request and writes it to the RAID 5 pool, spreading data and parity across the four drives.",
+    "The NAS acknowledges and the data path returns to the host. The VM never knows its disk is remote."
+   ],
+   "hit": {
+    "hv": "use",
+    "core": "use",
+    "nas": "use"
+   },
+   "why": "Why storage gets its own VLAN: heavy disk traffic must not slow other users."
+  },
+  {
+   "id": "mgmt",
+   "name": "Manage Proxmox from a laptop",
+   "layer": "Layer 2\u20137 \u00b7 HTTPS to :8006",
+   "route": [
+    "laptop",
+    "core",
+    "hv",
+    "core",
+    "laptop"
+   ],
+   "steps": [
+    "The laptop opens https://<host>:8006. Its packet is routed by the switch to the Management network.",
+    "The core switch carries the Management VLAN untagged (native) on the trunk to the host.",
+    "Proxmox answers. If the native VLAN does not match, this step fails and the page never loads.",
+    "The reply returns and the web interface appears."
+   ],
+   "hit": {
+    "laptop": "use",
+    "core": "use",
+    "hv": "use"
+   },
+   "why": "The Native VLAN rule from Goal 3: lose the management path to the hypervisor and you lose the host."
+  },
+  {
+   "id": "ftp",
+   "name": "Log in to the FTP server",
+   "layer": "Layer 7 \u00b7 FTP, cleartext",
+   "route": [
+    "laptop",
+    "core",
+    "hv",
+    "nas",
+    "hv",
+    "core",
+    "laptop"
+   ],
+   "steps": [
+    "The laptop connects to the Ubuntu-FTP virtual machine and sends USER and PASS.",
+    "The switch forwards the frames. The firewall is skipped because both ends are inside.",
+    "The VM runs on the hypervisor host. Its disk is on the NAS, so reading the file list touches storage too.",
+    "The listing comes back. The login worked, and every character travelled in plain text."
+   ],
+   "hit": {
+    "laptop": "use",
+    "core": "use",
+    "hv": "use",
+    "nas": "use"
+   },
+   "why": "A normal FTP session. The next demo (attack) shows what anyone watching the wire can see."
+  },
+  {
+   "id": "kvmflow",
+   "name": "Local console on a server",
+   "layer": "Physical \u00b7 keyboard, video, mouse",
+   "route": [
+    "kvm",
+    "hv",
+    "kvm"
+   ],
+   "steps": [
+    "On the KVM console, choose the port the server is plugged into.",
+    "Keyboard and mouse signals go to the server; its video goes back to the screen.",
+    "No network is involved, so this works even when the network is down. That is why Proxmox is installed here first."
+   ],
+   "hit": {
+    "kvm": "use",
+    "hv": "use"
+   },
+   "why": "Out-of-network access: the reason a rack has a KVM."
+  }
+ ],
+ "attacks": [
+  {
+   "id": "ftpsniff",
+   "kind": "attack",
+   "name": "Sniffing a cleartext FTP password",
+   "goal": "Goal 6 \u00b7 Task 7",
+   "summary": "Anyone who can see the traffic can read an FTP login.",
+   "steps": [
+    {
+     "title": "A user logs in",
+     "text": "A student starts an FTP session to Ubuntu-FTP. The password is sent as ordinary text.",
+     "route": [
+      "laptop",
+      "core",
+      "hv"
+     ],
+     "hit": {},
+     "watch": {
+      "core": 1,
+      "hv": 1
+     },
+     "focus": "core"
+    },
+    {
+     "title": "The wire is watched",
+     "text": "Wireshark on the analyst laptop captures frames passing the switch. FTP has no encryption, so the TCP stream contains the username and password as readable text.",
+     "route": [
+      "attacker",
+      "core"
+     ],
+     "hit": {
+      "core": 1
+     },
+     "watch": {
+      "hv": 1
+     },
+     "focus": "core"
+    },
+    {
+     "title": "The password is read",
+     "text": "In the TCP stream the attacker finds the exact packet that carries PASS followed by the password.",
+     "route": [],
+     "hit": {
+      "core": 1,
+      "hv": 1
+     },
+     "watch": {},
+     "focus": "hv"
+    },
+    {
+     "title": "Impact",
+     "text": "With the credentials the attacker can log in to the FTP VM. Its disk is stored on the NAS, so data on the storage network is exposed too.",
+     "route": [
+      "attacker",
+      "core",
+      "hv",
+      "nas"
+     ],
+     "hit": {
+      "hv": 1,
+      "nas": 1
+     },
+     "watch": {
+      "core": 1
+     },
+     "focus": "nas"
+    }
+   ],
+   "defend": [
+    "Use SFTP or FTPS so the session is encrypted",
+    "Segment storage and management traffic onto separate VLANs",
+    "Restrict who can reach FTP with firewall policy",
+    "Monitor for unexpected captures and logins"
+   ]
+  },
+  {
+   "id": "vulnpi",
+   "kind": "attack",
+   "name": "Backdoor on the vulnerable Pi",
+   "goal": "Goal 6 \u00b7 Task 8, Goal 7",
+   "summary": "A web page that runs commands gives remote code execution.",
+   "steps": [
+    {
+     "title": "Asset discovery",
+     "text": "The Pi is found on the Data network by asking the switch which address it handed out by DHCP.",
+     "route": [
+      "attacker",
+      "core",
+      "drawer"
+     ],
+     "hit": {},
+     "watch": {
+      "core": 1,
+      "drawer": 1
+     },
+     "focus": "drawer"
+    },
+    {
+     "title": "Hidden page",
+     "text": "VULN-PI runs a web server with a backdoor page that takes a command in the URL and runs it on the server.",
+     "route": [
+      "attacker",
+      "core",
+      "drawer"
+     ],
+     "hit": {
+      "drawer": 1
+     },
+     "watch": {
+      "core": 1
+     },
+     "focus": "drawer"
+    },
+    {
+     "title": "Code runs",
+     "text": "The command runs as the web-server user. A harmless test command such as id proves the attacker controls the machine.",
+     "route": [],
+     "hit": {
+      "drawer": 1
+     },
+     "watch": {},
+     "focus": "drawer"
+    },
+    {
+     "title": "Lateral movement risk",
+     "text": "From this foothold an attacker could probe the rest of the Data network. The switch and the firewall policy decide how far they get.",
+     "route": [
+      "drawer",
+      "core",
+      "hv"
+     ],
+     "hit": {
+      "drawer": 1
+     },
+     "watch": {
+      "core": 1,
+      "hv": 1,
+      "fw": 1
+     },
+     "focus": "core"
+    }
+   ],
+   "defend": [
+    "Patch or remove vulnerable web software",
+    "Never leave a web shell on a server",
+    "Limit lateral movement with VLANs and firewall rules",
+    "Detect unusual requests (IDS, Greenbone scans)"
+   ]
+  },
+  {
+   "id": "recon",
+   "kind": "attack",
+   "name": "Ping sweep and vulnerability scan",
+   "goal": "Goal 7 \u00b7 Tasks 3\u20134",
+   "summary": "Mapping a network before attacking it.",
+   "steps": [
+    {
+     "title": "Ping sweep",
+     "text": "From the target rack's Data network, Nmap sends one ICMP echo to every address in the subnet.",
+     "route": [
+      "attacker",
+      "core"
+     ],
+     "hit": {},
+     "watch": {
+      "core": 1
+     },
+     "focus": "core"
+    },
+    {
+     "title": "Hosts answer",
+     "text": "Live hosts reply. The Ubuntu FTP server and the vulnerable Pi appear in the list.",
+     "route": [
+      "core",
+      "hv",
+      "drawer"
+     ],
+     "hit": {
+      "hv": 1,
+      "drawer": 1
+     },
+     "watch": {},
+     "focus": "hv"
+    },
+    {
+     "title": "Targeted scan",
+     "text": "Greenbone runs a Full and Fast scan against just those IPs and reports High-severity findings.",
+     "route": [
+      "attacker",
+      "core",
+      "hv",
+      "drawer"
+     ],
+     "hit": {
+      "hv": 1,
+      "drawer": 1
+     },
+     "watch": {
+      "core": 1
+     },
+     "focus": "drawer"
+    },
+    {
+     "title": "Firewall view",
+     "text": "The firewall policy blocks or allows pings between zones. Disabling ping on the WAN makes the device less visible.",
+     "route": [],
+     "hit": {},
+     "watch": {
+      "fw": 1
+     },
+     "focus": "fw"
+    }
+   ],
+   "defend": [
+    "Turn off ping replies on exposed interfaces",
+    "Limit which networks can reach each service",
+    "Patch what the scanner finds",
+    "Log and alert on sweeps"
+   ]
+  },
+  {
+   "id": "mgmtsniff",
+   "kind": "attack",
+   "name": "Sniffing Telnet / HTTP management",
+   "goal": "Goal 3 \u00b7 Task 2",
+   "summary": "Admin passwords sent in cleartext can be captured.",
+   "steps": [
+    {
+     "title": "An admin connects",
+     "text": "An administrator opens the switch's web page over plain HTTP, or logs in over Telnet.",
+     "route": [
+      "laptop",
+      "core"
+     ],
+     "hit": {},
+     "watch": {
+      "core": 1
+     },
+     "focus": "core"
+    },
+    {
+     "title": "The login is captured",
+     "text": "Telnet and HTTP send credentials as text. A packet capture on the path shows them.",
+     "route": [
+      "attacker",
+      "core"
+     ],
+     "hit": {
+      "core": 1
+     },
+     "watch": {},
+     "focus": "core"
+    },
+    {
+     "title": "The attacker takes control",
+     "text": "With admin access the attacker can change VLANs, routes and DHCP. Every network that depends on the switch is affected.",
+     "route": [
+      "attacker",
+      "core",
+      "sw2",
+      "fw"
+     ],
+     "hit": {
+      "core": 1
+     },
+     "watch": {
+      "sw2": 1,
+      "fw": 1,
+      "hv": 1,
+      "nas": 1
+     },
+     "focus": "core"
+    }
+   ],
+   "defend": [
+    "Enable SSH and HTTPS only; disable Telnet and HTTP",
+    "Use the out-of-band management port",
+    "Restrict who can reach management addresses"
+   ]
+  },
+  {
+   "id": "usb",
+   "kind": "attack",
+   "name": "Rogue USB device (HID attack)",
+   "goal": "Goal 8 \u00b7 Physical security",
+   "summary": "A USB device that pretends to be a keyboard. Theory only: the lab forbids plugging these in.",
+   "steps": [
+    {
+     "title": "Trigger",
+     "text": "Someone with brief physical access plugs a device into a front USB port or the KVM. The computer trusts anything that looks like a keyboard.",
+     "route": [],
+     "hit": {
+      "hv": 1
+     },
+     "watch": {
+      "kvm": 1
+     },
+     "focus": "hv"
+    },
+    {
+     "title": "Execution",
+     "text": "The device types a scripted payload within seconds, as if a person were at the keyboard.",
+     "route": [],
+     "hit": {
+      "hv": 1,
+      "kvm": 1
+     },
+     "watch": {},
+     "focus": "hv"
+    },
+    {
+     "title": "Impact",
+     "text": "Whatever that account can do, the script can do. On a hypervisor that means every virtual machine and the storage it mounts.",
+     "route": [
+      "hv",
+      "core",
+      "nas"
+     ],
+     "hit": {
+      "hv": 1
+     },
+     "watch": {
+      "nas": 1,
+      "core": 1
+     },
+     "focus": "nas"
+    }
+   ],
+   "defend": [
+    "Lock the rack and use bezels",
+    "Disable unused USB ports in the BIOS",
+    "Use endpoint controls for new devices",
+    "Train staff not to plug in unknown devices"
+   ]
+  },
+  {
+   "id": "inbound",
+   "kind": "attack",
+   "name": "Probing the exposed services (VIPs)",
+   "goal": "Goal 2 \u00b7 Tasks 12\u201313",
+   "summary": "Port forwarding makes inside servers reachable from outside.",
+   "steps": [
+    {
+     "title": "A probe from outside",
+     "text": "A scan from the WAN side reaches the firewall's public address on the ports forwarded by the Virtual IPs.",
+     "route": [
+      "wan",
+      "fw"
+     ],
+     "hit": {
+      "fw": 1
+     },
+     "watch": {},
+     "focus": "fw"
+    },
+    {
+     "title": "Policy decides",
+     "text": "The Allow_Inbound_Services policy lets FTP, SSH and HTTP through to the mapped servers. Everything else is dropped.",
+     "route": [
+      "fw",
+      "core"
+     ],
+     "hit": {
+      "fw": 1
+     },
+     "watch": {
+      "core": 1
+     },
+     "focus": "fw"
+    },
+    {
+     "title": "Servers exposed",
+     "text": "The mapped FTP/SSH and web servers now answer to the outside, so they must be patched and well configured.",
+     "route": [
+      "core",
+      "hv",
+      "drawer"
+     ],
+     "hit": {
+      "hv": 1,
+      "drawer": 1
+     },
+     "watch": {},
+     "focus": "hv"
+    }
+   ],
+   "defend": [
+    "Expose only the services you need",
+    "Keep NAT off on inbound policies so the VIP handles translation cleanly",
+    "Patch exposed servers and log connections"
+   ]
+  },
+  {
+   "id": "power",
+   "kind": "outage",
+   "name": "Power failure and safe shutdown",
+   "goal": "Nightly shutdown procedure",
+   "summary": "The UPS buys time for an orderly shutdown.",
+   "steps": [
+    {
+     "title": "Wall power fails",
+     "text": "The UPS detects the loss and switches to battery. Its beeper sounds and the battery LED turns amber.",
+     "route": [],
+     "hit": {
+      "ups": 1
+     },
+     "watch": {
+      "pdu": 1
+     },
+     "focus": "ups",
+     "fx": "battery"
+    },
+    {
+     "title": "Everything keeps running",
+     "text": "The PDU still has power, so the network, storage and servers carry on for a few minutes.",
+     "route": [],
+     "hit": {},
+     "watch": {
+      "ups": 1,
+      "pdu": 1,
+      "fw": 1,
+      "core": 1,
+      "sw2": 1,
+      "nas": 1,
+      "hv": 1,
+      "aux": 1,
+      "r420": 1
+     },
+     "focus": "pdu",
+     "fx": "battery"
+    },
+    {
+     "title": "Shut down in order",
+     "text": "Shut down VMs, then power off the Proxmox host, then the KVM, then the UPS. Storage and network last so nothing loses its disk.",
+     "route": [],
+     "hit": {
+      "hv": 1,
+      "aux": 1,
+      "r420": 1
+     },
+     "watch": {
+      "nas": 1
+     },
+     "focus": "hv",
+     "fx": "shutdown"
+    },
+    {
+     "title": "Battery runs out",
+     "text": "Without a shutdown the UPS eventually runs flat and everything powers off suddenly. A sudden power-off can corrupt a RAID volume or a VM disk.",
+     "route": [],
+     "hit": {
+      "nas": 1,
+      "hv": 1,
+      "ups": 1
+     },
+     "watch": {},
+     "focus": "nas",
+     "fx": "dead"
+    }
+   ],
+   "defend": [
+    "Size the UPS for the load and runtime",
+    "Configure automatic shutdown on the NAS and servers",
+    "Test the battery regularly"
+   ]
+  },
+  {
+   "id": "vlan",
+   "kind": "outage",
+   "name": "Native VLAN mismatch",
+   "goal": "Goal 3 \u00b7 Task 7",
+   "summary": "One setting on a trunk cuts off the hypervisor.",
+   "steps": [
+    {
+     "title": "Misconfiguration",
+     "text": "The trunk toward the hypervisor is set without the Management VLAN as the native (untagged) VLAN.",
+     "route": [],
+     "hit": {
+      "core": 1
+     },
+     "watch": {},
+     "focus": "core"
+    },
+    {
+     "title": "Host unreachable",
+     "text": "The host sends untagged management frames, but the switch expects tagged ones. They land in the wrong VLAN or are dropped.",
+     "route": [
+      "laptop",
+      "core",
+      "hv"
+     ],
+     "hit": {
+      "core": 1,
+      "hv": 1
+     },
+     "watch": {},
+     "focus": "hv"
+    },
+    {
+     "title": "Knock-on effects",
+     "text": "The Proxmox web page times out. VMs and NFS storage lose their path as well.",
+     "route": [],
+     "hit": {
+      "hv": 1
+     },
+     "watch": {
+      "nas": 1,
+      "aux": 1
+     },
+     "focus": "nas"
+    },
+    {
+     "title": "Fix it bottom-up",
+     "text": "Check Layer 1 link lights first, then Layer 2 VLAN and trunk settings, then Layer 3 addresses, then Layer 4\u20137 policy.",
+     "route": [],
+     "hit": {},
+     "watch": {
+      "core": 1,
+      "hv": 1
+     },
+     "focus": "core"
+    }
+   ],
+   "defend": [
+    "Use the OSI bottom-up method",
+    "Change one thing at a time",
+    "Back up the config before changing trunks"
+   ]
+  }
+ ],
+ "outside": [
+  {
+   "id": "laptop",
+   "name": "Student laptop",
+   "note": "A laptop patched into a data-network port."
+  },
+  {
+   "id": "wan",
+   "name": "Simulated ISP (WAN)",
+   "note": "10.0.200.1 plays the ISP. It is not a live device and never replies."
+  },
+  {
+   "id": "attacker",
+   "name": "Attacker laptop",
+   "note": "A second analyst workstation, used for the offensive exercises."
+  }
+ ],
+ "osi": [
+  [
+   "Layer 1 \u00b7 Physical",
+   "Check link lights, cable seating and SFP modules."
+  ],
+  [
+   "Layer 2 \u00b7 Data Link",
+   "Check VLAN assignments, trunk status and the MAC address table."
+  ],
+  [
+   "Layer 3 \u00b7 Network",
+   "Check IP and mask, the default gateway and routing tables."
+  ],
+  [
+   "Layers 4\u20137",
+   "Check firewall policies, service status and ports."
+  ]
+ ]
+}
