@@ -680,11 +680,7 @@
     "laptop",
     "core",
     "bk",
-    "core",
     "hv",
-    "core",
-    "bk",
-    "core",
     "laptop"
    ],
    "steps": [
@@ -710,17 +706,12 @@
     "wan",
     "fw",
     "bk",
-    "core",
-    "hv",
-    "core",
-    "bk",
-    "fw",
-    "wan"
+    "hv"
    ],
    "steps": [
     "A laptop on the ISP router asks for http://10.R.200.2, the firewall's WAN address.",
-    "The firewall's VIP-HTTP maps port 80 on its WAN address to the web server, 10.R.40.10.",
-    "Allow_Inbound_Services lets the request through to the DMZ, and nowhere else.",
+    "The ISP router delivers the request to the firewall's WAN port.",
+    "VIP-HTTP maps port 80 to the web server, 10.R.40.10, and Allow_Inbound_Services lets it into the DMZ and nowhere else.",
     "The web server VM answers, and the reply goes back out through the firewall."
    ],
    "hit": {
@@ -740,14 +731,13 @@
     "laptop",
     "core",
     "bk",
-    "fw",
-    "wan"
+    "fw"
    ],
    "steps": [
     "The laptop sends a packet to an outside address. Its default gateway is the switch.",
     "The core switch's default route points to the firewall's internal address, so it forwards the packet there.",
     "The firewall matches Outbound_General_Access, then NAT replaces the private source address with its WAN address, 10.R.200.2.",
-    "The packet leaves the WAN port for the ISP router at 10.R.200.1, which plays the internet."
+    "The packet reaches the ISP router at 10.R.200.1, which plays the internet."
    ],
    "hit": {
     "laptop": "use",
@@ -766,20 +756,15 @@
     "laptop",
     "core",
     "bk",
-    "core",
     "hv",
-    "nas",
-    "hv",
-    "core",
-    "bk",
-    "core",
-    "laptop"
+    "nas"
    ],
    "steps": [
-    "The laptop connects to the FTP server VM at 10.R.40.11 and sends its username and password.",
-    "The packets go through the firewall, because the FTP server is in the DMZ. Internal_to_DMZ allows FTP.",
-    "The VM runs on the hypervisor host. Its disk is on the NAS, so reading the file list touches storage too.",
-    "The listing comes back. The login worked, and every character travelled in plain text."
+    "The laptop sends its FTP login to the FTP server VM at 10.R.40.11.",
+    "The FTP server is in the DMZ, so the switch sends the packets to the firewall.",
+    "Internal_to_DMZ allows FTP, so the firewall passes them to the DMZ.",
+    "The VM on the hypervisor receives the username and password.",
+    "Its disk lives on the NAS, so the file list comes from storage. The login worked, and every character travelled in plain text."
    ],
    "hit": {
     "laptop": "use",
@@ -798,7 +783,6 @@
     "hv",
     "core",
     "nas",
-    "core",
     "hv"
    ],
    "steps": [
@@ -822,7 +806,6 @@
     "laptop",
     "core",
     "hv",
-    "core",
     "laptop"
    ],
    "steps": [

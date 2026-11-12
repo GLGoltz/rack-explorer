@@ -280,3 +280,5 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .pres{color:#b42318;font-size:13px;min-height:1em}
 .pagebar{background:#edf3fc;border:1px solid #c8d8f2;border-radius:8px;padding:10px 12px;margin-bottom:14px;display:flex;flex-direction:column;gap:2px}
 .pagebar span{font-size:13px;color:#4b5563}
+.bub.dim:hover,.bub.dim:focus-within{max-height:25px}
+.bub:hover,.bub:focus-within{opacity:1}
