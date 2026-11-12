@@ -270,11 +270,11 @@
    "model": "SLIDESHELFD",
    "u": "2",
    "role": "Sliding shelf for the lab's small hardware",
-   "what": "A sliding 1U shelf with an open top. It stores the Raspberry Pis, cables, adapters and USB sticks.",
+   "what": "A sliding 1U shelf with an open top. It stores the Raspberry Pi, cables, adapters and USB sticks.",
    "how": "Telescoping rails let the shelf slide out of the rack so you can reach the contents, then lock back in. Nothing in the drawer is powered while it is stored.",
    "uses": [
     "Inventory check at the start of every lab: tell the instructor about anything missing",
-    "Holds the vulnerable Pi (Cyber Hub 08), a spare Pi, the console cable, dongle, KVM cable and two USB sticks"
+    "Holds the vulnerable Pi (Cyber Hub 08), the console cable, dongle, KVM cable and two USB sticks"
    ],
    "leds": []
   },
@@ -553,14 +553,6 @@
    "side": "front",
    "what": "A lockable drive tray.",
    "how": "One of the four drives in the RAID 5 pool."
-  },
-  {
-   "id": "pi-web",
-   "host": "drawer",
-   "name": "Raspberry Pi 3 · spare",
-   "side": "up",
-   "what": "A spare Pi. Not used in Cyber Hub.",
-   "how": "Runs Raspberry Pi OS and Apache. Students customise its web page (Goal 4)."
   },
   {
    "id": "pi-vuln",

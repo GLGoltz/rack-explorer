@@ -70,7 +70,6 @@ const PDU = { id: "pdu", x: [62, 70], y: [-68, -62], z: [48, 304], pal: "pal-fra
 const ITEMS = [
   { id: "dongle",    host: "drawer", pal: "pal-gry",  plan: { x: -53.5, y: 5,    w: 16, d: 7.5 },  h: 3.4 },
   { id: "kvm-cable", host: "drawer", pal: "pal-blk",  plan: { x: -6.5,  y: -1,   w: 22, d: 13.5 }, h: 3.6 },
-  { id: "pi-web",    host: "drawer", pal: "pal-grn",  plan: { x: -60.5, y: 29,   w: 30, d: 19.5 }, h: 7 },
   { id: "pi-vuln",   host: "drawer", pal: "pal-red",  plan: { x: -24.5, y: 29,   w: 30, d: 19.5 }, h: 7 },
   { id: "console",   host: "drawer", pal: "pal-blue", plan: { x: 44.5,  y: 31,   w: 16, d: 15.5 }, h: 3.6 },
   { id: "usb-b",     host: "drawer", pal: "pal-wht",  plan: { x: 23,    y: 38.5, w: 11, d: 4 },    h: 3 },

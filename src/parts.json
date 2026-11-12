@@ -5,11 +5,6 @@
    "kind": "up",
    "lift": 26
   },
-  "pi-web": {
-   "host": "drawer",
-   "kind": "up",
-   "lift": 30
-  },
   "kvm-cable": {
    "host": "drawer",
    "kind": "up",
@@ -285,11 +280,6 @@
    "host": "drawer",
    "kind": "up",
    "lift": 26
-  },
-  "pi-web": {
-   "host": "drawer",
-   "kind": "up",
-   "lift": 30
   },
   "dongle": {
    "host": "drawer",

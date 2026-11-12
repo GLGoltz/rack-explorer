@@ -293,13 +293,14 @@ function isolate(id) {
 }
 function select(id, opts = {}) {
   if (S.run) stopRun(true);
+  if (S.view !== "front") setView("front");
   isolate(id);
   S.sel = id; S.portZoom = !!opts.ports;
   if (id && id !== "rack") camDev(id, !!opts.ports); else if (id === "rack") camAll();
   setTab("learn");
   applyLit(); refreshPanel();
 }
-function deselect() { isolate(null); S.sel = null; S.portZoom = false; applyLit(); camAll(); refreshPanel(); }
+function deselect() { if (S.view !== "front") setView("front"); isolate(null); S.sel = null; S.portZoom = false; applyLit(); camAll(); refreshPanel(); }
 function stateText(id) {
   const s = devState(id), l = S.lit[id];
   if (UNUSED.has(id)) return "Not used";
@@ -328,6 +329,7 @@ function learnHtml() {
 <p class="role">${esc(d.role)}</p>
 <div class="btns">
  
+ ${S.iso === id && ANCH[id] && ANCH[id].rear ? `<button class="btn" data-act="flip">${S.view === "front" ? "See the back" : "See the front"}</button>` : ""}
  ${d.leds.length ? `<button class="btn" data-act="ports">Zoom to ports and lights</button>` : ""}
  ${TOPO.nodes.some((n) => n.dev === id) ? `<button class="btn" data-act="topo-show">Show it in the topology</button>` : ""}
  <button class="btn ghost" data-act="back">Back to whole rack</button></div>
@@ -798,6 +800,7 @@ document.addEventListener("click", (e) => {
   if (t.dataset.attack) return startRun("attack", t.dataset.attack);
   if (t.dataset.opt !== undefined) { const q = S.quiz.qs[S.quiz.i]; quizAnswer(+t.dataset.opt === q.ans, +t.dataset.opt); return; }
   switch (a) {
+    case "flip": setView(S.view === "front" ? "rear" : "front"); return refreshPanel();
     case "topo-show": { const id = S.sel; setTab("topo"); TQ.mode = "devices"; renderTopo(); const ns = TOPO.nodes.filter((n) => n.dev === id); topoPanel(ns[0] && ns[0].id); topoMark(ns.map((n) => [n.id, "on"]), "on"); return; }
     case "pull": return togglePart(S.sel);
     case "ports": S.portZoom = true; return camDev(S.sel, true);
