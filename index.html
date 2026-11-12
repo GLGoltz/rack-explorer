@@ -2400,8 +2400,7 @@ function learnHtml() {
 <p>This is the rack your team works on, drawn to match the room. Hover any label for a quick summary, or click a device to see it on its own and read its lights.</p>
 <ul class="how"><li><b>Click a device</b> to slide it out and see it on its own.</li><li><b>Power on</b> to watch the boot order and the lights come up.</li><li><b>Traffic</b> shows how a request moves between devices.</li><li><b>Topology</b> shows how the networks connect.</li></ul>
 <p class="note">Labels with a dashed grey outline are devices that stay in the rack but are not used in Cyber Hub. Cabling is left out on purpose: working out what connects where is part of the lab.</p></div>
-<h4>Every device (${DEVICE_IDS.length - 1 + 0})</h4><div class="chips">${M.devices.filter((d) => d.id !== "rack").map((d) => `<button class="chip${UNUSED.has(d.id) ? " unused" : ""}" data-sel="${d.id}">${d.u && d.id !== "pdu" ? "U" + d.u + " · " : ""}${esc(d.name)}${UNUSED.has(d.id) ? '<i class="nu">Not used</i>' : ""}</button>`).join("")}</div>
-<p class="credit">Rack Explorer built by Junior Angeles, Cyber Hub apprentice.</p>`;
+`;
   }
   const d = DEVS[id], parts = partsOf(id);
   const canPull = d.u && d.id !== "rack" && d.id !== "pdu";
