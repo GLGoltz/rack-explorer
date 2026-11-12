@@ -1,32 +1,37 @@
 <rect class="f-panel-d" x="0" y="0" width="152" height="12.8" />
-<rect class="f-ear-d" x="0" y="0" width="10" height="12.8" />
-<circle class="f-btn" cx="5" cy="4.2" r="2.2" />
-<circle class="led" data-dev="r420" data-led="pwr" cx="5" cy="4.2" r="0.8" />
-<circle class="f-key" cx="5" cy="9.6" r="1.1" />
-<circle class="led" data-dev="r420" data-led="sta" cx="5" cy="9.6" r="0.5" />
-<rect class="f-ctrl" x="11.4" y="1" width="29.2" height="10.8" rx="0.6" />
-<rect class="f-btn" x="17" y="9" width="4" height="1.6" rx="0.6" />
-<rect class="f-btn" x="24" y="9" width="4" height="1.6" rx="0.6" />
-<rect class="f-btn" x="31" y="9" width="4" height="1.6" rx="0.6" />
-<rect class="f-bz12" x="42" y="0.5" width="90" height="11.8" rx="0.6" />
-<line class="f-bz12-l" x1="43.5" y1="1.57" x2="130.5" y2="1.57" />
-<line class="f-bz12-l" x1="43.5" y1="2.64" x2="130.5" y2="2.64" />
-<line class="f-bz12-l" x1="43.5" y1="3.71" x2="130.5" y2="3.71" />
-<line class="f-bz12-l" x1="43.5" y1="4.78" x2="130.5" y2="4.78" />
-<line class="f-bz12-l" x1="43.5" y1="5.85" x2="130.5" y2="5.85" />
-<line class="f-bz12-l" x1="43.5" y1="6.92" x2="130.5" y2="6.92" />
-<line class="f-bz12-l" x1="43.5" y1="7.99" x2="130.5" y2="7.99" />
-<line class="f-bz12-l" x1="43.5" y1="9.06" x2="130.5" y2="9.06" />
-<line class="f-bz12-l" x1="43.5" y1="10.13" x2="130.5" y2="10.13" />
-<line class="f-bz12-l" x1="43.5" y1="11.20" x2="130.5" y2="11.20" />
-<rect class="f-bz12" x="78" y="3.4" width="18" height="6" rx="3" />
-<circle class="f-dell" cx="87" cy="6.4" r="2.6" />
-<text class="ft f-dell-t" x="87" y="7.0" font-size="1.5" text-anchor="middle">DELL</text>
-<circle class="f-lock" cx="128.4" cy="6.4" r="1.2" />
-<rect class="f-sock" x="128.1" y="5.7" width="0.6" height="1.4" />
-<path class="f-port" d="M133.4 2.2 h7.2 l-0.7 2.4 h-5.8 z" />
-<rect class="f-port" x="133.6" y="6.6" width="3.2" height="1.5" rx="0.2" />
-<rect class="f-port" x="137.4" y="6.6" width="3.2" height="1.5" rx="0.2" />
-<rect class="f-ear-d" x="142" y="0" width="10" height="12.8" />
-<rect class="f-intel" x="143.6" y="8.2" width="6.8" height="3.4" rx="0.6" />
-<text class="ft f-tx2" x="147" y="3.2" font-size="1.3" text-anchor="middle">R420</text>
+<rect class="f-ear-d" x="0" y="0" width="6" height="12.8" />
+<circle class="led" data-dev="r420" data-led="pwr" cx="3" cy="6.4" r="0.6" />
+<rect class="f-bz12s" x="6" y="0.4" width="135" height="12" rx="0.8" />
+<rect class="f-bz12w" x="8" y="1.6" width="18" height="9.6" rx="1.6" />
+<circle class="f-lock" cx="13" cy="6.4" r="2.4" />
+<circle class="f-bz12w" cx="13" cy="6.4" r="1.2" />
+<rect class="f-bz12w" x="28" y="1.6" width="22" height="9.6" rx="0.6" />
+<text class="ft f-tx" x="29.4" y="3.8" font-size="1.7" text-anchor="start">PowerEdge R420</text>
+<rect class="f-bz12w" x="53.2" y="2" width="20.6" height="8.8" rx="0.6" />
+<rect class="f-carr" x="54" y="2.6" width="19" height="7.6" />
+<line class="f-vent" x1="56" y1="4.2" x2="66" y2="4.2" />
+<line class="f-vent" x1="56" y1="6.4" x2="66" y2="6.4" />
+<line class="f-vent" x1="56" y1="8.6" x2="66" y2="8.6" />
+<rect class="f-handle" x="68" y="3.4" width="3.6" height="6" rx="0.5" />
+<rect class="f-bz12w" x="74.7" y="2" width="20.6" height="8.8" rx="0.6" />
+<rect class="f-carr" x="75.5" y="2.6" width="19" height="7.6" />
+<line class="f-vent" x1="77.5" y1="4.2" x2="87.5" y2="4.2" />
+<line class="f-vent" x1="77.5" y1="6.4" x2="87.5" y2="6.4" />
+<line class="f-vent" x1="77.5" y1="8.6" x2="87.5" y2="8.6" />
+<rect class="f-handle" x="89.5" y="3.4" width="3.6" height="6" rx="0.5" />
+<rect class="f-bz12w" x="96.2" y="2" width="20.6" height="8.8" rx="0.6" />
+<rect class="f-carr" x="97" y="2.6" width="19" height="7.6" />
+<line class="f-vent" x1="99" y1="4.2" x2="109" y2="4.2" />
+<line class="f-vent" x1="99" y1="6.4" x2="109" y2="6.4" />
+<line class="f-vent" x1="99" y1="8.6" x2="109" y2="8.6" />
+<rect class="f-handle" x="111" y="3.4" width="3.6" height="6" rx="0.5" />
+<rect class="f-bz12w" x="117.7" y="2" width="20.6" height="8.8" rx="0.6" />
+<rect class="f-carr" x="118.5" y="2.6" width="19" height="7.6" />
+<line class="f-vent" x1="120.5" y1="4.2" x2="130.5" y2="4.2" />
+<line class="f-vent" x1="120.5" y1="6.4" x2="130.5" y2="6.4" />
+<line class="f-vent" x1="120.5" y1="8.6" x2="130.5" y2="8.6" />
+<rect class="f-handle" x="132.5" y="3.4" width="3.6" height="6" rx="0.5" />
+<circle class="f-dell" cx="86" cy="6.4" r="3.4" />
+<text class="ft f-dell-t" x="86" y="7.1" font-size="1.9" text-anchor="middle">DELL</text>
+<rect class="f-ear-d" x="141" y="0" width="11" height="12.8" />
+<rect class="f-intel" x="142.6" y="2" width="7.8" height="5" rx="0.6" />

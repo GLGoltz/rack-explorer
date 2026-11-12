@@ -54,16 +54,16 @@
    ],
    "leds": [
     [
-     "Power button ring",
-     "green: system on · off: system off"
+     "Power LED (left ear)",
+     "green: system on"
     ],
     [
      "LCD panel",
      "blue: normal · amber: fault"
     ],
     [
-     "System ID button",
-     "blue: identify is on"
+     "Drive LEDs (behind the bezel)",
+     "green blink: drive in use"
     ]
    ]
   },
@@ -107,7 +107,7 @@
    "model": "CBS350-12XT",
    "u": "14",
    "role": "Layer 3 switch: VLANs, routing and DHCP",
-   "what": "A managed Layer 3 switch with twelve 10-gigabit RJ45 ports (two shared with SFP+ cages), a separate out-of-band management port and a console port at the back.",
+   "what": "A managed Layer 3 switch with twelve 10-gigabit RJ45 ports (two shared with SFP+ cages) and a separate out-of-band management port on the front. The console port is at the back.",
    "how": "The switch learns which MAC address lives on which port and forwards each frame only there. VLANs split it into separate networks. A trunk port carries several VLANs on one link. A switch virtual interface (SVI) gives each VLAN a gateway address so the switch can route between VLANs.",
    "uses": [
     "Cyber Hub 01: factory reset and out-of-band management",

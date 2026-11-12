@@ -292,3 +292,17 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .f-handle{fill:#1c1f24;stroke:#5a6068;stroke-width:.35}
 .f-door{fill:#1a1c20;stroke:#3a3f46;stroke-width:.4}
 .f-meter{fill:#22262c;stroke:#3e444c;stroke-width:.2}
+.f-hex{fill:none;stroke:#a39b8e;stroke-width:1.7;stroke-linejoin:miter}
+.f-dellemc{fill:#c9c4bb;font-weight:700;font-family:Arial,sans-serif;letter-spacing:-.1px}
+.f-sticker{fill:#e6e6e2;stroke:#888;stroke-width:.2}
+.f-bz12s{fill:#8e939a;stroke:#3a3d42;stroke-width:.45}
+.f-bz12w{fill:#16181b;stroke:#a7acb3;stroke-width:.35}
+.f-chrome-l{stroke:#9aa0a8;stroke-width:.6}
+.f-panel-r{fill:#a7abb0;stroke:#5c6066;stroke-width:.4}
+.f-serial{fill:#1d8a8a;stroke:#0d4d4d;stroke-width:.3}
+.f-vga{fill:#2a5cb8;stroke:#163266;stroke-width:.3}
+.f-usb3{fill:#2a6fd6;stroke:#173d78;stroke-width:.3}
+.f-blue{fill:#5aa0e0;stroke:#2a5d8f;stroke-width:.3}
+.f-label{fill:#f4f4f2;stroke:#9a9ea4;stroke-width:.3}
+.f-perf{fill:#8b9096;stroke:#5c6066;stroke-width:.3}
+.f-perf-d{stroke:#2c2f33;stroke-width:.55;stroke-dasharray:.55 .55}

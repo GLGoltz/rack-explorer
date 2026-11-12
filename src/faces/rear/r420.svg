@@ -8,33 +8,41 @@
 <line class="f-slot" x1="148.7" y1="3.46" x2="150.3" y2="3.46" />
 <circle class="f-screw" cx="149.5" cy="9.34" r="1.3" />
 <line class="f-slot" x1="148.7" y1="9.34" x2="150.3" y2="9.34" />
-<rect class="f-panel-d" x="5" y="0" width="142" height="12.8" />
-<rect class="f-grill" x="7" y="1.2" width="7.4" height="10.4" />
-<rect class="f-grill" x="16" y="1.2" width="7.4" height="10.4" />
-<rect class="f-grill" x="25" y="1.2" width="7.4" height="10.4" />
-<rect class="f-grill" x="34" y="1.2" width="7.4" height="10.4" />
-<rect class="f-grill" x="43" y="1.2" width="7.4" height="10.4" />
-<rect class="f-grill" x="52" y="1.2" width="7.4" height="10.4" />
-<rect class="f-grill" x="62" y="1.2" width="8" height="10.4" />
-<g class="port" data-dev="r420" data-port="iDRAC" data-tip="iDRAC iDRAC" data-tipb="Check its LED: solid = link up, blinking = traffic. Where the cable goes is for you to trace.">
-<rect class="f-port" x="79.12" y="2.72" width="5.76" height="4.16" rx="0.4" />
-<rect class="f-sock" x="79.92" y="3.52" width="4.16" height="2.08" />
-<circle class="led" data-dev="r420" data-led="port" cx="83.92" cy="2" r="0.65" data-n="iDRAC" />
+<rect class="f-panel-r" x="5" y="0" width="142" height="12.8" />
+<g class="port" data-dev="r420" data-port="iDRAC" data-tip="iDRAC" data-tipb="Check its LED: solid = link up, blinking = traffic. Where the cable goes is for you to trace.">
+<rect class="f-port" x="7" y="5.4" width="5.2" height="4.2" rx="0.4" />
+<rect class="f-sock" x="7.7" y="6.2" width="3.8" height="2.2" />
+<circle class="led" data-dev="r420" data-led="port" cx="11.4" cy="4.7" r="0.6" data-n="iDRAC" />
 </g>
+<rect class="f-blue" x="14" y="1.4" width="2" height="9.6" rx="0.4" />
+<rect class="f-perf" x="18.0" y="1.2" width="40.0" height="3.4" />
+<line class="f-perf-d" x1="18.6" y1="2.10" x2="57.4" y2="2.10" />
+<line class="f-perf-d" x1="18.6" y1="3.20" x2="57.4" y2="3.20" />
+<text class="ft f-tx2" x="56" y="4" font-size="1.4" text-anchor="end">2</text>
+<rect class="f-serial" x="19" y="5.4" width="8" height="4.6" rx="0.4" />
+<rect class="f-vga" x="29" y="5.4" width="8" height="4.6" rx="0.4" />
 <g class="port" data-dev="r420" data-port="1" data-tip="NIC 1" data-tipb="Check its LED: solid = link up, blinking = traffic. Where the cable goes is for you to trace.">
-<rect class="f-port" x="88.12" y="2.72" width="5.76" height="4.16" rx="0.4" />
-<rect class="f-sock" x="88.92" y="3.52" width="4.16" height="2.08" />
-<circle class="led" data-dev="r420" data-led="port" cx="92.92" cy="2" r="0.65" data-n="1" />
+<rect class="f-port" x="40" y="5.4" width="5.2" height="4.2" rx="0.4" />
+<rect class="f-sock" x="40.7" y="6.2" width="3.8" height="2.2" />
+<circle class="led" data-dev="r420" data-led="port" cx="44.4" cy="4.7" r="0.6" data-n="1" />
 </g>
 <g class="port" data-dev="r420" data-port="2" data-tip="NIC 2" data-tipb="Check its LED: solid = link up, blinking = traffic. Where the cable goes is for you to trace.">
-<rect class="f-port" x="97.12" y="2.72" width="5.76" height="4.16" rx="0.4" />
-<rect class="f-sock" x="97.92" y="3.52" width="4.16" height="2.08" />
-<circle class="led" data-dev="r420" data-led="port" cx="101.92" cy="2" r="0.65" data-n="2" />
+<rect class="f-port" x="47" y="5.4" width="5.2" height="4.2" rx="0.4" />
+<rect class="f-sock" x="47.7" y="6.2" width="3.8" height="2.2" />
+<circle class="led" data-dev="r420" data-led="port" cx="51.4" cy="4.7" r="0.6" data-n="2" />
 </g>
-<rect class="f-port" x="110" y="2.6" width="8.4" height="4.2" rx="0.4" />
-<rect class="f-port" x="121" y="2.6" width="4" height="4.2" rx="0.4" />
-<rect class="f-port" x="127" y="2.6" width="4" height="4.2" rx="0.4" />
-<rect class="f-port" x="110" y="8.2" width="4.4" height="3.2" rx="0.4" />
-<rect class="f-slot" x="74" y="8.4" width="36" height="0.1" />
-<rect class="f-socket" x="7" y="1.2" width="45" height="10.4" />
-<rect class="f-socket" x="54" y="1.2" width="26" height="10.4" />
+<rect class="f-port" x="55" y="6" width="3.6" height="1.8" rx="0.2" />
+<rect class="f-port" x="60" y="6" width="3.6" height="1.8" rx="0.2" />
+<circle class="f-btn" cx="67" cy="7" r="1.1" />
+<rect class="f-perf" x="71.0" y="1.2" width="40.0" height="10.4" />
+<line class="f-perf-d" x1="71.6" y1="2.10" x2="110.4" y2="2.10" />
+<line class="f-perf-d" x1="71.6" y1="3.20" x2="110.4" y2="3.20" />
+<line class="f-perf-d" x1="71.6" y1="4.30" x2="110.4" y2="4.30" />
+<line class="f-perf-d" x1="71.6" y1="5.40" x2="110.4" y2="5.40" />
+<line class="f-perf-d" x1="71.6" y1="6.50" x2="110.4" y2="6.50" />
+<line class="f-perf-d" x1="71.6" y1="7.60" x2="110.4" y2="7.60" />
+<line class="f-perf-d" x1="71.6" y1="8.70" x2="110.4" y2="8.70" />
+<line class="f-perf-d" x1="71.6" y1="9.80" x2="110.4" y2="9.80" />
+<line class="f-perf-d" x1="71.6" y1="10.90" x2="110.4" y2="10.90" />
+<rect class="f-socket" x="113" y="1.2" width="16" height="10.4" />
+<rect class="f-socket" x="130" y="1.2" width="16" height="10.4" />

@@ -9,22 +9,26 @@
 <circle class="f-screw" cx="149" cy="9.34" r="1.3" />
 <line class="f-slot" x1="148.2" y1="9.34" x2="149.8" y2="9.34" />
 <rect class="f-panel" x="6" y="0.8" width="140" height="11.2" />
-<rect class="f-port" x="14" y="3" width="8" height="5.4" rx="0.5" />
-<text class="ft f-tx2" x="18" y="11.6" font-size="1.5" text-anchor="middle">1</text>
-<rect class="f-port" x="25" y="3" width="8" height="5.4" rx="0.5" />
-<text class="ft f-tx2" x="29" y="11.6" font-size="1.5" text-anchor="middle">2</text>
-<rect class="f-port" x="36" y="3" width="8" height="5.4" rx="0.5" />
-<text class="ft f-tx2" x="40" y="11.6" font-size="1.5" text-anchor="middle">3</text>
-<rect class="f-port" x="47" y="3" width="8" height="5.4" rx="0.5" />
-<text class="ft f-tx2" x="51" y="11.6" font-size="1.5" text-anchor="middle">4</text>
-<rect class="f-port" x="58" y="3" width="8" height="5.4" rx="0.5" />
-<text class="ft f-tx2" x="62" y="11.6" font-size="1.5" text-anchor="middle">5</text>
-<rect class="f-port" x="69" y="3" width="8" height="5.4" rx="0.5" />
-<text class="ft f-tx2" x="73" y="11.6" font-size="1.5" text-anchor="middle">6</text>
-<rect class="f-port" x="80" y="3" width="8" height="5.4" rx="0.5" />
-<text class="ft f-tx2" x="84" y="11.6" font-size="1.5" text-anchor="middle">7</text>
-<rect class="f-port" x="91" y="3" width="8" height="5.4" rx="0.5" />
-<text class="ft f-tx2" x="95" y="11.6" font-size="1.5" text-anchor="middle">8</text>
-<rect class="f-port" x="108" y="3" width="22" height="5.4" rx="0.5" />
-<text class="ft f-tx2" x="119" y="11.6" font-size="1.4" text-anchor="middle">CONSOLE</text>
-<rect class="f-port" x="137" y="3" width="7" height="5.4" rx="0.5" />
+<rect class="f-vga" x="9" y="3" width="7" height="4.4" rx="0.5" />
+<text class="ft f-tx2" x="12.5" y="2.4" font-size="1" text-anchor="middle">FIRMWARE</text>
+<rect class="f-vga" x="19" y="3" width="7" height="4.4" rx="0.5" />
+<text class="ft f-tx2" x="22.5" y="2.4" font-size="1" text-anchor="middle">DAISYCHAIN</text>
+<rect class="f-port" x="31" y="3" width="8" height="4.4" rx="0.5" />
+<text class="ft f-tx2" x="35" y="10.6" font-size="1.5" text-anchor="middle">1</text>
+<rect class="f-port" x="42" y="3" width="8" height="4.4" rx="0.5" />
+<text class="ft f-tx2" x="46" y="10.6" font-size="1.5" text-anchor="middle">2</text>
+<rect class="f-port" x="53" y="3" width="8" height="4.4" rx="0.5" />
+<text class="ft f-tx2" x="57" y="10.6" font-size="1.5" text-anchor="middle">3</text>
+<rect class="f-port" x="64" y="3" width="8" height="4.4" rx="0.5" />
+<text class="ft f-tx2" x="68" y="10.6" font-size="1.5" text-anchor="middle">4</text>
+<rect class="f-port" x="75" y="3" width="8" height="4.4" rx="0.5" />
+<text class="ft f-tx2" x="79" y="10.6" font-size="1.5" text-anchor="middle">5</text>
+<rect class="f-port" x="86" y="3" width="8" height="4.4" rx="0.5" />
+<text class="ft f-tx2" x="90" y="10.6" font-size="1.5" text-anchor="middle">6</text>
+<rect class="f-port" x="97" y="3" width="8" height="4.4" rx="0.5" />
+<text class="ft f-tx2" x="101" y="10.6" font-size="1.5" text-anchor="middle">7</text>
+<rect class="f-port" x="108" y="3" width="8" height="4.4" rx="0.5" />
+<text class="ft f-tx2" x="112" y="10.6" font-size="1.5" text-anchor="middle">8</text>
+<text class="ft f-tx" x="143" y="4.4" font-size="1.7" text-anchor="end">TRIPP·LITE</text>
+<text class="ft f-tx2" x="143" y="7" font-size="1.3" text-anchor="end">8-PORT CONSOLE</text>
+<rect class="f-port" x="136" y="8.2" width="7" height="3" rx="0.4" />
