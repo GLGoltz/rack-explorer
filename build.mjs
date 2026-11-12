@@ -50,14 +50,14 @@ const FRAME = {
 const DEVICES = [
   { id: "ups",    u: 1,  d: 130, pal: "pal-blk", kind: "server" },
   { id: "drawer", u: 2,  d: 124, pal: "pal-blk", kind: "drawer", floor: 2.6 },
-  { id: "nas",    u: 4,  d: 120, pal: "pal-nas", kind: "server" },
+  { id: "nas",    u: 4,  d: 120, pal: "pal-blk", kind: "server" },
   { id: "aux",    u: 6,  d: 130, pal: "pal-blk", kind: "server" },
   { id: "bk",     u: 8,  d: 100, pal: "pal-wht", kind: "tray", floor: 2.8 },
   { id: "fw",     u: 10, d: 100, pal: "pal-wht", kind: "tray", floor: 2.8 },
   { id: "sw2",    u: 12, d: 84,  pal: "pal-wht", kind: "server" },
   { id: "core",   u: 14, d: 84,  pal: "pal-wht", kind: "server" },
   { id: "hv",     u: 16, d: 130, pal: "pal-blk", kind: "server" },
-  { id: "r420",   u: 18, d: 130, pal: "pal-gry", kind: "server" },
+  { id: "r420",   u: 18, d: 130, pal: "pal-blk", kind: "server" },
   { id: "kvm",    u: 24, d: 124, pal: "pal-blk", kind: "server" },
 ];
 

@@ -1,9 +1,0 @@
-<rect class="f-carr" x="0" y="0" width="28" height="7.2" />
-<rect class="f-sock" x="1.6" y="1.4" width="5.45" height="4.4" />
-<rect class="f-sock" x="7.85" y="1.4" width="5.45" height="4.4" />
-<rect class="f-sock" x="14.1" y="1.4" width="5.45" height="4.4" />
-<rect class="f-sock" x="20.35" y="1.4" width="5.45" height="4.4" />
-<circle class="led" data-dev="r420" data-led="drv" cx="3.1" cy="6.1" r="0.45" data-n="0" />
-<circle class="led" data-dev="r420" data-led="drv" cx="9.35" cy="6.1" r="0.45" data-n="1" />
-<circle class="led" data-dev="r420" data-led="drv" cx="15.6" cy="6.1" r="0.45" data-n="2" />
-<circle class="led" data-dev="r420" data-led="drv" cx="21.85" cy="6.1" r="0.45" data-n="3" />

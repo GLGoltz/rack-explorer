@@ -62,8 +62,8 @@
      "blue: normal · amber: fault"
     ],
     [
-     "Drive LEDs",
-     "green blink: drive in use"
+     "System ID button",
+     "blue: identify is on"
     ]
    ]
   },
@@ -86,16 +86,16 @@
    ],
    "leds": [
     [
-     "Power button",
+     "Power button (right ear)",
      "green: on"
     ],
     [
-     "Status (left ear)",
-     "off/white: healthy · amber blink: fault"
+     "Status icons (left ear)",
+     "off: healthy · amber: fault in that part"
     ],
     [
-     "Drive carrier LED",
-     "green blink: drive activity"
+     "System ID button",
+     "blue: identify is on · amber blink: fault"
     ]
    ]
   },
@@ -225,12 +225,16 @@
    ],
    "leds": [
     [
-     "Power button",
+     "Power button (right ear)",
      "green: on"
     ],
     [
-     "Drive carrier LED",
-     "green blink: drive activity"
+     "Status icons (left ear)",
+     "off: healthy · amber: fault in that part"
+    ],
+    [
+     "System ID button",
+     "blue: identify is on · amber blink: fault"
     ]
    ]
   },
@@ -349,30 +353,6 @@
    "how": "It reads the same management controller (iDRAC) that handles remote access."
   },
   {
-   "id": "r420-bayA",
-   "host": "r420",
-   "name": "Drive bay block A",
-   "side": "front",
-   "what": "A block of hot-swap drive bays.",
-   "how": "Each drive slides in on a carrier and connects to a backplane that carries data and power."
-  },
-  {
-   "id": "r420-bayB",
-   "host": "r420",
-   "name": "Drive bay block B",
-   "side": "front",
-   "what": "A block of hot-swap drive bays.",
-   "how": "Same carriers and backplane as block A."
-  },
-  {
-   "id": "r420-bayC",
-   "host": "r420",
-   "name": "Drive bay block C",
-   "side": "front",
-   "what": "A block of hot-swap drive bays.",
-   "how": "Same carriers and backplane as block A."
-  },
-  {
    "id": "r420-psu1",
    "host": "r420",
    "name": "Power supply 1",
@@ -389,46 +369,6 @@
    "how": "Shares the load with supply 1; either one alone can run the server."
   },
   {
-   "id": "hv-d1",
-   "host": "hv",
-   "name": "Drive carrier 1",
-   "side": "front",
-   "what": "A hot-swap drive carrier with a silver release latch.",
-   "how": "Press the latch, pull the carrier out. Proxmox itself is on the SD module, not on these drives."
-  },
-  {
-   "id": "hv-d2",
-   "host": "hv",
-   "name": "Drive carrier 2",
-   "side": "front",
-   "what": "A hot-swap drive carrier.",
-   "how": "Same latch and backplane connector as carrier 1."
-  },
-  {
-   "id": "hv-d3",
-   "host": "hv",
-   "name": "Drive carrier 3",
-   "side": "front",
-   "what": "A hot-swap drive carrier.",
-   "how": "Same latch and backplane connector as carrier 1."
-  },
-  {
-   "id": "hv-d4",
-   "host": "hv",
-   "name": "Drive carrier 4",
-   "side": "front",
-   "what": "A hot-swap drive carrier.",
-   "how": "Same latch and backplane connector as carrier 1."
-  },
-  {
-   "id": "hv-d5",
-   "host": "hv",
-   "name": "Drive carrier 5",
-   "side": "front",
-   "what": "A hot-swap drive carrier.",
-   "how": "Same latch and backplane connector as carrier 1."
-  },
-  {
    "id": "hv-psu1",
    "host": "hv",
    "name": "Power supply 1",
@@ -443,46 +383,6 @@
    "side": "rear",
    "what": "The second, redundant power supply.",
    "how": "If supply 1 fails the server keeps running on this one."
-  },
-  {
-   "id": "aux-d1",
-   "host": "aux",
-   "name": "Drive carrier 1",
-   "side": "front",
-   "what": "A hot-swap drive carrier.",
-   "how": "Press the latch and pull."
-  },
-  {
-   "id": "aux-d2",
-   "host": "aux",
-   "name": "Drive carrier 2",
-   "side": "front",
-   "what": "A hot-swap drive carrier.",
-   "how": "Press the latch and pull."
-  },
-  {
-   "id": "aux-d3",
-   "host": "aux",
-   "name": "Drive carrier 3",
-   "side": "front",
-   "what": "A hot-swap drive carrier.",
-   "how": "Press the latch and pull."
-  },
-  {
-   "id": "aux-d4",
-   "host": "aux",
-   "name": "Drive carrier 4",
-   "side": "front",
-   "what": "A hot-swap drive carrier.",
-   "how": "Press the latch and pull."
-  },
-  {
-   "id": "aux-d5",
-   "host": "aux",
-   "name": "Drive carrier 5",
-   "side": "front",
-   "what": "A hot-swap drive carrier.",
-   "how": "Press the latch and pull."
   },
   {
    "id": "aux-psu1",

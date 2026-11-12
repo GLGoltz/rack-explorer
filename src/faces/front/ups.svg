@@ -9,25 +9,35 @@
 <circle class="f-screw" cx="149" cy="9.34" r="1.3" />
 <line class="f-slot" x1="148.2" y1="9.34" x2="149.8" y2="9.34" />
 <rect class="f-panel" x="6" y="0.6" width="140" height="11.6" />
-<line class="f-vent" x1="12" y1="2.4" x2="52" y2="2.4" />
-<line class="f-vent" x1="12" y1="4.04" x2="52" y2="4.04" />
-<line class="f-vent" x1="12" y1="5.68" x2="52" y2="5.68" />
-<line class="f-vent" x1="12" y1="7.32" x2="52" y2="7.32" />
-<line class="f-vent" x1="12" y1="8.96" x2="52" y2="8.96" />
-<line class="f-vent" x1="12" y1="10.6" x2="52" y2="10.6" />
-<line class="f-vent" x1="106" y1="2.4" x2="136" y2="2.4" />
-<line class="f-vent" x1="106" y1="4.04" x2="136" y2="4.04" />
-<line class="f-vent" x1="106" y1="5.68" x2="136" y2="5.68" />
-<line class="f-vent" x1="106" y1="7.32" x2="136" y2="7.32" />
-<line class="f-vent" x1="106" y1="8.96" x2="136" y2="8.96" />
-<line class="f-vent" x1="106" y1="10.6" x2="136" y2="10.6" />
-<text class="ft f-tx" x="12" y="1.9" font-size="1.5" text-anchor="start">TRIPP·LITE SMARTPRO</text>
-<rect class="f-ctrl" x="66" y="1.4" width="38" height="11" rx="1" />
-<circle class="led" data-dev="ups" data-led="line" cx="72" cy="3.6" r="0.8" />
-<circle class="led" data-dev="ups" data-led="batt" cx="77" cy="3.6" r="0.8" />
-<circle class="led" data-dev="ups" data-led="over" cx="82" cy="3.6" r="0.8" />
-<circle class="led" data-dev="ups" data-led="repl" cx="87" cy="3.6" r="0.8" />
-<circle class="f-btn" cx="73" cy="8.8" r="2" />
-<circle class="f-btn-in" cx="73" cy="8.8" r="0.8" />
-<circle class="f-btn" cx="83" cy="8.8" r="2" />
-<text class="ft f-tx2" x="93" y="9.6" font-size="1.6" text-anchor="start">UPS</text>
+<rect class="f-door" x="8" y="1.6" width="46" height="9.6" rx="0.5" />
+<line class="f-vent" x1="11" y1="3.2" x2="51" y2="3.2" />
+<line class="f-vent" x1="11" y1="4.8" x2="51" y2="4.8" />
+<line class="f-vent" x1="11" y1="6.4" x2="51" y2="6.4" />
+<line class="f-vent" x1="11" y1="8.0" x2="51" y2="8.0" />
+<line class="f-vent" x1="11" y1="9.6" x2="51" y2="9.6" />
+<text class="ft f-tx2" x="31" y="11" font-size="1.1" text-anchor="middle">BATTERY ACCESS</text>
+<text class="ft f-tx" x="58" y="2.6" font-size="1.5" text-anchor="start">TRIPP·LITE  SmartPro</text>
+<rect class="f-ctrl" x="58" y="3.4" width="44" height="8.6" rx="0.8" />
+<circle class="led" data-dev="ups" data-led="line" cx="61.5" cy="5.4" r="0.7" />
+<circle class="led" data-dev="ups" data-led="batt" cx="65.5" cy="5.4" r="0.7" />
+<circle class="led" data-dev="ups" data-led="over" cx="69.5" cy="5.4" r="0.7" />
+<circle class="led" data-dev="ups" data-led="avr" cx="73.5" cy="5.4" r="0.7" />
+<circle class="led" data-dev="ups" data-led="repl" cx="77.5" cy="5.4" r="0.7" />
+<text class="ft f-tx2" x="60.4" y="8.7" font-size="1.1" text-anchor="start">LOAD</text>
+<rect class="f-meter" x="65.4" y="7.699999999999999" width="2.1" height="1" rx="0.2" />
+<rect class="f-meter" x="68.0" y="7.699999999999999" width="2.1" height="1" rx="0.2" />
+<rect class="f-meter" x="70.60000000000001" y="7.699999999999999" width="2.1" height="1" rx="0.2" />
+<text class="ft f-tx2" x="60.4" y="10.9" font-size="1.1" text-anchor="start">BATT</text>
+<rect class="f-meter" x="65.4" y="9.9" width="2.1" height="1" rx="0.2" />
+<rect class="f-meter" x="68.0" y="9.9" width="2.1" height="1" rx="0.2" />
+<rect class="f-meter" x="70.60000000000001" y="9.9" width="2.1" height="1" rx="0.2" />
+<circle class="f-btn" cx="86" cy="7.6" r="2" /><circle class="f-btn-in" cx="86" cy="7.6" r="0.8" />
+<circle class="f-btn" cx="94" cy="7.6" r="2" /><circle class="f-btn-in" cx="94" cy="7.6" r="0.8" />
+<text class="ft f-tx2" x="86" y="11.6" font-size="1" text-anchor="middle">POWER</text>
+<text class="ft f-tx2" x="94" y="11.6" font-size="1" text-anchor="middle">MUTE/TEST</text>
+<line class="f-vent" x1="106" y1="2.40" x2="142" y2="2.40" />
+<line class="f-vent" x1="106" y1="4.04" x2="142" y2="4.04" />
+<line class="f-vent" x1="106" y1="5.68" x2="142" y2="5.68" />
+<line class="f-vent" x1="106" y1="7.32" x2="142" y2="7.32" />
+<line class="f-vent" x1="106" y1="8.96" x2="142" y2="8.96" />
+<line class="f-vent" x1="106" y1="10.60" x2="142" y2="10.60" />
