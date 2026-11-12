@@ -234,9 +234,32 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
 [hidden]{display:none!important}
-.dev[data-unused]{opacity:.32}
-.dev[data-unused][data-lit="sel"]{opacity:.7}
-.bub.unused{opacity:.45}
-.chip.unused{opacity:.55}
 .st[data-st="unused"]{opacity:.8}
 .credit{margin-top:14px;font-size:12px;opacity:.75}
+
+/* isolation */
+.dev,.part{transition:opacity .45s ease}
+.dev[data-away],.part[data-away]{opacity:.06;pointer-events:none}
+.bub.away{display:none!important}
+/* not used: normal device, clear label */
+.bub .tag .nu,.chip .nu{display:inline-block;margin-left:6px;padding:0 5px;border-radius:3px;background:#e7e9ec;color:#5a616b;font-size:10px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;vertical-align:1px}
+.parts-info{padding-left:18px}.parts-info li{margin-bottom:6px}
+/* topology */
+.topo{position:absolute;inset:0;background:#f7f8fa;z-index:6;display:flex;align-items:center;justify-content:center;padding:12px}
+.topo svg{width:100%;height:100%;max-width:980px}
+.topo .node{cursor:pointer}
+.topo .node rect{fill:#fff;stroke:#c3c9d1;stroke-width:1.2;transition:stroke .2s,stroke-width .2s}
+.topo .node:hover rect,.topo .node:focus rect{stroke:#2f5fb0;stroke-width:2}
+.topo .node.on rect{stroke:#2f5fb0;stroke-width:2.6}
+.topo .node:focus{outline:none}
+.topo .nt{font:700 13px/1 system-ui,sans-serif;fill:#1e2530}
+.topo .na{font:12px/1 ui-monospace,Menlo,Consolas,monospace;fill:#4b5563}
+.topo .zone rect{stroke-width:1.2;stroke-dasharray:5 4}
+.topo .zl{font:700 12px/1 system-ui,sans-serif}
+.topo .zs{font:12px/1 ui-monospace,Menlo,Consolas,monospace}
+.topo .lk{stroke:#7a828d;stroke-width:2;fill:none}
+.topo .lk.wifi{stroke-dasharray:3 5}
+.topo .ll{font:11px/1 ui-monospace,Menlo,Consolas,monospace;fill:#5a616b}
+.bub.unused .tag{background:#eef0f3;border-style:dashed}
+.bub.unused .tag span{color:#5a616b}
+.isolating .frame,.isolating > g:not(.dev):not(.part){transition:opacity .45s ease;opacity:.06}

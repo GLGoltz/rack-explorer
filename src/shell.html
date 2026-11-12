@@ -1,14 +1,14 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Rack Explorer</title><style>{{STYLE}}</style></head><body class="iso" data-theme="dark"><div class="app">
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Rack Explorer</title><style>{{STYLE}}</style></head><body class="iso" data-theme="light"><div class="app">
 <header class="bar">
  <div class="brand"><span class="mark" aria-hidden="true"></span><div><b>Rack Explorer</b><small>Chaffey College · Cyber Hub · Built by Junior Angeles</small></div></div>
- <div class="seg" role="group" aria-label="View"><button data-view="front" aria-pressed="true">Front</button><button data-view="rear" aria-pressed="false">Rear</button></div>
+ <div class="seg" role="group" aria-label="View" hidden><button data-view="front" aria-pressed="true">Front</button><button data-view="rear" aria-pressed="false">Rear</button></div>
  <div class="acts">
   <button id="b-power" aria-pressed="false"><span class="lbl">Power on</span></button>
-  <button id="b-explode" aria-pressed="false"><span class="lbl">Take apart</span></button>
+  <button id="b-explode" aria-pressed="false" hidden><span class="lbl">Take apart</span></button>
   <button id="b-labels" aria-pressed="true" hidden>Labels</button>
   <button id="b-follow" aria-pressed="true" hidden>Auto camera</button>
   <button id="b-reset">Reset</button>
-  <button id="b-theme"><span class="lbl">Light</span></button>
+  <button id="b-theme" hidden><span class="lbl">Light</span></button>
  </div>
 </header>
 <main class="main">
@@ -17,7 +17,8 @@
 {{VIEWS}}
    <svg id="links" class="links" aria-hidden="true"></svg>
    <div id="bubbles"></div>
-   <div class="hint">Hover a label for details · click a device or a removable piece · scroll to zoom, drag to pan</div>
+   <div class="hint">Click a device to see it on its own · scroll to zoom, drag to pan</div>
+   <div id="topo" class="topo" hidden></div>
    <div id="lane" class="lane" hidden></div>
    <div id="tip" hidden></div>
    <div id="status" class="status" role="status"></div>
@@ -25,7 +26,7 @@
  </section>
  <aside class="panel">
   <nav class="tabs" role="tablist">
-   <button data-tab="learn" aria-selected="true">Devices</button><button data-tab="flow" aria-selected="false">Traffic</button><button data-tab="attack" aria-selected="false" hidden>Attacks</button><button data-tab="parts" aria-selected="false" hidden>Parts</button><button data-tab="tour" aria-selected="false" hidden>Tour</button><button data-tab="quiz" aria-selected="false" hidden>Quiz</button>
+   <button data-tab="learn" aria-selected="true">Devices</button><button data-tab="flow" aria-selected="false">Traffic</button><button data-tab="topo" aria-selected="false">Topology</button><button data-tab="attack" aria-selected="false" hidden>Attacks</button><button data-tab="parts" aria-selected="false" hidden>Parts</button><button data-tab="tour" aria-selected="false" hidden>Tour</button><button data-tab="quiz" aria-selected="false" hidden>Quiz</button>
   </nav>
   <div class="pane" id="p-learn"></div>
   <div class="pane" id="p-flow" hidden>
@@ -36,6 +37,7 @@
    <div id="attack-list"><p>Simulated attacks and failures from the labs. Red devices are affected, amber ones are at risk, and the rest dim. Concepts only, no step-by-step exploitation.</p><div class="list"></div></div>
    <div id="attack-run" hidden><div class="stepn"></div><h3></h3><div class="goal"></div><p class="stept"></p><div class="aff"></div><div class="def"><h4>How to defend</h4><ul></ul></div><div class="btns"><button class="btn prev">Back</button><button class="btn primary play">Pause</button><button class="btn next">Next</button><button class="btn ghost stop">Close</button></div></div>
   </div>
+  <div class="pane" id="p-topo" hidden></div>
   <div class="pane" id="p-parts" hidden><input id="q" type="search" placeholder="Search devices and pieces" aria-label="Search components"><p class="note" id="parts-count" style="margin:8px 0 0"></p><div id="parts-list"></div></div>
   <div class="pane" id="p-tour" hidden><div class="body"></div></div>
   <div class="pane" id="p-quiz" hidden><div class="body"></div></div>

@@ -11,13 +11,14 @@ const PARTS = Object.fromEntries(M.parts.map((p) => [p.id, p]));
 const OUT = Object.fromEntries(M.outside.map((o) => [o.id, o]));
 const nameOf = (id) => (DEVS[id] ? DEVS[id].name : OUT[id] ? OUT[id].name : id);
 const DEVICE_IDS = M.devices.map((d) => d.id);
-const PULL = 66, SPREAD = 1.7;
+const PULL = 66, SPREAD = 0;
 
 const S = {
   view: "front", powered: false, t: 0, sel: null, exploded: false, labels: true, follow: true,
   cur: {}, tgt: {}, hold: {}, lit: {}, dim: new Set(), over: {}, battery: false,
   mode: "learn", run: null, tour: null, quiz: null, portZoom: false,
 };
+const UNUSED = new Set(["r420", "sw2", "aux"]);
 const P = () => V[S.view].P;
 const sg = () => (S.view === "front" ? 1 : -1);
 
@@ -36,9 +37,9 @@ function pts2box(points) {
   return { x0, x1, y0, y1, cx: (x0 + x1) / 2, cy: (y0 + y1) / 2, w: x1 - x0, h: y1 - y0 };
 }
 const fitW = (b, pad) => Math.max(b.w * pad, b.h * pad * aspect());
-const pullVec = (id) => {
+const pullVec = (id, useTarget) => {
   if (S.view !== "front" || !DEVS[id] || id === "rack" || id === "pdu") return [0, 0];
-  const a = S.cur[id] || 0;
+  const a = useTarget ? (S.tgt[id] || 0) : (S.cur[id] || 0);
   return axisVector(P(), [0, PULL * a, SPREAD * ((parseInt(DEVS[id].u, 10) || 1) - 1) * a]);
 };
 function camAll(instant) {
@@ -55,7 +56,7 @@ function faceBox(id) {
   const p = P(), W2 = K.W / 2;
   const pts = [[-W2, a.y0, a.z0], [W2, a.y0, a.z0], [-W2, a.y0, a.z0 + a.H], [W2, a.y0, a.z0 + a.H]];
   if (id === "pdu" || id === "rack") { pts.length = 0; pts.push([a.edge[0], a.y0, a.z0], [a.edge[0], a.y0, a.z0 + a.H]); if (id === "rack") pts.push([-92, -88, 0], [92, 88, K.TOP_Z]); }
-  const pv = pullVec(id);
+  const pv = pullVec(id, true);
   return pts2box(pts.map((q) => { const s = iso(q, p); return [s[0] + pv[0], s[1] + pv[1]]; }));
 }
 function camDev(id, ports, instant) {
@@ -63,12 +64,11 @@ function camDev(id, ports, instant) {
   if (!b) return camAll(instant);
   if (id === "rack") return camAll(instant);
   const boost = DEVS[id] && DEVS[id].u && String(DEVS[id].u).length < 4 ? 1 : 1;
-  let w = fitW(b, 3.3);
-  w = Math.max(w, 300);
+  let w = 470;
   if (ports) w = Math.max(120, w * 0.42);
   const pv = [0, 0];
-  const cx = b.cx + (ports ? b.w * 0.18 : 0);
-  camTo(cx, b.cy - (ports ? 0 : 6), w, instant);
+  const cx = b.cx + (ports ? b.w * 0.18 : 70);
+  camTo(cx, b.cy + (ports ? 0 : 40), w, instant);
 }
 function camNode(id) {
   if (DEVS[id]) camDev(id, false);
@@ -220,7 +220,6 @@ function power(on) {
 function powerInstant() { if (!S.powered) { S.powered = true; S.t = POWER_END + 1; $("#b-power").setAttribute("aria-pressed", true); $("#b-power .lbl").textContent = "Power off"; updateLeds(true); } }
 
 // ---------- lighting, dimming ----------
-const UNUSED = new Set(["r420", "sw2", "aux"]);
 function applyLit() {
   for (const view of ["front", "rear"]) {
     for (const el of $$(".dev", svgs[view])) {
@@ -228,11 +227,16 @@ function applyLit() {
       const l = S.lit[id] || (S.sel === id ? "sel" : "");
       if (l) el.dataset.lit = l; else delete el.dataset.lit;
       if (S.dim.size && DEVS[id] && S.dim.has(id)) el.setAttribute("data-dim", ""); else el.removeAttribute("data-dim");
-      if (UNUSED.has(id)) el.setAttribute("data-unused", ""); else el.removeAttribute("data-unused");
+      if (S.iso && id !== S.iso) el.setAttribute("data-away", ""); else el.removeAttribute("data-away");
     }
     svgs[view].classList.toggle("frame-sel", S.sel === "rack");
+    svgs[view].classList.toggle("isolating", !!S.iso);
+    for (const el of $$(".part", svgs[view])) {
+      const p = PARTS[el.dataset.part];
+      if (S.iso && p && p.host !== S.iso) el.setAttribute("data-away", ""); else el.removeAttribute("data-away");
+    }
   }
-  for (const b of $$(".bub")) { const id = b.dataset.dev; b.dataset.lit = S.lit[id] || (S.sel === id ? "sel" : ""); b.classList.toggle("dim", S.dim.has(id)); b.classList.toggle("unused", UNUSED.has(id)); }
+  for (const b of $$(".bub")) { const id = b.dataset.dev; b.dataset.lit = S.lit[id] || (S.sel === id ? "sel" : ""); b.classList.toggle("dim", S.dim.has(id)); b.classList.toggle("unused", UNUSED.has(id)); b.classList.toggle("away", !!S.iso && id !== S.iso); }
   updateLeds(true);
 }
 function clearLit() { S.lit = {}; S.dim = new Set(); S.over = {}; S.battery = false; applyLit(); }
@@ -259,7 +263,7 @@ function placeBubbles() {
     const s = iso(a.edge, p), pv = pullVec(id);
     const x = (s[0] + pv[0] - (vb.cx - vb.w / 2)) * sc, y = (s[1] + pv[1] - (vb.cy - hh / 2)) * sc;
     const on = x > -10 && x < w + 10 && y > 6 && y < h - 6;
-    const focus = camT.w < 460 && S.sel && S.sel !== "rack" && id !== S.sel;
+    const focus = (S.iso && id !== S.iso) || S.mode === "topo";
     b.style.display = on && !focus ? "" : "none";
     if (on && !focus) items.push({ b, id, x, y });
   }
@@ -281,13 +285,21 @@ function placeBubbles() {
 }
 
 // ---------- selection and panel ----------
+function canPull(id) { return DEVS[id] && DEVS[id].u && id !== "rack" && id !== "pdu"; }
+function isolate(id) {
+  if (S.iso && S.iso !== id && canPull(S.iso)) setPull(S.iso, 0);
+  S.iso = id && id !== "rack" ? id : null;
+  if (S.iso && canPull(S.iso)) setPull(S.iso, 1);
+}
 function select(id, opts = {}) {
+  if (S.run) stopRun(true);
+  isolate(id);
   S.sel = id; S.portZoom = !!opts.ports;
   if (id && id !== "rack") camDev(id, !!opts.ports); else if (id === "rack") camAll();
   setTab("learn");
   applyLit(); refreshPanel();
 }
-function deselect() { S.sel = null; S.portZoom = false; applyLit(); camAll(); refreshPanel(); }
+function deselect() { isolate(null); S.sel = null; S.portZoom = false; applyLit(); camAll(); refreshPanel(); }
 function stateText(id) {
   const s = devState(id), l = S.lit[id];
   if (UNUSED.has(id)) return "Not used";
@@ -304,9 +316,9 @@ function learnHtml() {
   if (!id) {
     return `<div class="intro"><h3>Cyber Hub · Your lab rack</h3>
 <p>This is the rack your team works on, drawn to match the room. Hover any label for a quick summary, or click a device to zoom in, read its lights, and take it apart.</p>
-<ul class="how"><li><b>Power on</b> to watch the boot order and the lights come up.</li><li><b>Take apart</b> slides every device and removable part out.</li><li><b>Traffic</b> shows how a request moves between devices.</li></ul>
-<p class="note">Faded devices are not used in Cyber Hub. Cabling is left out on purpose: working out what connects where is part of the lab.</p></div>
-<h4>Every device (${DEVICE_IDS.length - 1 + 0})</h4><div class="chips">${M.devices.filter((d) => d.id !== "rack").map((d) => `<button class="chip${UNUSED.has(d.id) ? " unused" : ""}" data-sel="${d.id}">${d.u && d.id !== "pdu" ? "U" + d.u + " · " : ""}${esc(d.name)}</button>`).join("")}</div>
+<ul class="how"><li><b>Click a device</b> to slide it out and see it on its own.</li><li><b>Power on</b> to watch the boot order and the lights come up.</li><li><b>Traffic</b> shows how a request moves between devices.</li><li><b>Topology</b> shows how the networks connect.</li></ul>
+<p class="note">Labels with a dashed grey outline are devices that stay in the rack but are not used in Cyber Hub. Cabling is left out on purpose: working out what connects where is part of the lab.</p></div>
+<h4>Every device (${DEVICE_IDS.length - 1 + 0})</h4><div class="chips">${M.devices.filter((d) => d.id !== "rack").map((d) => `<button class="chip${UNUSED.has(d.id) ? " unused" : ""}" data-sel="${d.id}">${d.u && d.id !== "pdu" ? "U" + d.u + " · " : ""}${esc(d.name)}${UNUSED.has(d.id) ? '<i class="nu">Not used</i>' : ""}</button>`).join("")}</div>
 <p class="credit">Rack Explorer built by Junior Angeles, Cyber Hub apprentice.</p>`;
   }
   const d = DEVS[id], parts = partsOf(id);
@@ -314,12 +326,12 @@ function learnHtml() {
   return `<div class="dhead"><div><div class="u">${id === "rack" ? "Cabinet" : id === "pdu" ? "Rear rail" : "U" + d.u}</div><h3>${esc(d.name)}</h3><div class="mk">${esc(d.make)} · ${esc(d.model)}</div></div><div class="st" data-st="${UNUSED.has(id) ? "unused" : devState(id)}">${stateText(id)}</div></div>
 <p class="role">${esc(d.role)}</p>
 <div class="btns">
- ${canPull ? `<button class="btn" data-act="pull">${S.tgt[id] > 0.5 ? "Slide back in" : "Pull out"}</button>` : ""}
+ 
  ${d.leds.length ? `<button class="btn" data-act="ports">Zoom to ports and lights</button>` : ""}
  <button class="btn ghost" data-act="back">Back to whole rack</button></div>
 <h4>What it is</h4><p>${esc(d.what)}</p><h4>How it works</h4><p>${esc(d.how)}</p>
 <h4>What we use it for</h4><ul>${d.uses.map((u) => `<li>${esc(u)}</li>`).join("")}</ul>${legend(d)}
-${parts.length ? `<h4>Removable pieces (${parts.length})</h4><div class="plist">${parts.map((p) => `<button class="prow" data-part="${p.id}" aria-pressed="${S.tgt[p.id] > 0.5}"><span class="pn">${esc(p.name)}</span><span class="pa">${S.tgt[p.id] > 0.5 ? "Put back" : "Take out"}</span></button>`).join("")}</div>` : ""}`;
+${parts.length ? `<h4>Parts</h4><ul class="parts-info">${parts.map((p) => `<li><b>${esc(p.name)}</b> ${esc(p.what)}</li>`).join("")}</ul>` : ""}`;
 }
 function refreshPanel() {
   if (S.mode === "learn") $("#p-learn").innerHTML = learnHtml();
@@ -330,6 +342,9 @@ function setTab(t) {
   S.mode = t;
   $$(".tabs button").forEach((b) => b.setAttribute("aria-selected", b.dataset.tab === t));
   $$(".pane").forEach((p) => p.hidden = p.id !== "p-" + t);
+  $("#topo").hidden = t !== "topo";
+  if (t === "topo") { if (S.iso) { isolate(null); S.sel = null; applyLit(); camAll(); } renderTopo(); topoPanel(null); }
+  kick();
   if (t === "learn") refreshPanel();
   if (t === "parts") renderParts();
   if (t === "flow") renderFlowList();
@@ -367,6 +382,7 @@ function startRun(type, id) {
   stopRun(true);
   powerInstant();
   const sc = (type === "flow" ? M.traffic : M.attacks).find((x) => x.id === id);
+  if (S.iso) { isolate(null); S.sel = null; }
   S.run = { type, sc, i: 0, auto: true };
   $("#" + type + "-run").hidden = false;
   $("#" + type + "-list").hidden = true;
@@ -565,6 +581,62 @@ function showTip(ev) {
   tipEl.style.transform = `translate(${Math.max(4, x)}px,${Math.max(4, y)}px)`;
 }
 
+
+// ---------- logical topology ----------
+const TOPO = {
+  nodes: [
+    { id: "net", x: 400, y: 34, w: 170, t: "The internet", a: "past the ISP", info: "Everything outside your rack. In the lab, a laptop plugged into the ISP router stands in for it." },
+    { id: "isp", x: 400, y: 112, w: 190, t: "ISP router", a: "10.R.200.1", dev: "fw", info: "The FortiGate 50E plays your internet provider. Your firewall's default route points here." },
+    { id: "fw", x: 400, y: 222, w: 250, t: "Perimeter firewall", a: "wan1 .2 · internal .1 · dmz .1", dev: "bk", info: "The FortiWiFi 60E. Every packet between the internet, the DMZ, the guest network and your internal networks passes one of its policies." },
+    { id: "guest", x: 110, y: 222, w: 170, t: "Guest iPads", a: "DHCP 10.R.50.x", info: "Guest Wi-Fi lives on the firewall itself. Its only policy allows HTTP to the web server, so guests cannot reach anything else." },
+    { id: "web", x: 690, y: 300, w: 170, t: "Web server VM", a: "10.R.40.10", dev: "hv", info: "Your company homepage. It runs on the Proxmox host but lives in the DMZ, so its gateway is the firewall, not the switch." },
+    { id: "ftp", x: 690, y: 362, w: 170, t: "FTP server VM", a: "10.R.40.11", dev: "hv", info: "Also a VM on the Proxmox host, also in the DMZ. In Cyber Hub 07 you find its login in plain text." },
+    { id: "core", x: 400, y: 338, w: 250, t: "Core switch (Layer 3)", a: "SVIs .254 · routes between VLANs", dev: "core", info: "Routes between the Management, Data and Storage VLANs, hands out DHCP, and sends everything else to the firewall over the Transit VLAN." },
+    { id: "pve", x: 130, y: 486, w: 170, t: "Proxmox host", a: "10.R.10.10", dev: "hv", info: "Managed on the Management VLAN at https://10.R.10.10:8006. Its VMs are tagged into other VLANs over the same cable." },
+    { id: "admin", x: 130, y: 546, w: 170, t: "Admin laptop", a: "10.R.10.5", info: "A laptop on the Management VLAN, for managing infrastructure." },
+    { id: "lap", x: 400, y: 486, w: 170, t: "Team laptops", a: "DHCP .100 to .199", info: "Your laptops on the Data VLAN. Their gateway is the switch at 10.R.20.254." },
+    { id: "vpi", x: 400, y: 546, w: 170, t: "Vulnerable Pi", a: "DHCP on Data", dev: "drawer", info: "The Pi your team builds in Cyber Hub 08, on the Data VLAN where another team will scan it." },
+    { id: "nas", x: 670, y: 516, w: 170, t: "Storage NAS", a: "10.R.30.10", dev: "nas", info: "Serves VM disks to the Proxmox host over NFS, on its own VLAN so heavy storage traffic stays separate." },
+  ],
+  zones: [
+    { x: 15, y: 150, w: 190, h: 108, c: "#8a5a00", f: "#fff7e6", l: "Guest Wi-Fi", s: "10.R.50.0/24" },
+    { x: 590, y: 238, w: 200, h: 160, c: "#a8332f", f: "#fdeeee", l: "DMZ · VLAN 40", s: "10.R.40.0/24" },
+    { x: 30, y: 420, w: 200, h: 172, c: "#2f5fb0", f: "#edf3fc", l: "Management · VLAN 10", s: "10.R.10.0/24" },
+    { x: 300, y: 420, w: 200, h: 172, c: "#1d7a4a", f: "#ecf7f0", l: "Data · VLAN 20", s: "10.R.20.0/24" },
+    { x: 570, y: 448, w: 200, h: 106, c: "#6b4bb0", f: "#f3effb", l: "Storage · VLAN 30", s: "10.R.30.0/24" },
+  ],
+  links: [
+    ["net", "isp", ""], ["isp", "fw", "ISP · 10.R.200.0/24"], ["fw", "guest", "", "wifi"],
+    ["fw", "web", ""], ["fw", "core", "Transit · VLAN 100 · 10.R.100.0/24"],
+    ["core", "pve", ""], ["core", "lap", ""], ["core", "nas", ""],
+  ],
+};
+function renderTopo() {
+  const N = Object.fromEntries(TOPO.nodes.map((n) => [n.id, n]));
+  const H = 26;
+  const edge = (a, b) => [a.x, a.y + (b.y > a.y ? H : b.y < a.y ? -H : 0), b.x, b.y + (a.y > b.y ? H : a.y < b.y ? -H : 0)];
+  const lk = TOPO.links.map(([a, b, l, k]) => {
+    const A = N[a], B = N[b];
+    let [x1, y1, x2, y2] = edge(A, B);
+    if (A.y === B.y) { x1 = A.x + (B.x > A.x ? A.w / 2 : -A.w / 2); x2 = B.x + (A.x > B.x ? B.w / 2 : -B.w / 2); y1 = y2 = A.y; }
+    if (b === "web") { x1 = A.x + A.w / 2; y1 = A.y; x2 = 590; y2 = 318; }
+    const ZT = { pve: 420, lap: 420, nas: 448 };
+    if (a === "core" && ZT[b]) y2 = ZT[b];
+    const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+    const path = Math.abs(x1 - x2) > 4 && A.y !== B.y && b !== "web" ? `M${x1},${y1} V${my} H${x2} V${y2}` : `M${x1},${y1} L${x2},${y2}`;
+    return `<path class="lk${k ? " " + k : ""}" d="${path}"/>${l ? `<text class="ll" x="${x1 - 10}" y="${my + 4}" text-anchor="end">${l}</text>` : ""}`;
+  }).join("");
+  const zs = TOPO.zones.map((z) => `<g class="zone"><rect x="${z.x}" y="${z.y}" width="${z.w}" height="${z.h}" rx="10" fill="${z.f}" stroke="${z.c}"/><text class="zl" x="${z.x + 10}" y="${z.y + 17}" fill="${z.c}">${z.l}</text><text class="zs" x="${z.x + 10}" y="${z.y + 31}" fill="${z.c}">${z.s}</text></g>`).join("");
+  const ns = TOPO.nodes.map((n) => `<g class="node" data-node="${n.id}" tabindex="0" role="button" aria-label="${esc(n.t)}, ${esc(n.a)}"><rect x="${n.x - n.w / 2}" y="${n.y - H}" width="${n.w}" height="${H * 2 - 8}" rx="8"/><text class="nt" x="${n.x}" y="${n.y - 6}" text-anchor="middle">${esc(n.t)}</text><text class="na" x="${n.x}" y="${n.y + 11}" text-anchor="middle">${esc(n.a)}</text></g>`).join("");
+  $("#topo").innerHTML = `<svg viewBox="0 0 800 600" role="img" aria-label="Logical topology of your rack's network">${zs}${lk}${ns}</svg>`;
+}
+function topoPanel(id) {
+  const n = TOPO.nodes.find((x) => x.id === id);
+  $$("#topo .node").forEach((g) => g.classList.toggle("on", g.dataset.node === id));
+  const intro = `<div class="intro"><h3>Logical topology</h3><p>How your rack's networks connect, regardless of which cable goes where. Each coloured box is one network. Click any device to see its role.</p><p class="note">Replace R with your rack number, as on your rack sheet.</p></div>`;
+  $("#p-topo").innerHTML = intro + (n ? `<div class="dhead"><div><h3>${esc(n.t)}</h3><div class="mk">${esc(n.a)}</div></div></div><p>${esc(n.info)}</p>${n.dev ? `<div class="btns"><button class="btn" data-sel="${n.dev}">Show it in the rack</button></div>` : ""}` : "");
+}
+
 // ---------- view, theme ----------
 function setView(v) {
   S.view = v;
@@ -607,7 +679,7 @@ addEventListener("resize", () => { kick(); camAll(true); });
 
 // ---------- events ----------
 let drag = null;
-stage.addEventListener("pointerdown", (e) => { if (e.target.closest(".bub, .hud, #lane, .ctl")) return; drag = { x: e.clientX, y: e.clientY, cx: camT.cx, cy: camT.cy, moved: false }; });
+stage.addEventListener("pointerdown", (e) => { if (e.target.closest(".bub, .hud, #lane, .ctl, #topo")) return; drag = { x: e.clientX, y: e.clientY, cx: camT.cx, cy: camT.cy, moved: false }; });
 addEventListener("pointermove", (e) => {
   if (drag) {
     const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
@@ -618,14 +690,16 @@ addEventListener("pointermove", (e) => {
 });
 addEventListener("pointerup", () => setTimeout(() => (drag = null), 0));
 stage.addEventListener("pointerleave", () => (tipEl.hidden = true));
-stage.addEventListener("wheel", (e) => { e.preventDefault(); const f = Math.exp(e.deltaY * 0.0012); camT.w = Math.max(70, Math.min(1400, camT.w * f)); Object.assign(cam, { w: camT.w }); kick(); }, { passive: false });
+stage.addEventListener("wheel", (e) => { if (S.mode === "topo") return; e.preventDefault(); const f = Math.exp(e.deltaY * 0.0012); camT.w = Math.max(70, Math.min(1400, camT.w * f)); Object.assign(cam, { w: camT.w }); kick(); }, { passive: false });
 stage.addEventListener("click", (e) => {
+  const tn = e.target.closest("#topo .node"); if (tn) { topoPanel(tn.dataset.node); return; }
+  if (e.target.closest("#topo")) return;
   if (drag && drag.moved) return;
   if (e.target.closest(".bub, .hud, .ctl, #lane")) return;
   const part = e.target.closest(".part"), port = e.target.closest(".port"), dev = e.target.closest(".dev");
   if (S.quiz && !S.quiz.done && S.quiz.qs[S.quiz.i].type === "click") { if (dev) quizAnswer(dev.dataset.dev === S.quiz.qs[S.quiz.i].ans, null); return; }
   if (port && dev) { select(dev.dataset.dev, { ports: true }); return; }
-  if (part) { togglePart(part.dataset.part); return; }
+  if (part) { const p = PARTS[part.dataset.part]; if (p) select(p.host); return; }
   if (dev) { select(dev.dataset.dev); return; }
   if (S.sel) deselect();
 });
@@ -658,22 +732,20 @@ document.addEventListener("click", (e) => {
   if (t.id === "b-theme") return setTheme(document.body.dataset.theme === "dark" ? "light" : "dark");
   if (t.id === "b-labels") { S.labels = !S.labels; t.setAttribute("aria-pressed", S.labels); return kick(); }
   if (t.id === "b-follow") { S.follow = !S.follow; t.setAttribute("aria-pressed", S.follow); return; }
-  if (t.id === "b-reset") { stopRun(true); tourEnd(); resetPulls(); power(false); S.sel = null; clearLit(); camAll(); setTab("learn"); return; }
+  if (t.id === "b-reset") { stopRun(true); tourEnd(); isolate(null); resetPulls(); power(false); S.sel = null; clearLit(); camAll(); setTab("learn"); return; }
   if (t.classList.contains("prev")) return stepRun(-1, false);
   if (t.classList.contains("next")) return stepRun(1, false);
   if (t.classList.contains("play")) { const r = S.run; if (r.done || r.i === r.sc.steps.length - 1) { r.i = 0; r.done = false; r.auto = true; showStep(); scheduleNext(); } else { r.auto = !r.auto; if (r.auto) scheduleNext(); else clearTimeout(runTimer); showStep(); } return; }
   if (t.classList.contains("stop")) return stopRun();
 });
 $("#q").addEventListener("input", renderParts);
-addEventListener("keydown", (e) => { if (e.key === "Escape") { if (S.run) stopRun(); else if (S.sel) deselect(); } });
+addEventListener("keydown", (e) => { const tn = e.target.closest && e.target.closest("#topo .node"); if (tn && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); topoPanel(tn.dataset.node); return; } if (e.key === "Escape") { if (S.run) stopRun(); else if (S.sel) deselect(); } });
 
 // ---------- boot ----------
 function init() {
   buildBubbles();
   for (const el of $$(".led")) { el.setAttribute("data-tip", "LED"); }
-  let th = "dark";
-  try { th = localStorage.getItem("rack-theme") || (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark"); } catch (e) {}
-  setTheme(th);
+  setTheme("light");
   setView("front"); camAll(true);
   updateLeds(true); applyLit(); refreshPanel(); setTab("learn");
   const fit = () => { camAll(true); kick(); };
