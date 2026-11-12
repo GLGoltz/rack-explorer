@@ -12,7 +12,7 @@
    "how": "Vertical rails with square holes every U take cage nuts and screws, and the U numbers are printed on the rails. A base with levelling feet carries the weight, and perforated doors let air flow front to back. A power strip (PDU) runs down the rear rail.",
    "uses": [
     "Cyber Hub 00: rack and stack a server",
-    "Cyber Hub 12: every cable out, rack back to its starting state",
+    "Cyber Hub 15: every cable out, rack back to its starting state",
     "Nightly shutdown ends with an instructor check"
    ],
    "leds": []
@@ -28,7 +28,7 @@
    "what": "A 1U pull-out drawer with an LCD screen, keyboard and touchpad that folds into the rack. Behind it is an 8-port KVM switch.",
    "how": "KVM stands for keyboard, video, mouse. A thick USB + VGA cable joins a server to one of the 8 rear ports. Choose a port and that server's video appears on the screen, while your keyboard and mouse control it.",
    "uses": [
-    "Cyber Hub 06: install Proxmox on the hypervisor host",
+    "Cyber Hub 07: install Proxmox on the hypervisor host",
     "Read a server's screen when the network is down",
     "Nightly shutdown: switch the KVM off, fold it, slide it into the rack"
    ],
@@ -78,10 +78,10 @@
    "what": "A 1U Dell EMC server that runs Proxmox VE, a Type-1 hypervisor. Proxmox is installed on the internal SD module (IDSDM), which leaves the drive bays free for virtual machine data.",
    "how": "A Type-1 hypervisor runs straight on the hardware and divides CPU, RAM and storage between virtual machines. The Linux bridge vmbr0 is VLAN-aware, so a VM can be placed on a VLAN with a tag. VM disks live on the NAS and are mounted over NFS.",
    "uses": [
-    "Cyber Hub 06: Proxmox host for the DMZ web server VM",
-    "Cyber Hub 08: hosts your Greenbone scanner appliance",
-    "Cyber Hub 09: hosts the visiting assessors' scanner appliance",
-    "Cyber Hub 07: FTP server VM",
+    "Cyber Hub 08: Proxmox host for the DMZ web server VM",
+    "Cyber Hub 10: hosts your Greenbone scanner appliance",
+    "Cyber Hub 12: hosts the visiting assessors' scanner appliance",
+    "Cyber Hub 09: FTP server VM",
     "Managed from the Proxmox web interface on port 8006"
    ],
    "leds": [
@@ -111,8 +111,8 @@
    "how": "The switch learns which MAC address lives on which port and forwards each frame only there. VLANs split it into separate networks. A trunk port carries several VLANs on one link. A switch virtual interface (SVI) gives each VLAN a gateway address so the switch can route between VLANs.",
    "uses": [
     "Cyber Hub 01: factory reset and out-of-band management",
-    "Cyber Hub 04: VLANs, routing between VLANs, DHCP and the port map",
-    "Cyber Hub 12: reset to factory defaults"
+    "Cyber Hubs 04 and 05: VLANs, routing between VLANs, DHCP and the port map",
+    "Cyber Hub 15: reset to factory defaults"
    ],
    "leds": [
     [
@@ -161,8 +161,8 @@
    "how": "Its internal side answers at 10.R.200.1. The perimeter firewall's WAN port connects to it, and a laptop plugged into it can test your servers from the internet side.",
    "uses": [
     "Cyber Hub 02: set up as the ISP at 10.R.200.1",
-    "Cyber Hubs 06 and 09: test port forwards from the outside",
-    "Cyber Hub 12: factory reset"
+    "Cyber Hubs 08 and 12: test port forwards from the outside",
+    "Cyber Hub 15: factory reset"
    ],
    "leds": [
     [
@@ -196,7 +196,7 @@
    "uses": [
     "Cyber Hub 02: interfaces, routes and configuration backups",
     "Cyber Hub 03: policies, NAT, port forwards and guest Wi-Fi",
-    "Cyber Hub 09: its logs show the other team's scan",
+    "Cyber Hub 12: its logs show the other team's scan",
     "Netgate SG-3100: retired, not used"
    ],
    "leds": [
@@ -249,9 +249,9 @@
    "what": "A 4-bay network-attached storage server running DiskStation Manager (DSM). The four drives are grouped into one storage pool.",
    "how": "RAID 5 spreads data and parity across the four drives, so the pool survives one drive failing. An ext4 volume holds the VM_Datastore shared folder, which is exported over NFS so a server can mount it like a local disk.",
    "uses": [
-    "Cyber Hub 05: RAID 5 pool and NFS share on the Storage VLAN",
-    "Cyber Hub 06: VM disks live on the VM_Datastore share",
-    "Cyber Hub 12: Mode 2 reset"
+    "Cyber Hub 06: RAID 5 pool and NFS share on the Storage VLAN",
+    "Cyber Hub 07: VM disks live on the VM_Datastore share",
+    "Cyber Hub 15: Mode 2 reset"
    ],
    "leds": [
     [
@@ -280,7 +280,7 @@
    "how": "Telescoping rails let the shelf slide out of the rack so you can reach the contents, then lock back in. Nothing in the drawer is powered while it is stored.",
    "uses": [
     "Inventory check at the start of every lab: tell the instructor about anything missing",
-    "Holds the vulnerable Pi (Cyber Hub 08), the console cable, dongle, KVM cable and two USB sticks"
+    "Holds the vulnerable Pi (Cyber Hub 11), the console cable, dongle, KVM cable and two USB sticks"
    ],
    "leds": []
   },
@@ -461,7 +461,7 @@
    "host": "drawer",
    "name": "Raspberry Pi 3 · VULN-PI",
    "side": "up",
-   "what": "The deliberately vulnerable Pi your team builds in Cyber Hub 08.",
+   "what": "The deliberately vulnerable Pi your team builds in Cyber Hub 11.",
    "how": "Pre-loaded with weaknesses, including a backdoor page, for testing."
   },
   {
@@ -469,7 +469,7 @@
    "host": "drawer",
    "name": "USB stick A (install)",
    "side": "up",
-   "what": "Proxmox installer, used in Cyber Hub 06.",
+   "what": "Proxmox installer, used in Cyber Hub 07.",
    "how": "Created with an MBR partition scheme so the Dell BIOS can boot it."
   },
   {
@@ -675,7 +675,7 @@
     "hv": "use",
     "nas": "use"
    },
-   "why": "In Cyber Hub 07 you capture this login and find the password in plain text."
+   "why": "In Cyber Hub 09 you capture this login and find the password in plain text."
   },
   {
    "id": "nfs",
@@ -721,7 +721,7 @@
     "core": "use",
     "hv": "use"
    },
-   "why": "The native VLAN rule from Cyber Hub 04: lose the management path to the hypervisor and you lose the host."
+   "why": "The native VLAN rule from Cyber Hub 05: lose the management path to the hypervisor and you lose the host."
   },
   {
    "id": "kvmflow",

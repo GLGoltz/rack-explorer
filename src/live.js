@@ -824,10 +824,12 @@ addEventListener("keydown", (e) => { const tn = e.target.closest && e.target.clo
 const PAGES = {
   "00": ["Launch Your Company", ["rack"]], "01": ["Switch Provisioning", ["core"]],
   "02": ["Perimeter Firewall", ["fw", "bk"]], "03": ["Firewall Policies and Guest Wi-Fi", ["bk"]],
-  "04": ["Core Switching and VLANs", ["core", "bk"]], "05": ["Network Storage", ["nas", "core"]],
-  "06": ["Hypervisor and DMZ Web Server", ["hv", "nas", "kvm"]], "07": ["Services and Traffic Analysis", ["hv"]],
-  "08": ["Build the Vulnerable Pi", ["hv", "drawer"]], "09": ["Vulnerability Assessment", ["bk", "core", "hv", "drawer"]],
-  "10": ["Remediation and SSP", ["fw", "bk", "core", "hv", "nas", "drawer"]], "12": ["Lab Restoration", ["fw", "bk", "core", "hv", "nas", "drawer"]],
+  "04": ["Core Switching and VLANs", ["core"]], "05": ["Switch Ports and DHCP", ["core", "bk"]],
+  "06": ["Network Storage", ["nas", "core"]], "07": ["Hypervisor and Shared Storage", ["hv", "nas", "kvm"]],
+  "08": ["DMZ Web Server", ["hv", "bk"]], "09": ["Services and Traffic Analysis", ["hv"]],
+  "10": ["Scanner Appliance", ["hv", "bk"]], "11": ["Build the Vulnerable Pi", ["drawer", "kvm"]],
+  "12": ["Vulnerability Assessment", ["bk", "core", "hv", "drawer"]],
+  "13": ["Remediation and SSP", ["fw", "bk", "core", "hv", "nas", "drawer"]], "15": ["Lab Restoration", ["fw", "bk", "core", "hv", "nas", "drawer"]],
 };
 function applyPage() {
   const m = /^#ch(\d\d)$/.exec(location.hash);
