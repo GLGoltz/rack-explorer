@@ -79,6 +79,8 @@
    "how": "A Type-1 hypervisor runs straight on the hardware and divides CPU, RAM and storage between virtual machines. The Linux bridge vmbr0 is VLAN-aware, so a VM can be placed on a VLAN with a tag. VM disks live on the NAS and are mounted over NFS.",
    "uses": [
     "Cyber Hub 06: Proxmox host for the DMZ web server VM",
+    "Cyber Hub 08: hosts your Greenbone scanner appliance",
+    "Cyber Hub 09: hosts the visiting assessors' scanner appliance",
     "Cyber Hub 07: FTP server VM",
     "Managed from the Proxmox web interface on port 8006"
    ],
