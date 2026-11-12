@@ -2373,6 +2373,7 @@ function canPull(id) { return DEVS[id] && DEVS[id].u && id !== "rack" && id !== 
 function isolate(id) {
   if (S.iso && S.iso !== id && canPull(S.iso)) setPull(S.iso, 0);
   S.iso = id && id !== "rack" ? id : null;
+  if (!S.iso && S.view !== "front") setView("front");
   if (S.iso && canPull(S.iso)) setPull(S.iso, 1);
 }
 function select(id, opts = {}) {
