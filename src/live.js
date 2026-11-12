@@ -597,7 +597,8 @@ const TOPO = {
     { id: "ftp", x: 690, y: 362, w: 170, t: "FTP server VM", a: "10.R.40.11", dev: "hv", info: "Also a VM on the Proxmox host, also in the DMZ. In Cyber Hub 07 you find its login in plain text." },
     { id: "core", x: 400, y: 338, w: 250, t: "Core switch (Layer 3)", a: "SVIs .254 · routes between VLANs", dev: "core", info: "Routes between the Management, Data and Storage VLANs, hands out DHCP, and sends everything else to the firewall over the Transit VLAN." },
     { id: "pve", x: 130, y: 486, w: 170, t: "Proxmox host", a: "10.R.10.10", dev: "hv", info: "Managed on the Management VLAN at https://10.R.10.10:8006. Its VMs are tagged into other VLANs over the same cable." },
-    { id: "admin", x: 130, y: 546, w: 170, t: "Admin laptop", a: "10.R.10.5", info: "A laptop on the Management VLAN, for managing infrastructure." },
+    { id: "scan", x: 130, y: 546, w: 170, t: "Scanner VM", a: "10.R.10.20", dev: "hv", info: "Your Greenbone scanner appliance, a VM on the Proxmox host. Its own firewall policy, Scanner_to_DMZ, lets it test every port in the DMZ." },
+    { id: "admin", x: 130, y: 606, w: 170, t: "Admin laptop", a: "10.R.10.5", info: "A laptop on the Management VLAN, for managing infrastructure." },
     { id: "lap", x: 400, y: 486, w: 170, t: "Team laptops", a: "DHCP .100 to .199", info: "Your laptops on the Data VLAN. Their gateway is the switch at 10.R.20.254." },
     { id: "vpi", x: 400, y: 546, w: 170, t: "Vulnerable Pi", a: "DHCP on Data", dev: "drawer", info: "The Pi your team builds in Cyber Hub 08, on the Data VLAN where another team will scan it." },
     { id: "nas", x: 670, y: 516, w: 170, t: "Storage NAS", a: "10.R.30.10", dev: "nas", info: "Serves VM disks to the Proxmox host over NFS, on its own VLAN so heavy storage traffic stays separate." },
@@ -605,7 +606,7 @@ const TOPO = {
   zones: [
     { x: 15, y: 150, w: 190, h: 108, c: "#8a5a00", f: "#fff7e6", l: "Guest Wi-Fi", s: "10.R.50.0/24" },
     { x: 590, y: 238, w: 200, h: 160, c: "#a8332f", f: "#fdeeee", l: "DMZ · VLAN 40", s: "10.R.40.0/24" },
-    { x: 30, y: 420, w: 200, h: 172, c: "#2f5fb0", f: "#edf3fc", l: "Management · VLAN 10", s: "10.R.10.0/24" },
+    { x: 30, y: 420, w: 200, h: 232, c: "#2f5fb0", f: "#edf3fc", l: "Management · VLAN 10", s: "10.R.10.0/24" },
     { x: 300, y: 420, w: 200, h: 172, c: "#1d7a4a", f: "#ecf7f0", l: "Data · VLAN 20", s: "10.R.20.0/24" },
     { x: 570, y: 448, w: 200, h: 106, c: "#6b4bb0", f: "#f3effb", l: "Storage · VLAN 30", s: "10.R.30.0/24" },
   ],
@@ -618,7 +619,7 @@ const TOPO = {
     "net-isp": { t: "Internet to ISP router", p: ["Outside your control. Nothing from here gets into your network unless the firewall allows it."] },
     "isp-fw": { t: "ISP router to firewall (wan1)", p: ["Out: Outbound_General_Access (HTTP, HTTPS, DNS) and Outbound_Ping, both with NAT.", "In: only the three VIPs, through Allow_Inbound_Services, with NAT off.", "Everything else: blocked by the firewall's implicit deny."] },
     "fw-guest": { t: "Firewall to guest Wi-Fi", p: ["Guest_to_DMZ_Web allows HTTP to the web server.", "Nothing else from guests is allowed, so they never see your internal networks."] },
-    "fw-web": { t: "Firewall to the DMZ", p: ["Internal_to_DMZ allows HTTP, SSH and FTP from the Data and Management VLANs.", "Allow_Inbound_Services allows the VIPs from the internet side.", "DMZ to internal: no policy at all, so a broken-into server cannot reach inside."] },
+    "fw-web": { t: "Firewall to the DMZ", p: ["Internal_to_DMZ allows HTTP, SSH and FTP from the Data and Management VLANs.", "Scanner_to_DMZ lets the scanner VM, and only it, test every port.", "Allow_Inbound_Services allows the VIPs from the internet side.", "DMZ to internal: no policy at all, so a broken-into server cannot reach inside."] },
     "fw-core": { t: "Transit link (VLAN 100)", p: ["Routing only, no NAT. Internal traffic going to the DMZ or the internet crosses here and is checked by the firewall.", "The firewall's static routes send replies back through the switch at 10.R.100.254."] },
     "core-pve": { t: "Switch to the Management VLAN", p: ["The switch routes between internal VLANs itself, so the firewall never sees this traffic.", "That is fast, but there is no firewall policy between your internal networks."] },
     "core-lap": { t: "Switch to the Data VLAN", p: ["Laptops get addresses from the switch's DHCP pool and use 10.R.20.254 as their gateway.", "Traffic to other internal VLANs is routed by the switch, not the firewall."] },
@@ -668,7 +669,7 @@ function renderTopo() {
   }).join("");
   const zs = TOPO.zones.map((z) => `<g class="zone"><rect x="${z.x}" y="${z.y}" width="${z.w}" height="${z.h}" rx="10" fill="${z.f}" stroke="${z.c}"/><text class="zl" x="${z.x + 10}" y="${z.y + 17}" fill="${z.c}">${z.l}</text><text class="zs" x="${z.x + 10}" y="${z.y + 31}" fill="${z.c}">${z.s}</text></g>`).join("");
   const ns = TOPO.nodes.map((n) => `<g class="node" data-node="${n.id}" tabindex="0" role="button" aria-label="${esc(n.t)}, ${esc(n.a)}"><rect x="${n.x - n.w / 2}" y="${n.y - H}" width="${n.w}" height="${H * 2 - 8}" rx="8"/><text class="nt" x="${n.x}" y="${n.y - 6}" text-anchor="middle">${esc(n.t)}</text><text class="na" x="${n.x}" y="${n.y + 11}" text-anchor="middle">${esc(n.a)}</text></g>`).join("");
-  $("#topo").innerHTML = `<svg viewBox="0 0 800 600" role="img" aria-label="Logical topology of your rack's network" data-mode="${TQ.mode}">${zs}${lk}${ns}</svg>`;
+  $("#topo").innerHTML = `<svg viewBox="0 0 800 670" role="img" aria-label="Logical topology of your rack's network" data-mode="${TQ.mode}">${zs}${lk}${ns}</svg>`;
 }
 function topoMark(nodes, cls, links) {
   $$("#topo .node").forEach((g) => { g.classList.remove("on", "ok", "bad"); });
@@ -826,7 +827,7 @@ const PAGES = {
   "02": ["Perimeter Firewall", ["fw", "bk"]], "03": ["Firewall Policies and Guest Wi-Fi", ["bk"]],
   "04": ["Core Switching and VLANs", ["core", "bk"]], "05": ["Network Storage", ["nas", "core"]],
   "06": ["Hypervisor and DMZ Web Server", ["hv", "nas", "kvm"]], "07": ["Services and Traffic Analysis", ["hv"]],
-  "08": ["Build the Vulnerable Pi", ["drawer"]], "09": ["Vulnerability Assessment", ["bk", "core", "hv", "drawer"]],
+  "08": ["Build the Vulnerable Pi", ["hv", "drawer"]], "09": ["Vulnerability Assessment", ["bk", "core", "hv", "drawer"]],
   "10": ["Remediation and SSP", ["fw", "bk", "core", "hv", "nas", "drawer"]], "12": ["Lab Restoration", ["fw", "bk", "core", "hv", "nas", "drawer"]],
 };
 function applyPage() {
