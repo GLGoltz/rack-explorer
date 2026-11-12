@@ -14,7 +14,7 @@ const DEVICE_IDS = M.devices.map((d) => d.id);
 const PULL = 66, SPREAD = 0;
 
 const S = {
-  view: "front", powered: false, t: 0, sel: null, exploded: false, labels: true, follow: true,
+  view: "front", powered: false, t: 0, sel: null, exploded: false, labels: true, follow: false,
   cur: {}, tgt: {}, hold: {}, lit: {}, dim: new Set(), over: {}, battery: false,
   mode: "learn", run: null, tour: null, quiz: null, portZoom: false,
 };
@@ -214,7 +214,7 @@ function power(on) {
   $("#b-power").setAttribute("aria-pressed", S.powered);
   $("#b-power .lbl").textContent = S.powered ? "Power off" : "Power on";
   updateLeds(true); kick(); refreshPanel();
-  if (S.powered) setStatus("Powering on in order: UPS, PDU, firewalls, switches, storage, servers, KVM.");
+  if (S.powered) setStatus("Powering on: watch the lights come up from the UPS to the servers.");
   else setStatus("Everything is off. LEDs are dark.");
 }
 function powerInstant() { if (!S.powered) { S.powered = true; S.t = POWER_END + 1; $("#b-power").setAttribute("aria-pressed", true); $("#b-power .lbl").textContent = "Power off"; updateLeds(true); } }
@@ -314,8 +314,9 @@ function partsOf(id) { return M.parts.filter((p) => p.host === id); }
 function learnHtml() {
   const id = S.sel;
   if (!id) {
-    return `<div class="intro"><h3>Cyber Hub · Your lab rack</h3>
-<p>This is the rack your team works on, drawn to match the room. Hover any label for a quick summary, or click a device to zoom in, read its lights, and take it apart.</p>
+    const pg = S.page ? `<div class="pagebar"><b>Cyber Hub ${S.page.n}: ${esc(S.page.t)}</b><span>Highlighted: the devices this page uses.</span></div>` : "";
+    return pg + `<div class="intro"><h3>Cyber Hub · Your lab rack</h3>
+<p>This is the rack your team works on, drawn to match the room. Hover any label for a quick summary, or click a device to see it on its own and read its lights.</p>
 <ul class="how"><li><b>Click a device</b> to slide it out and see it on its own.</li><li><b>Power on</b> to watch the boot order and the lights come up.</li><li><b>Traffic</b> shows how a request moves between devices.</li><li><b>Topology</b> shows how the networks connect.</li></ul>
 <p class="note">Labels with a dashed grey outline are devices that stay in the rack but are not used in Cyber Hub. Cabling is left out on purpose: working out what connects where is part of the lab.</p></div>
 <h4>Every device (${DEVICE_IDS.length - 1 + 0})</h4><div class="chips">${M.devices.filter((d) => d.id !== "rack").map((d) => `<button class="chip${UNUSED.has(d.id) ? " unused" : ""}" data-sel="${d.id}">${d.u && d.id !== "pdu" ? "U" + d.u + " · " : ""}${esc(d.name)}${UNUSED.has(d.id) ? '<i class="nu">Not used</i>' : ""}</button>`).join("")}</div>
@@ -328,6 +329,7 @@ function learnHtml() {
 <div class="btns">
  
  ${d.leds.length ? `<button class="btn" data-act="ports">Zoom to ports and lights</button>` : ""}
+ ${TOPO.nodes.some((n) => n.dev === id) ? `<button class="btn" data-act="topo-show">Show it in the topology</button>` : ""}
  <button class="btn ghost" data-act="back">Back to whole rack</button></div>
 <h4>What it is</h4><p>${esc(d.what)}</p><h4>How it works</h4><p>${esc(d.how)}</p>
 <h4>What we use it for</h4><ul>${d.uses.map((u) => `<li>${esc(u)}</li>`).join("")}</ul>${legend(d)}
@@ -383,7 +385,7 @@ function startRun(type, id) {
   powerInstant();
   const sc = (type === "flow" ? M.traffic : M.attacks).find((x) => x.id === id);
   if (S.iso) { isolate(null); S.sel = null; }
-  S.run = { type, sc, i: 0, auto: true };
+  S.run = { type, sc, i: 0, auto: false };
   $("#" + type + "-run").hidden = false;
   $("#" + type + "-list").hidden = true;
   showStep();
@@ -588,7 +590,7 @@ const TOPO = {
     { id: "net", x: 400, y: 34, w: 170, t: "The internet", a: "past the ISP", info: "Everything outside your rack. In the lab, a laptop plugged into the ISP router stands in for it." },
     { id: "isp", x: 400, y: 112, w: 190, t: "ISP router", a: "10.R.200.1", dev: "fw", info: "The FortiGate 50E plays your internet provider. Your firewall's default route points here." },
     { id: "fw", x: 400, y: 222, w: 250, t: "Perimeter firewall", a: "wan1 .2 · internal .1 · dmz .1", dev: "bk", info: "The FortiWiFi 60E. Every packet between the internet, the DMZ, the guest network and your internal networks passes one of its policies." },
-    { id: "guest", x: 110, y: 222, w: 170, t: "Guest iPads", a: "DHCP 10.R.50.x", info: "Guest Wi-Fi lives on the firewall itself. Its only policy allows HTTP to the web server, so guests cannot reach anything else." },
+    { id: "guest", x: 110, y: 222, w: 170, t: "Guest laptops", a: "DHCP 10.R.50.x", info: "Guest Wi-Fi lives on the firewall itself. Its only policy allows HTTP to the web server, so guests cannot reach anything else." },
     { id: "web", x: 690, y: 300, w: 170, t: "Web server VM", a: "10.R.40.10", dev: "hv", info: "Your company homepage. It runs on the Proxmox host but lives in the DMZ, so its gateway is the firewall, not the switch." },
     { id: "ftp", x: 690, y: 362, w: 170, t: "FTP server VM", a: "10.R.40.11", dev: "hv", info: "Also a VM on the Proxmox host, also in the DMZ. In Cyber Hub 07 you find its login in plain text." },
     { id: "core", x: 400, y: 338, w: 250, t: "Core switch (Layer 3)", a: "SVIs .254 · routes between VLANs", dev: "core", info: "Routes between the Management, Data and Storage VLANs, hands out DHCP, and sends everything else to the firewall over the Transit VLAN." },
@@ -610,7 +612,44 @@ const TOPO = {
     ["fw", "web", ""], ["fw", "core", "Transit · VLAN 100 · 10.R.100.0/24"],
     ["core", "pve", ""], ["core", "lap", ""], ["core", "nas", ""],
   ],
+  policy: {
+    "net-isp": { t: "Internet to ISP router", p: ["Outside your control. Nothing from here gets into your network unless the firewall allows it."] },
+    "isp-fw": { t: "ISP router to firewall (wan1)", p: ["Out: Outbound_General_Access (HTTP, HTTPS, DNS) and Outbound_Ping, both with NAT.", "In: only the three VIPs, through Allow_Inbound_Services, with NAT off.", "Everything else: blocked by the firewall's implicit deny."] },
+    "fw-guest": { t: "Firewall to guest Wi-Fi", p: ["Guest_to_DMZ_Web allows HTTP to the web server.", "Nothing else from guests is allowed, so they never see your internal networks."] },
+    "fw-web": { t: "Firewall to the DMZ", p: ["Internal_to_DMZ allows HTTP, SSH and FTP from the Data and Management VLANs.", "Allow_Inbound_Services allows the VIPs from the internet side.", "DMZ to internal: no policy at all, so a broken-into server cannot reach inside."] },
+    "fw-core": { t: "Transit link (VLAN 100)", p: ["Routing only, no NAT. Internal traffic going to the DMZ or the internet crosses here and is checked by the firewall.", "The firewall's static routes send replies back through the switch at 10.R.100.254."] },
+    "core-pve": { t: "Switch to the Management VLAN", p: ["The switch routes between internal VLANs itself, so the firewall never sees this traffic.", "That is fast, but there is no firewall policy between your internal networks."] },
+    "core-lap": { t: "Switch to the Data VLAN", p: ["Laptops get addresses from the switch's DHCP pool and use 10.R.20.254 as their gateway.", "Traffic to other internal VLANs is routed by the switch, not the firewall."] },
+    "core-nas": { t: "Switch to the Storage VLAN", p: ["The Proxmox host reaches the NAS through the switch.", "Keeping storage on its own VLAN stops heavy disk traffic slowing everything else."] },
+  },
+  stops: [
+    { t: "A laptop gets a 169.254.x.x address", s: [
+      { n: "lap", ok: true, x: "The laptop sends a DHCP request, asking for an address." },
+      { n: "core", ok: false, x: "No answer comes back. Check that the laptop's port is in the Data VLAN, and that the Data VLAN has a DHCP pool." } ] },
+    { t: "A laptop pings its gateway but not other VLANs", s: [
+      { n: "lap", ok: true, x: "A ping to 10.R.20.254 works, so the cable, VLAN and address are fine." },
+      { n: "lap", ok: false, x: "Traffic for other networks never leaves the laptop. Check the laptop's default gateway." } ] },
+    { t: "VLANs reach each other, but not the firewall", s: [
+      { n: "lap", ok: true, x: "The laptop sends traffic to its gateway." },
+      { n: "core", ok: true, x: "The switch routes between your VLANs, so internal traffic works." },
+      { n: "fw", ok: false, x: "Nothing reaches the firewall, or replies never return. Check the switch's default route to 10.R.100.1, and the firewall's static routes back." } ] },
+    { t: "A laptop cannot open the DMZ web page", s: [
+      { n: "lap", ok: true, x: "The laptop asks for http://10.R.40.10." },
+      { n: "core", ok: true, x: "The switch has no DMZ address, so it sends the request to the firewall." },
+      { n: "fw", ok: false, x: "The firewall drops it. Check that Internal_to_DMZ allows HTTP from the Data VLAN." } ] },
+    { t: "Proxmox works, but the web VM cannot be reached", s: [
+      { n: "lap", ok: true, x: "The laptop asks for the web page." },
+      { n: "core", ok: true, x: "The switch forwards it to the firewall." },
+      { n: "fw", ok: true, x: "The policy allows it, and the firewall sends it out of its DMZ port." },
+      { n: "web", ok: false, x: "The VM never answers. Check its VLAN tag (40), that VLAN 40 is tagged on XG3, and that vmbr0 is VLAN-aware." } ] },
+    { t: "Outside visitors cannot open the web page", s: [
+      { n: "net", ok: true, x: "A visitor asks for http://10.R.200.2, the firewall's WAN address." },
+      { n: "isp", ok: true, x: "The ISP router delivers it to the firewall." },
+      { n: "fw", ok: false, x: "The firewall drops it. Check that VIP-HTTP maps to 10.R.40.10 and that Allow_Inbound_Services allows it, with NAT off." } ] },
+  ],
 };
+const TQ = { mode: "devices", stop: null, step: 0, practice: {} };
+const PRACTICE_IDS = ["isp", "pve", "admin", "web", "ftp", "nas"];
 function renderTopo() {
   const N = Object.fromEntries(TOPO.nodes.map((n) => [n.id, n]));
   const H = 26;
@@ -624,17 +663,56 @@ function renderTopo() {
     if (a === "core" && ZT[b]) y2 = ZT[b];
     const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
     const path = Math.abs(x1 - x2) > 4 && A.y !== B.y && b !== "web" ? `M${x1},${y1} V${my} H${x2} V${y2}` : `M${x1},${y1} L${x2},${y2}`;
-    return `<path class="lk${k ? " " + k : ""}" d="${path}"/>${l ? `<text class="ll" x="${x1 - 10}" y="${my + 4}" text-anchor="end">${l}</text>` : ""}`;
+    return `<g class="link" data-link="${a}-${b}"><path class="lk${k ? " " + k : ""}" d="${path}"/><path class="lkh" d="${path}"/></g>${l ? `<text class="ll" x="${x1 - 10}" y="${my + 4}" text-anchor="end">${l}</text>` : ""}`;
   }).join("");
   const zs = TOPO.zones.map((z) => `<g class="zone"><rect x="${z.x}" y="${z.y}" width="${z.w}" height="${z.h}" rx="10" fill="${z.f}" stroke="${z.c}"/><text class="zl" x="${z.x + 10}" y="${z.y + 17}" fill="${z.c}">${z.l}</text><text class="zs" x="${z.x + 10}" y="${z.y + 31}" fill="${z.c}">${z.s}</text></g>`).join("");
-  const ns = TOPO.nodes.map((n) => `<g class="node" data-node="${n.id}" tabindex="0" role="button" aria-label="${esc(n.t)}, ${esc(n.a)}"><rect x="${n.x - n.w / 2}" y="${n.y - H}" width="${n.w}" height="${H * 2 - 8}" rx="8"/><text class="nt" x="${n.x}" y="${n.y - 6}" text-anchor="middle">${esc(n.t)}</text><text class="na" x="${n.x}" y="${n.y + 11}" text-anchor="middle">${esc(n.a)}</text></g>`).join("");
-  $("#topo").innerHTML = `<svg viewBox="0 0 800 600" role="img" aria-label="Logical topology of your rack's network">${zs}${lk}${ns}</svg>`;
+  const ns = TOPO.nodes.map((n) => `<g class="node" data-node="${n.id}" tabindex="0" role="button" aria-label="${esc(n.t)}, ${esc(n.a)}"><rect x="${n.x - n.w / 2}" y="${n.y - H}" width="${n.w}" height="${H * 2 - 8}" rx="8"/><text class="nt" x="${n.x}" y="${n.y - 6}" text-anchor="middle">${esc(n.t)}</text><text class="na" x="${n.x}" y="${n.y + 11}" text-anchor="middle">${TQ.mode === "practice" && PRACTICE_IDS.includes(n.id) ? (TQ.practice[n.id] ? esc(n.a) : "?") : esc(n.a)}</text></g>`).join("");
+  $("#topo").innerHTML = `<svg viewBox="0 0 800 600" role="img" aria-label="Logical topology of your rack's network" data-mode="${TQ.mode}">${zs}${lk}${ns}</svg>`;
 }
+function topoMark(nodes, cls, links) {
+  $$("#topo .node").forEach((g) => { g.classList.remove("on", "ok", "bad"); });
+  $$("#topo .link").forEach((g) => g.classList.remove("on"));
+  for (const [id, c] of nodes) { const g = $(`#topo .node[data-node="${id}"]`); if (g) g.classList.add(c); }
+  for (const l of links || []) { const g = $(`#topo .link[data-link="${l}"]`); if (g) g.classList.add("on"); }
+}
+function topoModes() {
+  const m = [["devices", "Devices"], ["policies", "Policies"], ["stop", "Where does it stop?"], ["practice", "Practice"]];
+  return `<div class="tmodes" role="group" aria-label="Topology mode">${m.map(([k, l]) => `<button class="btn${TQ.mode === k ? " primary" : ""}" data-tmode="${k}">${l}</button>`).join("")}</div>`;
+}
+function linkBetween(a, b) { const l = TOPO.links.find(([x, y]) => (x === a && y === b) || (x === b && y === a)); return l ? l[0] + "-" + l[1] : null; }
 function topoPanel(id) {
-  const n = TOPO.nodes.find((x) => x.id === id);
-  $$("#topo .node").forEach((g) => g.classList.toggle("on", g.dataset.node === id));
-  const intro = `<div class="intro"><h3>Logical topology</h3><p>How your rack's networks connect, regardless of which cable goes where. Each coloured box is one network. Click any device to see its role.</p><p class="note">Replace R with your rack number, as on your rack sheet.</p></div>`;
-  $("#p-topo").innerHTML = intro + (n ? `<div class="dhead"><div><h3>${esc(n.t)}</h3><div class="mk">${esc(n.a)}</div></div></div><p>${esc(n.info)}</p>${n.dev ? `<div class="btns"><button class="btn" data-sel="${n.dev}">Show it in the rack</button></div>` : ""}` : "");
+  const head = `<div class="intro"><h3>Logical topology</h3><p>How your rack's networks connect, regardless of which cable goes where. Replace R with your rack number.</p></div>${topoModes()}`;
+  let body = "";
+  if (TQ.mode === "devices") {
+    const n = TOPO.nodes.find((x) => x.id === id);
+    topoMark(n ? [[id, "on"]] : [], "on");
+    body = n ? `<div class="dhead"><div><h3>${esc(n.t)}</h3><div class="mk">${esc(n.a)}</div></div></div><p>${esc(n.info)}</p>${n.dev ? `<div class="btns"><button class="btn" data-sel="${n.dev}">Show it in the rack</button></div>` : ""}` : `<p class="note">Click any device to see its role.</p>`;
+  } else if (TQ.mode === "policies") {
+    const L = id && TOPO.policy[id];
+    topoMark(L ? id.split("-").map((x) => [x, "on"]) : [], "on", L ? [id] : []);
+    body = L ? `<h3>${esc(L.t)}</h3><ul>${L.p.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>` : `<p class="note">Click any line between two devices to see which rules decide the traffic on it.</p>`;
+  } else if (TQ.mode === "stop") {
+    if (!TQ.stop) {
+      topoMark([], "on");
+      body = `<p class="note">Pick a symptom. Step through it to see where the traffic stops and what to check.</p><div class="list">${TOPO.stops.map((s, i) => `<button class="item" data-stop="${i}"><b>${esc(s.t)}</b></button>`).join("")}</div>`;
+    } else {
+      const sc = TOPO.stops[TQ.stop - 1], st = sc.s[TQ.step];
+      const seen = sc.s.slice(0, TQ.step + 1);
+      const marks = seen.map((x, i) => [x.n, i === TQ.step ? (x.ok ? "ok" : "bad") : "ok"]);
+      const links = []; for (let i = 1; i < seen.length; i++) { const l = linkBetween(seen[i - 1].n, seen[i].n); if (l) links.push(l); }
+      topoMark(marks, "", links);
+      body = `<div class="stepn">Step ${TQ.step + 1} of ${sc.s.length}</div><h3>${esc(sc.t)}</h3><p class="${st.ok ? "" : "fault"}">${st.ok ? "" : "<b>Stops here.</b> "}${esc(st.x)}</p><div class="btns"><button class="btn" data-stopstep="-1"${TQ.step ? "" : " disabled"}>Back</button><button class="btn primary" data-stopstep="1"${TQ.step < sc.s.length - 1 ? "" : " disabled"}>Next</button><button class="btn ghost" data-stopclose="1">Close</button></div>`;
+    }
+  } else if (TQ.mode === "practice") {
+    const done = PRACTICE_IDS.filter((x) => TQ.practice[x]).length;
+    const n = PRACTICE_IDS.includes(id) && TOPO.nodes.find((x) => x.id === id);
+    topoMark(n ? [[id, "on"]] : [], "on");
+    body = `<p class="note">Addresses are hidden. Click a device with a ? and type its address, using R for your rack number. ${done} of ${PRACTICE_IDS.length} done.</p>` +
+      (n ? `<h3>${esc(n.t)}</h3>${TQ.practice[id] ? `<p class="okmsg">Correct: ${esc(n.a)}</p>` : `<form class="pform" data-pnode="${id}"><label for="pin">Address</label><input id="pin" autocomplete="off" spellcheck="false" placeholder="10.R.?.?"><button class="btn primary" type="submit">Check</button></form><p class="pres" role="status"></p>`}` : "") +
+      (done ? `<div class="btns"><button class="btn ghost" data-preset="1">Start over</button></div>` : "");
+  }
+  $("#p-topo").innerHTML = head + body;
+  const inp = $("#pin"); if (inp) inp.focus();
 }
 
 // ---------- view, theme ----------
@@ -657,7 +735,7 @@ function tick(now) {
   if (S.powered && S.t < POWER_END) {
     S.t += dt; busy = true;
     const idx = M.power.reduce((b, p, i) => (S.t >= p.at ? i : b), -1);
-    if (idx !== lastBoot) { lastBoot = idx; if (idx >= 0 && S.follow && !S.run && !S.tour) { const id = M.power[idx].id; if (DEVS[id]) camDev(id, false); setStatus(M.power[idx].note + "."); } if (idx === M.power.length - 1) setTimeout(() => { if (!S.run && !S.tour) camAll(); }, 1400); }
+    if (idx !== lastBoot) { lastBoot = idx; if (idx >= 0 && S.follow && !S.run && !S.tour) { const id = M.power[idx].id; if (DEVS[id]) camDev(id, false); setStatus(M.power[idx].note + "."); } if (idx === M.power.length - 1) setTimeout(() => { if (!S.run && !S.tour && !S.iso) camAll(); }, 1400); }
     updateLeds(true);
   } else if (S.powered && S.t >= POWER_END && lastBoot !== 99) { lastBoot = 99; updateLeds(true); refreshPanel(); }
   let moved = false;
@@ -679,7 +757,7 @@ addEventListener("resize", () => { kick(); camAll(true); });
 
 // ---------- events ----------
 let drag = null;
-stage.addEventListener("pointerdown", (e) => { if (e.target.closest(".bub, .hud, #lane, .ctl, #topo")) return; drag = { x: e.clientX, y: e.clientY, cx: camT.cx, cy: camT.cy, moved: false }; });
+stage.addEventListener("pointerdown", (e) => { return; drag = { x: e.clientX, y: e.clientY, cx: camT.cx, cy: camT.cy, moved: false }; });
 addEventListener("pointermove", (e) => {
   if (drag) {
     const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
@@ -690,9 +768,10 @@ addEventListener("pointermove", (e) => {
 });
 addEventListener("pointerup", () => setTimeout(() => (drag = null), 0));
 stage.addEventListener("pointerleave", () => (tipEl.hidden = true));
-stage.addEventListener("wheel", (e) => { if (S.mode === "topo") return; e.preventDefault(); const f = Math.exp(e.deltaY * 0.0012); camT.w = Math.max(70, Math.min(1400, camT.w * f)); Object.assign(cam, { w: camT.w }); kick(); }, { passive: false });
+stage.addEventListener("wheel", (e) => { return; e.preventDefault(); const f = Math.exp(e.deltaY * 0.0012); camT.w = Math.max(70, Math.min(1400, camT.w * f)); Object.assign(cam, { w: camT.w }); kick(); }, { passive: false });
 stage.addEventListener("click", (e) => {
-  const tn = e.target.closest("#topo .node"); if (tn) { topoPanel(tn.dataset.node); return; }
+  const tl = e.target.closest("#topo .link"); if (tl && TQ.mode === "policies") { topoPanel(tl.dataset.link); return; }
+  const tn = e.target.closest("#topo .node"); if (tn) { if (TQ.mode === "devices" || TQ.mode === "practice") topoPanel(tn.dataset.node); return; }
   if (e.target.closest("#topo")) return;
   if (drag && drag.moved) return;
   if (e.target.closest(".bub, .hud, .ctl, #lane")) return;
@@ -700,13 +779,18 @@ stage.addEventListener("click", (e) => {
   if (S.quiz && !S.quiz.done && S.quiz.qs[S.quiz.i].type === "click") { if (dev) quizAnswer(dev.dataset.dev === S.quiz.qs[S.quiz.i].ans, null); return; }
   if (port && dev) { select(dev.dataset.dev, { ports: true }); return; }
   if (part) { const p = PARTS[part.dataset.part]; if (p) select(p.host); return; }
-  if (dev) { select(dev.dataset.dev); return; }
+  if (dev) { if (S.iso === dev.dataset.dev) deselect(); else select(dev.dataset.dev); return; }
   if (S.sel) deselect();
 });
 document.addEventListener("click", (e) => {
   const t = e.target.closest("button, .chip"); if (!t) return;
   const a = t.dataset.act;
   if (t.dataset.tab) return setTab(t.dataset.tab);
+  if (t.dataset.tmode) { TQ.mode = t.dataset.tmode; TQ.stop = null; TQ.step = 0; renderTopo(); return topoPanel(null); }
+  if (t.dataset.stop !== undefined) { TQ.stop = +t.dataset.stop + 1; TQ.step = 0; return topoPanel(null); }
+  if (t.dataset.stopstep) { TQ.step = Math.max(0, Math.min(TOPO.stops[TQ.stop - 1].s.length - 1, TQ.step + +t.dataset.stopstep)); return topoPanel(null); }
+  if (t.dataset.stopclose) { TQ.stop = null; TQ.step = 0; return topoPanel(null); }
+  if (t.dataset.preset) { TQ.practice = {}; renderTopo(); return topoPanel(null); }
   if (t.dataset.view) return setView(t.dataset.view);
   if (t.dataset.sel) return select(t.dataset.sel);
   if (t.dataset.part) { const id = t.dataset.part; if (t.dataset.go) { const p = PARTS[id]; if (p.side === "front" || p.side === "rear") { if (S.view !== p.side) setView(p.side); } camDev(p.host, false); S.sel = p.host; applyLit(); } togglePart(id); return; }
@@ -714,6 +798,7 @@ document.addEventListener("click", (e) => {
   if (t.dataset.attack) return startRun("attack", t.dataset.attack);
   if (t.dataset.opt !== undefined) { const q = S.quiz.qs[S.quiz.i]; quizAnswer(+t.dataset.opt === q.ans, +t.dataset.opt); return; }
   switch (a) {
+    case "topo-show": { const id = S.sel; setTab("topo"); TQ.mode = "devices"; renderTopo(); const ns = TOPO.nodes.filter((n) => n.dev === id); topoPanel(ns[0] && ns[0].id); topoMark(ns.map((n) => [n.id, "on"]), "on"); return; }
     case "pull": return togglePart(S.sel);
     case "ports": S.portZoom = true; return camDev(S.sel, true);
     case "back": return deselect();
@@ -739,7 +824,32 @@ document.addEventListener("click", (e) => {
   if (t.classList.contains("stop")) return stopRun();
 });
 $("#q").addEventListener("input", renderParts);
+document.addEventListener("submit", (e) => {
+  const f = e.target.closest(".pform"); if (!f) return;
+  e.preventDefault();
+  const id = f.dataset.pnode, n = TOPO.nodes.find((x) => x.id === id);
+  const norm = (v) => v.toLowerCase().replace(/\s+/g, "");
+  if (norm($("#pin").value) === norm(n.a)) { TQ.practice[id] = true; renderTopo(); topoPanel(id); }
+  else { $(".pres").textContent = "Not quite. Check the VLAN plan: the third number is the VLAN."; $("#pin").select(); }
+});
 addEventListener("keydown", (e) => { const tn = e.target.closest && e.target.closest("#topo .node"); if (tn && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); topoPanel(tn.dataset.node); return; } if (e.key === "Escape") { if (S.run) stopRun(); else if (S.sel) deselect(); } });
+
+// ---------- per-page view (#ch04) ----------
+const PAGES = {
+  "00": ["Launch Your Company", ["rack"]], "01": ["Switch Provisioning", ["core"]],
+  "02": ["Perimeter Firewall", ["fw", "bk"]], "03": ["Firewall Policies and Guest Wi-Fi", ["bk"]],
+  "04": ["Core Switching and VLANs", ["core", "bk"]], "05": ["Network Storage", ["nas", "core"]],
+  "06": ["Hypervisor and DMZ Web Server", ["hv", "nas", "kvm"]], "07": ["Services and Traffic Analysis", ["hv"]],
+  "08": ["Build the Vulnerable Pi", ["drawer"]], "09": ["Vulnerability Assessment", ["bk", "core", "hv", "drawer"]],
+  "10": ["Remediation and SSP", ["fw", "bk", "core", "hv", "nas", "drawer"]], "12": ["Lab Restoration", ["fw", "bk", "core", "hv", "nas", "drawer"]],
+};
+function applyPage() {
+  const m = /^#ch(\d\d)$/.exec(location.hash);
+  S.page = m && PAGES[m[1]] ? { n: m[1], t: PAGES[m[1]][0], devs: PAGES[m[1]][1] } : null;
+  S.lit = {}; if (S.page) for (const id of S.page.devs) S.lit[id] = "use";
+  applyLit(); refreshPanel();
+}
+addEventListener("hashchange", applyPage);
 
 // ---------- boot ----------
 function init() {
@@ -747,7 +857,7 @@ function init() {
   for (const el of $$(".led")) { el.setAttribute("data-tip", "LED"); }
   setTheme("light");
   setView("front"); camAll(true);
-  updateLeds(true); applyLit(); refreshPanel(); setTab("learn");
+  updateLeds(true); applyLit(); refreshPanel(); setTab("learn"); applyPage();
   const fit = () => { camAll(true); kick(); };
   new ResizeObserver(fit).observe(stage);
   kick();

@@ -17,7 +17,7 @@
 {{VIEWS}}
    <svg id="links" class="links" aria-hidden="true"></svg>
    <div id="bubbles"></div>
-   <div class="hint">Click a device to see it on its own · scroll to zoom, drag to pan</div>
+   <div class="hint">Click a device to see it on its own. Click it again to go back.</div>
    <div id="topo" class="topo" hidden></div>
    <div id="lane" class="lane" hidden></div>
    <div id="tip" hidden></div>
@@ -31,11 +31,11 @@
   <div class="pane" id="p-learn"></div>
   <div class="pane" id="p-flow" hidden>
    <div id="flow-list"><p>Pick a request to see how it travels through the rack. The bead hops from device to device while each one lights up. The wiring is left for you to work out.</p><div class="list"></div></div>
-   <div id="flow-run" hidden><div class="stepn"></div><h3></h3><div class="layer"></div><p class="stept"></p><p class="why"></p><div class="btns"><button class="btn prev">Back</button><button class="btn primary play">Pause</button><button class="btn next">Next</button><button class="btn ghost stop">Close</button></div></div>
+   <div id="flow-run" hidden><div class="stepn"></div><h3></h3><div class="layer"></div><p class="stept"></p><p class="why"></p><div class="btns"><button class="btn prev">Back</button><button class="btn primary play" hidden>Pause</button><button class="btn next">Next</button><button class="btn ghost stop">Close</button></div></div>
   </div>
   <div class="pane" id="p-attack" hidden>
    <div id="attack-list"><p>Simulated attacks and failures from the labs. Red devices are affected, amber ones are at risk, and the rest dim. Concepts only, no step-by-step exploitation.</p><div class="list"></div></div>
-   <div id="attack-run" hidden><div class="stepn"></div><h3></h3><div class="goal"></div><p class="stept"></p><div class="aff"></div><div class="def"><h4>How to defend</h4><ul></ul></div><div class="btns"><button class="btn prev">Back</button><button class="btn primary play">Pause</button><button class="btn next">Next</button><button class="btn ghost stop">Close</button></div></div>
+   <div id="attack-run" hidden><div class="stepn"></div><h3></h3><div class="goal"></div><p class="stept"></p><div class="aff"></div><div class="def"><h4>How to defend</h4><ul></ul></div><div class="btns"><button class="btn prev">Back</button><button class="btn primary play" hidden>Pause</button><button class="btn next">Next</button><button class="btn ghost stop">Close</button></div></div>
   </div>
   <div class="pane" id="p-topo" hidden></div>
   <div class="pane" id="p-parts" hidden><input id="q" type="search" placeholder="Search devices and pieces" aria-label="Search components"><p class="note" id="parts-count" style="margin:8px 0 0"></p><div id="parts-list"></div></div>
