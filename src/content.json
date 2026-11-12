@@ -154,8 +154,8 @@
    "make": "Fortinet",
    "model": "FortiGate 50E",
    "u": "10",
-   "role": "Plays the internet provider for your rack",
-   "what": "A compact FortiGate. In this lab it plays your rack's internet provider at 10.R.200.1, so the perimeter firewall has a real next hop.",
+   "role": "Acts as a mock ISP for your rack",
+   "what": "A compact FortiGate. In this lab it acts as a mock ISP at 10.R.200.1, so the perimeter firewall has a real next hop.",
    "how": "Its internal side answers at 10.R.200.1. The perimeter firewall's WAN port connects to it, and a laptop plugged into it can test your servers from the internet side.",
    "uses": [
     "Cyber Hub 02: set up as the ISP at 10.R.200.1",
@@ -737,7 +737,7 @@
     "The laptop sends a packet to an outside address. Its default gateway is the switch.",
     "The core switch's default route points to the firewall's internal address, so it forwards the packet there.",
     "The firewall matches Outbound_General_Access, then NAT replaces the private source address with its WAN address, 10.R.200.2.",
-    "The packet reaches the ISP router at 10.R.200.1, which plays the internet."
+    "The packet reaches the ISP router at 10.R.200.1, the mock ISP."
    ],
    "hit": {
     "laptop": "use",

@@ -590,7 +590,7 @@ function showTip(ev) {
 const TOPO = {
   nodes: [
     { id: "net", x: 400, y: 34, w: 170, t: "The internet", a: "past the ISP", info: "Everything outside your rack. In the lab, a laptop plugged into the ISP router stands in for it." },
-    { id: "isp", x: 400, y: 112, w: 190, t: "ISP router", a: "10.R.200.1", dev: "fw", info: "The FortiGate 50E plays your internet provider. Your firewall's default route points here." },
+    { id: "isp", x: 400, y: 112, w: 190, t: "ISP router", a: "10.R.200.1", dev: "fw", info: "The FortiGate 50E acts as a mock ISP. Your firewall's default route points here." },
     { id: "fw", x: 400, y: 222, w: 250, t: "Perimeter firewall", a: "wan1 .2 · internal .1 · dmz .1", dev: "bk", info: "The FortiWiFi 60E. Every packet between the internet, the DMZ, the guest network and your internal networks passes one of its policies." },
     { id: "guest", x: 110, y: 222, w: 170, t: "Guest laptops", a: "DHCP 10.R.50.x", info: "Guest Wi-Fi lives on the firewall itself. Its only policy allows HTTP to the web server, so guests cannot reach anything else." },
     { id: "web", x: 690, y: 300, w: 170, t: "Web server VM", a: "10.R.40.10", dev: "hv", info: "Your company homepage. It runs on the Proxmox host but lives in the DMZ, so its gateway is the firewall, not the switch." },
