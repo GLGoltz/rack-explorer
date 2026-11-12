@@ -651,8 +651,7 @@ const TOPO = {
       { n: "fw", ok: false, x: "The firewall drops it. Check that VIP-HTTP maps to 10.R.40.10 and that Allow_Inbound_Services allows it, with NAT off." } ] },
   ],
 };
-const TQ = { mode: "devices", stop: null, step: 0, practice: {} };
-const PRACTICE_IDS = ["isp", "pve", "admin", "web", "ftp", "nas"];
+const TQ = { mode: "devices", stop: null, step: 0 };
 function renderTopo() {
   const N = Object.fromEntries(TOPO.nodes.map((n) => [n.id, n]));
   const H = 26;
@@ -669,7 +668,7 @@ function renderTopo() {
     return `<g class="link" data-link="${a}-${b}"><path class="lk${k ? " " + k : ""}" d="${path}"/><path class="lkh" d="${path}"/></g>${l ? `<text class="ll" x="${x1 - 10}" y="${my + 4}" text-anchor="end">${l}</text>` : ""}`;
   }).join("");
   const zs = TOPO.zones.map((z) => `<g class="zone"><rect x="${z.x}" y="${z.y}" width="${z.w}" height="${z.h}" rx="10" fill="${z.f}" stroke="${z.c}"/><text class="zl" x="${z.x + 10}" y="${z.y + 17}" fill="${z.c}">${z.l}</text><text class="zs" x="${z.x + 10}" y="${z.y + 31}" fill="${z.c}">${z.s}</text></g>`).join("");
-  const ns = TOPO.nodes.map((n) => `<g class="node" data-node="${n.id}" tabindex="0" role="button" aria-label="${esc(n.t)}, ${esc(n.a)}"><rect x="${n.x - n.w / 2}" y="${n.y - H}" width="${n.w}" height="${H * 2 - 8}" rx="8"/><text class="nt" x="${n.x}" y="${n.y - 6}" text-anchor="middle">${esc(n.t)}</text><text class="na" x="${n.x}" y="${n.y + 11}" text-anchor="middle">${TQ.mode === "practice" && PRACTICE_IDS.includes(n.id) ? (TQ.practice[n.id] ? esc(n.a) : "?") : esc(n.a)}</text></g>`).join("");
+  const ns = TOPO.nodes.map((n) => `<g class="node" data-node="${n.id}" tabindex="0" role="button" aria-label="${esc(n.t)}, ${esc(n.a)}"><rect x="${n.x - n.w / 2}" y="${n.y - H}" width="${n.w}" height="${H * 2 - 8}" rx="8"/><text class="nt" x="${n.x}" y="${n.y - 6}" text-anchor="middle">${esc(n.t)}</text><text class="na" x="${n.x}" y="${n.y + 11}" text-anchor="middle">${esc(n.a)}</text></g>`).join("");
   $("#topo").innerHTML = `<svg viewBox="0 0 800 600" role="img" aria-label="Logical topology of your rack's network" data-mode="${TQ.mode}">${zs}${lk}${ns}</svg>`;
 }
 function topoMark(nodes, cls, links) {
@@ -679,7 +678,7 @@ function topoMark(nodes, cls, links) {
   for (const l of links || []) { const g = $(`#topo .link[data-link="${l}"]`); if (g) g.classList.add("on"); }
 }
 function topoModes() {
-  const m = [["devices", "Devices"], ["policies", "Policies"], ["stop", "Where does it stop?"], ["practice", "Practice"]];
+  const m = [["devices", "Devices"], ["policies", "Policies"], ["stop", "Where does it stop?"]];
   return `<div class="tmodes" role="group" aria-label="Topology mode">${m.map(([k, l]) => `<button class="btn${TQ.mode === k ? " primary" : ""}" data-tmode="${k}">${l}</button>`).join("")}</div>`;
 }
 function linkBetween(a, b) { const l = TOPO.links.find(([x, y]) => (x === a && y === b) || (x === b && y === a)); return l ? l[0] + "-" + l[1] : null; }
@@ -706,16 +705,8 @@ function topoPanel(id) {
       topoMark(marks, "", links);
       body = `<div class="stepn">Step ${TQ.step + 1} of ${sc.s.length}</div><h3>${esc(sc.t)}</h3><p class="${st.ok ? "" : "fault"}">${st.ok ? "" : "<b>Stops here.</b> "}${esc(st.x)}</p><div class="btns"><button class="btn" data-stopstep="-1"${TQ.step ? "" : " disabled"}>Back</button><button class="btn primary" data-stopstep="1"${TQ.step < sc.s.length - 1 ? "" : " disabled"}>Next</button><button class="btn ghost" data-stopclose="1">Close</button></div>`;
     }
-  } else if (TQ.mode === "practice") {
-    const done = PRACTICE_IDS.filter((x) => TQ.practice[x]).length;
-    const n = PRACTICE_IDS.includes(id) && TOPO.nodes.find((x) => x.id === id);
-    topoMark(n ? [[id, "on"]] : [], "on");
-    body = `<p class="note">Addresses are hidden. Click a device with a ? and type its address, using R for your rack number. ${done} of ${PRACTICE_IDS.length} done.</p>` +
-      (n ? `<h3>${esc(n.t)}</h3>${TQ.practice[id] ? `<p class="okmsg">Correct: ${esc(n.a)}</p>` : `<form class="pform" data-pnode="${id}"><label for="pin">Address</label><input id="pin" autocomplete="off" spellcheck="false" placeholder="10.R.?.?"><button class="btn primary" type="submit">Check</button></form><p class="pres" role="status"></p>`}` : "") +
-      (done ? `<div class="btns"><button class="btn ghost" data-preset="1">Start over</button></div>` : "");
   }
   $("#p-topo").innerHTML = head + body;
-  const inp = $("#pin"); if (inp) inp.focus();
 }
 
 // ---------- view, theme ----------
@@ -774,7 +765,7 @@ stage.addEventListener("pointerleave", () => (tipEl.hidden = true));
 stage.addEventListener("wheel", (e) => { return; e.preventDefault(); const f = Math.exp(e.deltaY * 0.0012); camT.w = Math.max(70, Math.min(1400, camT.w * f)); Object.assign(cam, { w: camT.w }); kick(); }, { passive: false });
 stage.addEventListener("click", (e) => {
   const tl = e.target.closest("#topo .link"); if (tl && TQ.mode === "policies") { topoPanel(tl.dataset.link); return; }
-  const tn = e.target.closest("#topo .node"); if (tn) { if (TQ.mode === "devices" || TQ.mode === "practice") topoPanel(tn.dataset.node); return; }
+  const tn = e.target.closest("#topo .node"); if (tn) { if (TQ.mode === "devices") topoPanel(tn.dataset.node); return; }
   if (e.target.closest("#topo")) return;
   if (drag && drag.moved) return;
   if (e.target.closest(".bub, .hud, .ctl, #lane")) return;
@@ -793,7 +784,6 @@ document.addEventListener("click", (e) => {
   if (t.dataset.stop !== undefined) { TQ.stop = +t.dataset.stop + 1; TQ.step = 0; return topoPanel(null); }
   if (t.dataset.stopstep) { TQ.step = Math.max(0, Math.min(TOPO.stops[TQ.stop - 1].s.length - 1, TQ.step + +t.dataset.stopstep)); return topoPanel(null); }
   if (t.dataset.stopclose) { TQ.stop = null; TQ.step = 0; return topoPanel(null); }
-  if (t.dataset.preset) { TQ.practice = {}; renderTopo(); return topoPanel(null); }
   if (t.dataset.view) return setView(t.dataset.view);
   if (t.dataset.sel) return select(t.dataset.sel);
   if (t.dataset.part) { const id = t.dataset.part; if (t.dataset.go) { const p = PARTS[id]; if (p.side === "front" || p.side === "rear") { if (S.view !== p.side) setView(p.side); } camDev(p.host, false); S.sel = p.host; applyLit(); } togglePart(id); return; }
@@ -828,14 +818,7 @@ document.addEventListener("click", (e) => {
   if (t.classList.contains("stop")) return stopRun();
 });
 $("#q").addEventListener("input", renderParts);
-document.addEventListener("submit", (e) => {
-  const f = e.target.closest(".pform"); if (!f) return;
-  e.preventDefault();
-  const id = f.dataset.pnode, n = TOPO.nodes.find((x) => x.id === id);
-  const norm = (v) => v.toLowerCase().replace(/\s+/g, "");
-  if (norm($("#pin").value) === norm(n.a)) { TQ.practice[id] = true; renderTopo(); topoPanel(id); }
-  else { $(".pres").textContent = "Not quite. Check the VLAN plan: the third number is the VLAN."; $("#pin").select(); }
-});
+
 addEventListener("keydown", (e) => { const tn = e.target.closest && e.target.closest("#topo .node"); if (tn && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); topoPanel(tn.dataset.node); return; } if (e.key === "Escape") { if (S.run) stopRun(); else if (S.sel) deselect(); } });
 
 // ---------- per-page view (#ch04) ----------
