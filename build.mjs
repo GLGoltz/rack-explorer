@@ -1,6 +1,6 @@
 // Server Rack Explorer: build script.
 //
-//   node build.mjs            writes server-rack.html
+//   node build.mjs            writes index.html
 //
 // What lives where
 //   build.mjs                 geometry: the rack frame, the device table, shelf items, views
@@ -275,6 +275,6 @@ const page = read("src/shell.html")
   .replace("{{VIEWS}}", () => "   " + viewSvg("front") + viewSvg("rear"))
   // escape "</script" inside the inlined code so it cannot close the page's script tag
   .replace("{{SCRIPT}}", () => (kit + "\n" + data + "\n" + read("src/live.js")).replace(/<\/(script)/gi, "<\\/$1"));
-const out = join(HERE, "server-rack.html");
+const out = join(HERE, "index.html");
 writeFileSync(out, page);
 console.log(`wrote ${out} (${(page.length / 1024).toFixed(0)} KB)`);

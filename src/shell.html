@@ -1,12 +1,12 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Server Rack Explorer</title><style>{{STYLE}}</style></head><body class="iso" data-theme="dark"><div class="app">
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Rack Explorer</title><style>{{STYLE}}</style></head><body class="iso" data-theme="dark"><div class="app">
 <header class="bar">
- <div class="brand"><span class="mark" aria-hidden="true"></span><div><b>Server Rack Explorer</b><small>Chaffey College · Enterprise Infrastructure Capstone</small></div></div>
+ <div class="brand"><span class="mark" aria-hidden="true"></span><div><b>Rack Explorer</b><small>Chaffey College · Cyber Hub · Built by Junior Angeles</small></div></div>
  <div class="seg" role="group" aria-label="View"><button data-view="front" aria-pressed="true">Front</button><button data-view="rear" aria-pressed="false">Rear</button></div>
  <div class="acts">
   <button id="b-power" aria-pressed="false"><span class="lbl">Power on</span></button>
   <button id="b-explode" aria-pressed="false"><span class="lbl">Take apart</span></button>
-  <button id="b-labels" aria-pressed="true">Labels</button>
-  <button id="b-follow" aria-pressed="true">Auto camera</button>
+  <button id="b-labels" aria-pressed="true" hidden>Labels</button>
+  <button id="b-follow" aria-pressed="true" hidden>Auto camera</button>
   <button id="b-reset">Reset</button>
   <button id="b-theme"><span class="lbl">Light</span></button>
  </div>
@@ -25,11 +25,11 @@
  </section>
  <aside class="panel">
   <nav class="tabs" role="tablist">
-   <button data-tab="learn" aria-selected="true">Learn</button><button data-tab="flow" aria-selected="false">Flow</button><button data-tab="attack" aria-selected="false">Attacks</button><button data-tab="parts" aria-selected="false">Parts</button><button data-tab="tour" aria-selected="false">Tour</button><button data-tab="quiz" aria-selected="false">Quiz</button>
+   <button data-tab="learn" aria-selected="true">Devices</button><button data-tab="flow" aria-selected="false">Traffic</button><button data-tab="attack" aria-selected="false" hidden>Attacks</button><button data-tab="parts" aria-selected="false" hidden>Parts</button><button data-tab="tour" aria-selected="false" hidden>Tour</button><button data-tab="quiz" aria-selected="false" hidden>Quiz</button>
   </nav>
   <div class="pane" id="p-learn"></div>
   <div class="pane" id="p-flow" hidden>
-   <div id="flow-list"><p>Pick a flow to see how one request travels through the rack. The bead hops from device to device while each one lights up. The wiring is left for you to work out.</p><div class="list"></div></div>
+   <div id="flow-list"><p>Pick a request to see how it travels through the rack. The bead hops from device to device while each one lights up. The wiring is left for you to work out.</p><div class="list"></div></div>
    <div id="flow-run" hidden><div class="stepn"></div><h3></h3><div class="layer"></div><p class="stept"></p><p class="why"></p><div class="btns"><button class="btn prev">Back</button><button class="btn primary play">Pause</button><button class="btn next">Next</button><button class="btn ghost stop">Close</button></div></div>
   </div>
   <div class="pane" id="p-attack" hidden>

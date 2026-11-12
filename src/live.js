@@ -220,6 +220,7 @@ function power(on) {
 function powerInstant() { if (!S.powered) { S.powered = true; S.t = POWER_END + 1; $("#b-power").setAttribute("aria-pressed", true); $("#b-power .lbl").textContent = "Power off"; updateLeds(true); } }
 
 // ---------- lighting, dimming ----------
+const UNUSED = new Set(["r420", "sw2", "aux"]);
 function applyLit() {
   for (const view of ["front", "rear"]) {
     for (const el of $$(".dev", svgs[view])) {
@@ -227,10 +228,11 @@ function applyLit() {
       const l = S.lit[id] || (S.sel === id ? "sel" : "");
       if (l) el.dataset.lit = l; else delete el.dataset.lit;
       if (S.dim.size && DEVS[id] && S.dim.has(id)) el.setAttribute("data-dim", ""); else el.removeAttribute("data-dim");
+      if (UNUSED.has(id)) el.setAttribute("data-unused", ""); else el.removeAttribute("data-unused");
     }
     svgs[view].classList.toggle("frame-sel", S.sel === "rack");
   }
-  for (const b of $$(".bub")) { const id = b.dataset.dev; b.dataset.lit = S.lit[id] || (S.sel === id ? "sel" : ""); b.classList.toggle("dim", S.dim.has(id)); }
+  for (const b of $$(".bub")) { const id = b.dataset.dev; b.dataset.lit = S.lit[id] || (S.sel === id ? "sel" : ""); b.classList.toggle("dim", S.dim.has(id)); b.classList.toggle("unused", UNUSED.has(id)); }
   updateLeds(true);
 }
 function clearLit() { S.lit = {}; S.dim = new Set(); S.over = {}; S.battery = false; applyLit(); }
@@ -288,6 +290,7 @@ function select(id, opts = {}) {
 function deselect() { S.sel = null; S.portZoom = false; applyLit(); camAll(); refreshPanel(); }
 function stateText(id) {
   const s = devState(id), l = S.lit[id];
+  if (UNUSED.has(id)) return "Not used";
   if (!DEVS[id].u || id === "rack") return s === "off" && !S.powered ? "Off" : "On";
   return ({ off: "Off", boot: "Booting…", on: l === "use" ? "On · in use" : l === "hit" ? "On · affected" : "On" })[s];
 }
@@ -299,15 +302,16 @@ function partsOf(id) { return M.parts.filter((p) => p.host === id); }
 function learnHtml() {
   const id = S.sel;
   if (!id) {
-    return `<div class="intro"><h3>Enterprise Infrastructure Capstone · Server rack</h3>
-<p>This is the lab rack your team will work on, drawn to match the room. Hover any label for a quick summary, or click a device to zoom in, read its lights, and take it apart.</p>
-<ul class="how"><li><b>Power on</b> to watch the boot order and the lights come up.</li><li><b>Take apart</b> slides every device and removable part out.</li><li><b>Flow</b> shows how traffic moves between devices.</li><li><b>Attacks</b> shows what each scenario touches.</li><li><b>Tour</b> is a hands-free walk through the rack.</li></ul>
-<p class="note">Cabling is left out on purpose. Working out what connects to what is part of the lab.</p></div>
-<h4>Every device (${DEVICE_IDS.length - 1 + 0})</h4><div class="chips">${M.devices.filter((d) => d.id !== "rack").map((d) => `<button class="chip" data-sel="${d.id}">${d.u && d.id !== "pdu" ? "U" + d.u + " · " : ""}${esc(d.name)}</button>`).join("")}</div>`;
+    return `<div class="intro"><h3>Cyber Hub · Your lab rack</h3>
+<p>This is the rack your team works on, drawn to match the room. Hover any label for a quick summary, or click a device to zoom in, read its lights, and take it apart.</p>
+<ul class="how"><li><b>Power on</b> to watch the boot order and the lights come up.</li><li><b>Take apart</b> slides every device and removable part out.</li><li><b>Traffic</b> shows how a request moves between devices.</li></ul>
+<p class="note">Faded devices are not used in Cyber Hub. Cabling is left out on purpose: working out what connects where is part of the lab.</p></div>
+<h4>Every device (${DEVICE_IDS.length - 1 + 0})</h4><div class="chips">${M.devices.filter((d) => d.id !== "rack").map((d) => `<button class="chip${UNUSED.has(d.id) ? " unused" : ""}" data-sel="${d.id}">${d.u && d.id !== "pdu" ? "U" + d.u + " · " : ""}${esc(d.name)}</button>`).join("")}</div>
+<p class="credit">Rack Explorer built by Junior Angeles, Cyber Hub apprentice.</p>`;
   }
   const d = DEVS[id], parts = partsOf(id);
   const canPull = d.u && d.id !== "rack" && d.id !== "pdu";
-  return `<div class="dhead"><div><div class="u">${id === "rack" ? "Cabinet" : id === "pdu" ? "Rear rail" : "U" + d.u}</div><h3>${esc(d.name)}</h3><div class="mk">${esc(d.make)} · ${esc(d.model)}</div></div><div class="st" data-st="${devState(id)}">${stateText(id)}</div></div>
+  return `<div class="dhead"><div><div class="u">${id === "rack" ? "Cabinet" : id === "pdu" ? "Rear rail" : "U" + d.u}</div><h3>${esc(d.name)}</h3><div class="mk">${esc(d.make)} · ${esc(d.model)}</div></div><div class="st" data-st="${UNUSED.has(id) ? "unused" : devState(id)}">${stateText(id)}</div></div>
 <p class="role">${esc(d.role)}</p>
 <div class="btns">
  ${canPull ? `<button class="btn" data-act="pull">${S.tgt[id] > 0.5 ? "Slide back in" : "Pull out"}</button>` : ""}
@@ -322,6 +326,7 @@ function refreshPanel() {
   if (S.mode === "parts") renderParts();
 }
 function setTab(t) {
+  if (t !== "flow" && S.run) stopRun(true);
   S.mode = t;
   $$(".tabs button").forEach((b) => b.setAttribute("aria-selected", b.dataset.tab === t));
   $$(".pane").forEach((p) => p.hidden = p.id !== "p-" + t);

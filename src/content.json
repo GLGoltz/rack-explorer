@@ -6,14 +6,14 @@
    "name": "Equipment Rack",
    "make": "APC",
    "model": "NetShelter SX 24U",
-   "u": "1\u201324",
+   "u": "1–24",
    "role": "The cabinet that holds, cools and organises everything",
    "what": "A 19-inch enclosure with 24 rack units (U). One U is 1.75 in (44.45 mm) tall. Every device in the lab is screwed or slid into it.",
    "how": "Vertical rails with square holes every U take cage nuts and screws, and the U numbers are printed on the rails. A base with levelling feet carries the weight, and perforated doors let air flow front to back. A power strip (PDU) runs down the rear rail.",
    "uses": [
-    "Rack & Stack: physical installation is the first milestone",
-    "Decabling and tidy-up at the end of the course (Goal 9)",
-    "Nightly shutdown ends with a rack review by the instructor"
+    "Cyber Hub 00: rack and stack a server",
+    "Cyber Hub 12: every cable out, rack back to its starting state",
+    "Nightly shutdown ends with an instructor check"
    ],
    "leds": []
   },
@@ -28,8 +28,8 @@
    "what": "A 1U pull-out drawer with an LCD screen, keyboard and touchpad that folds into the rack. Behind it is an 8-port KVM switch.",
    "how": "KVM stands for keyboard, video, mouse. A thick USB + VGA cable joins a server to one of the 8 rear ports. Choose a port and that server's video appears on the screen, while your keyboard and mouse control it.",
    "uses": [
-    "Install Proxmox on the hypervisor host (Goal 6)",
-    "Stage the Raspberry Pis before they join the air-gapped network (Goal 4)",
+    "Cyber Hub 06: install Proxmox on the hypervisor host",
+    "Read a server's screen when the network is down",
     "Nightly shutdown: switch the KVM off, fold it, slide it into the rack"
    ],
    "leds": [
@@ -46,22 +46,20 @@
    "make": "Dell",
    "model": "PowerEdge R420",
    "u": "18",
-   "role": "Older 1U server kept for practice and comparison",
+   "role": "Not used in Cyber Hub",
    "what": "A 1U, two-socket Intel Xeon server from Dell's 12th generation. Hot-swap drive bays and an LCD status panel are on the front; two power supplies, iDRAC and gigabit NICs are at the back.",
    "how": "Two redundant power supplies share the load, so one can fail without a shutdown. The iDRAC port is a tiny separate computer that lets an admin power the server on or off and see its screen over the network, even when the main system is off.",
    "uses": [
-    "Legacy host for extra practice VMs",
-    "Compare an older server with the R440: bezel, LCD, drive bays",
-    "Practise reading server status lights"
+    "Not used in Cyber Hub. It stays in the rack."
    ],
    "leds": [
     [
      "Power button ring",
-     "green: system on \u00b7 off: system off"
+     "green: system on · off: system off"
     ],
     [
      "LCD panel",
-     "blue: normal \u00b7 amber: fault"
+     "blue: normal · amber: fault"
     ],
     [
      "Drive LEDs",
@@ -80,9 +78,9 @@
    "what": "A 1U Dell EMC server that runs Proxmox VE, a Type-1 hypervisor. Proxmox is installed on the internal SD module (IDSDM), which leaves the drive bays free for virtual machine data.",
    "how": "A Type-1 hypervisor runs straight on the hardware and divides CPU, RAM and storage between virtual machines. The Linux bridge vmbr0 is VLAN-aware, so a VM can be placed on a VLAN with a tag. VM disks live on the NAS and are mounted over NFS.",
    "uses": [
-    "Hosts the Ubuntu-FTP virtual machine (Goal 6)",
-    "Managed from the Proxmox web interface on port 8006",
-    "Target of the traffic-analysis and physical-security exercises"
+    "Cyber Hub 06: Proxmox host for the DMZ web server VM",
+    "Cyber Hub 07: FTP server VM",
+    "Managed from the Proxmox web interface on port 8006"
    ],
    "leds": [
     [
@@ -91,7 +89,7 @@
     ],
     [
      "Status (left ear)",
-     "off/white: healthy \u00b7 amber blink: fault"
+     "off/white: healthy · amber blink: fault"
     ],
     [
      "Drive carrier LED",
@@ -110,19 +108,18 @@
    "what": "A managed Layer 3 switch with twelve 10-gigabit RJ45 ports (two shared with SFP+ cages), a separate out-of-band management port and a console port at the back.",
    "how": "The switch learns which MAC address lives on which port and forwards each frame only there. VLANs split it into separate networks. A trunk port carries several VLANs on one link. A switch virtual interface (SVI) gives each VLAN a gateway address so the switch can route between VLANs.",
    "uses": [
-    "VLANs, SVIs and inter-VLAN routing (Goal 3)",
-    "DHCP server for the data and storage networks",
-    "In-band and out-of-band management (Goal 1)",
-    "Trunk links to servers and the firewall, access links to hosts"
+    "Cyber Hub 01: factory reset and out-of-band management",
+    "Cyber Hub 04: VLANs, routing between VLANs, DHCP and the port map",
+    "Cyber Hub 12: reset to factory defaults"
    ],
    "leds": [
     [
      "Port LED",
-     "solid: link up \u00b7 blinking: traffic \u00b7 off: no link"
+     "solid: link up · blinking: traffic · off: no link"
     ],
     [
      "SYS / PWR",
-     "green: running \u00b7 blinking: booting \u00b7 amber: fault"
+     "green: running · blinking: booting · amber: fault"
     ]
    ]
   },
@@ -133,40 +130,37 @@
    "make": "Cisco",
    "model": "CBS350-12XT",
    "u": "12",
-   "role": "A second identical switch for extra segments and practice",
+   "role": "Not used in Cyber Hub",
    "what": "The same CBS350-12XT hardware as the core switch. Identical hardware means a config learned on one works on the other.",
    "how": "Works exactly like the core switch. Used as spare capacity or as a separate segment, depending on what the instructor assigns.",
    "uses": [
-    "Extra switching capacity or a second segment",
-    "Practise factory reset and sanitising (Goals 1 and 9)",
-    "Compare running-config and startup-config on two units"
+    "Not used in Cyber Hub. It stays in the rack."
    ],
    "leds": [
     [
      "Port LED",
-     "solid: link up \u00b7 blinking: traffic \u00b7 off: no link"
+     "solid: link up · blinking: traffic · off: no link"
     ],
     [
      "SYS / PWR",
-     "green: running \u00b7 blinking: booting"
+     "green: running · blinking: booting"
     ]
    ]
   },
   {
    "id": "fw",
    "num": 6,
-   "name": "Firewall",
+   "name": "ISP Router",
    "make": "Fortinet",
    "model": "FortiGate 50E",
    "u": "10",
-   "role": "Perimeter firewall between the lab and the (simulated) Internet",
-   "what": "A compact next-generation firewall that sits between the lab LAN and the WAN. In this lab the WAN side is a simulated ISP, so nothing outside will ever reply.",
-   "how": "Every packet is compared with policies from top to bottom: source, destination, service, action. The first match wins and the default is deny. NAT swaps private addresses for the WAN address, Virtual IPs (VIPs) forward chosen outside ports to inside servers, and static routes tell it where the internal VLANs live.",
+   "role": "Plays the internet provider for your rack",
+   "what": "A compact FortiGate. In this lab it plays your rack's internet provider at 10.R.200.1, so the perimeter firewall has a real next hop.",
+   "how": "Its internal side answers at 10.R.200.1. The perimeter firewall's WAN port connects to it, and a laptop plugged into it can test your servers from the internet side.",
    "uses": [
-    "WAN/LAN interfaces and the default route (Goal 2)",
-    "Outbound policies, ping policy and VIPs for FTP, SSH and HTTP",
-    "Hardening: disable ping on the WAN, change the default password",
-    "Backup the config as Goal2_Start_Backup.conf"
+    "Cyber Hub 02: set up as the ISP at 10.R.200.1",
+    "Cyber Hubs 06 and 09: test port forwards from the outside",
+    "Cyber Hub 12: factory reset"
    ],
    "leds": [
     [
@@ -175,31 +169,33 @@
     ],
     [
      "STA",
-     "green: running \u00b7 blinking: booting"
+     "green: running · blinking: booting"
     ],
     [
      "ALARM",
-     "off: healthy \u00b7 red: fault"
+     "off: healthy · red: fault"
     ],
     [
      "Port LEDs",
-     "solid: link up \u00b7 blinking: traffic"
+     "solid: link up · blinking: traffic"
     ]
    ]
   },
   {
    "id": "bk",
    "num": 7,
-   "name": "Backup Appliances",
-   "make": "Netgate / Fortinet",
-   "model": "SG-3100 / FortiWiFi 60E",
+   "name": "Perimeter Firewall",
+   "make": "Fortinet / Netgate",
+   "model": "FortiWiFi 60E / SG-3100",
    "u": "8",
-   "role": "Two spare firewall appliances on one rack tray",
-   "what": "A white rack tray holding a Netgate SG-3100 (runs pfSense) and a Fortinet FortiWiFi 60E (a FortiGate with built-in Wi-Fi). Both lift off the tray.",
-   "how": "Both do the same job as the main firewall: inspect and filter traffic between networks. They come from two different vendors, so students can compare pfSense with FortiOS.",
+   "role": "Your firewall between the lab and the internet. The Netgate beside it is retired.",
+   "what": "A rack tray holding a Fortinet FortiWiFi 60E, a FortiGate with built-in Wi-Fi, and a retired Netgate SG-3100.",
+   "how": "Every packet is compared with policies from top to bottom: source, destination, service, action. The first match wins and the default is deny. NAT swaps private addresses for the WAN address, Virtual IPs (VIPs) forward chosen outside ports to DMZ servers, and static routes tell it where the internal VLANs live. Its Wi-Fi radio serves the guest network.",
    "uses": [
-    "Standby if the main firewall is wiped or misconfigured",
-    "Hands-on comparison of two vendors' firewalls"
+    "Cyber Hub 02: interfaces, routes and configuration backups",
+    "Cyber Hub 03: policies, NAT, port forwards and guest Wi-Fi",
+    "Cyber Hub 09: its logs show the other team's scan",
+    "Netgate SG-3100: retired, not used"
    ],
    "leds": [
     [
@@ -208,7 +204,7 @@
     ],
     [
      "Port LEDs",
-     "solid: link \u00b7 blinking: traffic"
+     "solid: link · blinking: traffic"
     ]
    ]
   },
@@ -219,12 +215,11 @@
    "make": "Dell EMC",
    "model": "PowerEdge R440",
    "u": "6",
-   "role": "Second R440 for practice VMs and extra targets",
+   "role": "Not used in Cyber Hub",
    "what": "A second 1U R440, the same hardware as the hypervisor host.",
    "how": "Same design: redundant power supplies, iDRAC remote management, two gigabit NICs and front drive carriers. Having two identical servers makes exercises possible that need a second host.",
    "uses": [
-    "Second host for practice VMs or scan targets",
-    "Hardware swap practice: drive carriers and power supplies"
+    "Not used in Cyber Hub. It stays in the rack."
    ],
    "leds": [
     [
@@ -248,23 +243,22 @@
    "what": "A 4-bay network-attached storage server running DiskStation Manager (DSM). The four drives are grouped into one storage pool.",
    "how": "RAID 5 spreads data and parity across the four drives, so the pool survives one drive failing. An ext4 volume holds the VM_Datastore shared folder, which is exported over NFS so a server can mount it like a local disk.",
    "uses": [
-    "Storage on its own VLAN so storage traffic is isolated (Goal 5)",
-    "VM_Datastore holds the Ubuntu-FTP disk (Goal 6)",
-    "DSM upgrade path: 6.2.4 \u2192 7.0.1 \u2192 7.3.2",
-    "'Mode 2' reset clears it at the end of the course"
+    "Cyber Hub 05: RAID 5 pool and NFS share on the Storage VLAN",
+    "Cyber Hub 06: VM disks live on the VM_Datastore share",
+    "Cyber Hub 12: Mode 2 reset"
    ],
    "leds": [
     [
      "STATUS",
-     "green: healthy \u00b7 orange blink: degraded / fault"
+     "green: healthy · orange blink: degraded / fault"
     ],
     [
      "Drive LED",
-     "green: drive OK \u00b7 blink: activity \u00b7 orange: fault"
+     "green: drive OK · blink: activity · orange: fault"
     ],
     [
      "LAN LED",
-     "green: link \u00b7 blink: traffic"
+     "green: link · blink: traffic"
     ]
    ]
   },
@@ -279,9 +273,8 @@
    "what": "A sliding 1U shelf with an open top. It stores the Raspberry Pis, cables, adapters and USB sticks.",
    "how": "Telescoping rails let the shelf slide out of the rack so you can reach the contents, then lock back in. Nothing in the drawer is powered while it is stored.",
    "uses": [
-    "Inventory check at the start of every shift: tell the instructor about anything missing",
-    "Holds WEB-SRV and VULN-PI (Raspberry Pi 3)",
-    "Console cable, USB-C dongle, KVM cable and two USB sticks"
+    "Inventory check at the start of every lab: tell the instructor about anything missing",
+    "Holds the vulnerable Pi (Cyber Hub 08), a spare Pi, the console cable, dongle, KVM cable and two USB sticks"
    ],
    "leds": []
   },
@@ -508,25 +501,25 @@
   {
    "id": "fw-unit",
    "host": "fw",
-   "name": "FortiGate 50E appliance",
+   "name": "FortiGate 50E (ISP router)",
    "side": "up",
-   "what": "The firewall itself, a desktop-size appliance resting on the tray. The right half of the tray is empty.",
+   "what": "The ISP router, a desktop-size FortiGate resting on the tray.",
    "how": "Network ports are on the back; the front shows power, status and port LEDs and a USB port."
   },
   {
    "id": "sg3100",
    "host": "bk",
-   "name": "Netgate SG-3100",
+   "name": "Netgate SG-3100 (retired)",
    "side": "up",
-   "what": "A compact pfSense firewall appliance.",
+   "what": "A retired pfSense appliance. Not used in Cyber Hub.",
    "how": "ARM-based, runs pfSense. Ports on the back; three status LEDs on the front."
   },
   {
    "id": "fw60e",
    "host": "bk",
-   "name": "FortiWiFi 60E",
+   "name": "FortiWiFi 60E (perimeter firewall)",
    "side": "up",
-   "what": "A FortiGate firewall with built-in Wi-Fi.",
+   "what": "Your perimeter firewall: a FortiGate with built-in Wi-Fi for the guest network.",
    "how": "Runs the same FortiOS as the FortiGate 50E, plus a wireless access point."
   },
   {
@@ -564,17 +557,17 @@
   {
    "id": "pi-web",
    "host": "drawer",
-   "name": "Raspberry Pi 3 \u00b7 WEB-SRV",
+   "name": "Raspberry Pi 3 · spare",
    "side": "up",
-   "what": "The internal intranet web server.",
+   "what": "A spare Pi. Not used in Cyber Hub.",
    "how": "Runs Raspberry Pi OS and Apache. Students customise its web page (Goal 4)."
   },
   {
    "id": "pi-vuln",
    "host": "drawer",
-   "name": "Raspberry Pi 3 \u00b7 VULN-PI",
+   "name": "Raspberry Pi 3 · VULN-PI",
    "side": "up",
-   "what": "The deliberately vulnerable target machine, marked with a hacker sticker.",
+   "what": "The deliberately vulnerable Pi your team builds in Cyber Hub 08.",
    "how": "Pre-loaded with weaknesses, including a backdoor page, for testing."
   },
   {
@@ -582,7 +575,7 @@
    "host": "drawer",
    "name": "USB stick A (install)",
    "side": "up",
-   "what": "Boot media used to install Proxmox.",
+   "what": "Proxmox installer, used in Cyber Hub 06.",
    "how": "Created with an MBR partition scheme so the Dell BIOS can boot it."
   },
   {
@@ -590,7 +583,7 @@
    "host": "drawer",
    "name": "USB stick B (transfer)",
    "side": "up",
-   "what": "A blank drive for moving screenshots, logs and configs off the air-gapped network.",
+   "what": "Transfer stick for moving files into and out of the air-gapped rack.",
    "how": "The only sanctioned way data leaves the lab."
   },
   {
@@ -635,13 +628,13 @@
    "id": "fw",
    "at": 2,
    "dur": 3,
-   "note": "Firewall boots (PWR then STA)"
+   "note": "ISP router boots"
   },
   {
    "id": "bk",
    "at": 2.2,
    "dur": 2.5,
-   "note": "Backup appliances boot"
+   "note": "Perimeter firewall boots"
   },
   {
    "id": "core",
@@ -689,56 +682,126 @@
  "traffic": [
   {
    "id": "web",
-   "name": "Open the intranet web page",
-   "layer": "Layer 7 \u00b7 HTTP",
+   "name": "Open the company web page (DMZ)",
+   "layer": "Layer 3–7 · HTTP through a firewall policy",
    "route": [
     "laptop",
     "core",
-    "drawer",
+    "bk",
+    "core",
+    "hv",
+    "core",
+    "bk",
     "core",
     "laptop"
    ],
    "steps": [
-    "The laptop asks the DHCP server on the switch for an address, then sends an HTTP request for the web page.",
-    "The core switch looks at the destination MAC address and forwards the frame only toward the web server.",
-    "WEB-SRV (Raspberry Pi) runs Apache. It reads index.html and builds the response.",
-    "The reply goes back the same way. The switch forwards it to the laptop's MAC address."
+    "The laptop on the Data VLAN asks for http://10.R.40.10. That is another network, so it goes to its gateway, the core switch.",
+    "The switch has no DMZ address of its own, so its default route sends the packet to the firewall's internal port.",
+    "The firewall checks its policies. Internal_to_DMZ allows HTTP, so it forwards the packet out of its DMZ port.",
+    "The packet crosses the switch on the DMZ VLAN to the hypervisor, where the web server VM answers.",
+    "The reply takes the same path back through the firewall to the laptop."
    ],
    "hit": {
     "laptop": "use",
     "core": "use",
-    "drawer": "use"
+    "bk": "use",
+    "hv": "use"
    },
-   "why": "Static IPs, DHCP and switching working together. The firewall is not involved because the traffic never leaves the data network."
+   "why": "Every packet between your internal networks and the DMZ passes a firewall policy. That is the point of a DMZ."
+  },
+  {
+   "id": "inbound",
+   "name": "Outside visitor opens the web page (port forward)",
+   "layer": "Layer 3–7 · VIP and inbound policy",
+   "route": [
+    "wan",
+    "fw",
+    "bk",
+    "core",
+    "hv",
+    "core",
+    "bk",
+    "fw",
+    "wan"
+   ],
+   "steps": [
+    "A laptop on the ISP router asks for http://10.R.200.2, the firewall's WAN address.",
+    "The firewall's VIP-HTTP maps port 80 on its WAN address to the web server, 10.R.40.10.",
+    "Allow_Inbound_Services lets the request through to the DMZ, and nowhere else.",
+    "The web server VM answers, and the reply goes back out through the firewall."
+   ],
+   "hit": {
+    "wan": "use",
+    "fw": "use",
+    "bk": "use",
+    "core": "use",
+    "hv": "use"
+   },
+   "why": "How a real company publishes one server to the internet without exposing anything behind it."
   },
   {
    "id": "out",
-   "name": "Reach the Internet (outbound NAT)",
-   "layer": "Layer 3 \u00b7 routing + NAT",
+   "name": "Reach the internet (outbound NAT)",
+   "layer": "Layer 3 · routing + NAT",
    "route": [
     "laptop",
     "core",
+    "bk",
     "fw",
     "wan"
    ],
    "steps": [
     "The laptop sends a packet to an outside address. Its default gateway is the switch.",
-    "The core switch's default route points to the firewall's LAN address, so it forwards the packet there.",
-    "The firewall matches the packet against Outbound_General_Access, then NAT replaces the private source with the WAN address.",
-    "The packet leaves the WAN port toward the simulated ISP. Nothing answers because 10.0.200.1 is not a live device."
+    "The core switch's default route points to the firewall's internal address, so it forwards the packet there.",
+    "The firewall matches Outbound_General_Access, then NAT replaces the private source address with its WAN address, 10.R.200.2.",
+    "The packet leaves the WAN port for the ISP router at 10.R.200.1, which plays the internet."
    ],
    "hit": {
     "laptop": "use",
     "core": "use",
+    "bk": "use",
     "fw": "use",
     "wan": "use"
    },
    "why": "Default routes, firewall policy and NAT, step by step. If a hop fails, you can see which layer to check."
   },
   {
+   "id": "ftp",
+   "name": "Log in to the FTP server (DMZ)",
+   "layer": "Layer 7 · FTP, cleartext",
+   "route": [
+    "laptop",
+    "core",
+    "bk",
+    "core",
+    "hv",
+    "nas",
+    "hv",
+    "core",
+    "bk",
+    "core",
+    "laptop"
+   ],
+   "steps": [
+    "The laptop connects to the FTP server VM at 10.R.40.11 and sends its username and password.",
+    "The packets go through the firewall, because the FTP server is in the DMZ. Internal_to_DMZ allows FTP.",
+    "The VM runs on the hypervisor host. Its disk is on the NAS, so reading the file list touches storage too.",
+    "The listing comes back. The login worked, and every character travelled in plain text."
+   ],
+   "hit": {
+    "laptop": "use",
+    "core": "use",
+    "bk": "use",
+    "hv": "use",
+    "nas": "use"
+   },
+   "why": "In Cyber Hub 07 you capture this login and find the password in plain text."
+  },
+  {
    "id": "nfs",
    "name": "VM disk read/write over NFS",
-   "layer": "Layer 4\u20137 \u00b7 NFS on the storage VLAN",
+   "layer": "Layer 4–7 · NFS on the storage VLAN",
    "route": [
     "hv",
     "core",
@@ -762,7 +825,7 @@
   {
    "id": "mgmt",
    "name": "Manage Proxmox from a laptop",
-   "layer": "Layer 2\u20137 \u00b7 HTTPS to :8006",
+   "layer": "Layer 2–7 · HTTPS to :8006",
    "route": [
     "laptop",
     "core",
@@ -781,39 +844,12 @@
     "core": "use",
     "hv": "use"
    },
-   "why": "The Native VLAN rule from Goal 3: lose the management path to the hypervisor and you lose the host."
-  },
-  {
-   "id": "ftp",
-   "name": "Log in to the FTP server",
-   "layer": "Layer 7 \u00b7 FTP, cleartext",
-   "route": [
-    "laptop",
-    "core",
-    "hv",
-    "nas",
-    "hv",
-    "core",
-    "laptop"
-   ],
-   "steps": [
-    "The laptop connects to the Ubuntu-FTP virtual machine and sends USER and PASS.",
-    "The switch forwards the frames. The firewall is skipped because both ends are inside.",
-    "The VM runs on the hypervisor host. Its disk is on the NAS, so reading the file list touches storage too.",
-    "The listing comes back. The login worked, and every character travelled in plain text."
-   ],
-   "hit": {
-    "laptop": "use",
-    "core": "use",
-    "hv": "use",
-    "nas": "use"
-   },
-   "why": "A normal FTP session. The next demo (attack) shows what anyone watching the wire can see."
+   "why": "The native VLAN rule from Cyber Hub 04: lose the management path to the hypervisor and you lose the host."
   },
   {
    "id": "kvmflow",
    "name": "Local console on a server",
-   "layer": "Physical \u00b7 keyboard, video, mouse",
+   "layer": "Physical · keyboard, video, mouse",
    "route": [
     "kvm",
     "hv",
@@ -836,7 +872,7 @@
    "id": "ftpsniff",
    "kind": "attack",
    "name": "Sniffing a cleartext FTP password",
-   "goal": "Goal 6 \u00b7 Task 7",
+   "goal": "Goal 6 · Task 7",
    "summary": "Anyone who can see the traffic can read an FTP login.",
    "steps": [
     {
@@ -907,84 +943,10 @@
    ]
   },
   {
-   "id": "vulnpi",
-   "kind": "attack",
-   "name": "Backdoor on the vulnerable Pi",
-   "goal": "Goal 6 \u00b7 Task 8, Goal 7",
-   "summary": "A web page that runs commands gives remote code execution.",
-   "steps": [
-    {
-     "title": "Asset discovery",
-     "text": "The Pi is found on the Data network by asking the switch which address it handed out by DHCP.",
-     "route": [
-      "attacker",
-      "core",
-      "drawer"
-     ],
-     "hit": {},
-     "watch": {
-      "core": 1,
-      "drawer": 1
-     },
-     "focus": "drawer"
-    },
-    {
-     "title": "Hidden page",
-     "text": "VULN-PI runs a web server with a backdoor page that takes a command in the URL and runs it on the server.",
-     "route": [
-      "attacker",
-      "core",
-      "drawer"
-     ],
-     "hit": {
-      "drawer": 1
-     },
-     "watch": {
-      "core": 1
-     },
-     "focus": "drawer"
-    },
-    {
-     "title": "Code runs",
-     "text": "The command runs as the web-server user. A harmless test command such as id proves the attacker controls the machine.",
-     "route": [],
-     "hit": {
-      "drawer": 1
-     },
-     "watch": {},
-     "focus": "drawer"
-    },
-    {
-     "title": "Lateral movement risk",
-     "text": "From this foothold an attacker could probe the rest of the Data network. The switch and the firewall policy decide how far they get.",
-     "route": [
-      "drawer",
-      "core",
-      "hv"
-     ],
-     "hit": {
-      "drawer": 1
-     },
-     "watch": {
-      "core": 1,
-      "hv": 1,
-      "fw": 1
-     },
-     "focus": "core"
-    }
-   ],
-   "defend": [
-    "Patch or remove vulnerable web software",
-    "Never leave a web shell on a server",
-    "Limit lateral movement with VLANs and firewall rules",
-    "Detect unusual requests (IDS, Greenbone scans)"
-   ]
-  },
-  {
    "id": "recon",
    "kind": "attack",
    "name": "Ping sweep and vulnerability scan",
-   "goal": "Goal 7 \u00b7 Tasks 3\u20134",
+   "goal": "Goal 7 · Tasks 3–4",
    "summary": "Mapping a network before attacking it.",
    "steps": [
     {
@@ -1055,7 +1017,7 @@
    "id": "mgmtsniff",
    "kind": "attack",
    "name": "Sniffing Telnet / HTTP management",
-   "goal": "Goal 3 \u00b7 Task 2",
+   "goal": "Goal 3 · Task 2",
    "summary": "Admin passwords sent in cleartext can be captured.",
    "steps": [
     {
@@ -1115,7 +1077,7 @@
    "id": "usb",
    "kind": "attack",
    "name": "Rogue USB device (HID attack)",
-   "goal": "Goal 8 \u00b7 Physical security",
+   "goal": "Goal 8 · Physical security",
    "summary": "A USB device that pretends to be a keyboard. Theory only: the lab forbids plugging these in.",
    "steps": [
     {
@@ -1170,7 +1132,7 @@
    "id": "inbound",
    "kind": "attack",
    "name": "Probing the exposed services (VIPs)",
-   "goal": "Goal 2 \u00b7 Tasks 12\u201313",
+   "goal": "Goal 2 · Tasks 12–13",
    "summary": "Port forwarding makes inside servers reachable from outside.",
    "steps": [
     {
@@ -1301,7 +1263,7 @@
    "id": "vlan",
    "kind": "outage",
    "name": "Native VLAN mismatch",
-   "goal": "Goal 3 \u00b7 Task 7",
+   "goal": "Goal 3 · Task 7",
    "summary": "One setting on a trunk cuts off the hypervisor.",
    "steps": [
     {
@@ -1344,7 +1306,7 @@
     },
     {
      "title": "Fix it bottom-up",
-     "text": "Check Layer 1 link lights first, then Layer 2 VLAN and trunk settings, then Layer 3 addresses, then Layer 4\u20137 policy.",
+     "text": "Check Layer 1 link lights first, then Layer 2 VLAN and trunk settings, then Layer 3 addresses, then Layer 4–7 policy.",
      "route": [],
      "hit": {},
      "watch": {
@@ -1369,8 +1331,8 @@
   },
   {
    "id": "wan",
-   "name": "Simulated ISP (WAN)",
-   "note": "10.0.200.1 plays the ISP. It is not a live device and never replies."
+   "name": "The internet side",
+   "note": "Past the ISP router at 10.R.200.1. A laptop plugged into the ISP router stands in for the outside world."
   },
   {
    "id": "attacker",
@@ -1380,19 +1342,19 @@
  ],
  "osi": [
   [
-   "Layer 1 \u00b7 Physical",
+   "Layer 1 · Physical",
    "Check link lights, cable seating and SFP modules."
   ],
   [
-   "Layer 2 \u00b7 Data Link",
+   "Layer 2 · Data Link",
    "Check VLAN assignments, trunk status and the MAC address table."
   ],
   [
-   "Layer 3 \u00b7 Network",
+   "Layer 3 · Network",
    "Check IP and mask, the default gateway and routing tables."
   ],
   [
-   "Layers 4\u20137",
+   "Layers 4–7",
    "Check firewall policies, service status and ports."
   ]
  ]
