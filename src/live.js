@@ -757,7 +757,7 @@ addEventListener("resize", () => { kick(); camAll(true); });
 
 // ---------- events ----------
 let drag = null;
-stage.addEventListener("pointerdown", (e) => { return; drag = { x: e.clientX, y: e.clientY, cx: camT.cx, cy: camT.cy, moved: false }; });
+stage.addEventListener("pointerdown", (e) => { if (e.target.closest(".bub, .hud, #lane, .ctl, #topo")) return; drag = { x: e.clientX, y: e.clientY, cx: camT.cx, cy: camT.cy, moved: false }; });
 addEventListener("pointermove", (e) => {
   if (drag) {
     const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
