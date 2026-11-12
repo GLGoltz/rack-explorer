@@ -2121,13 +2121,17 @@ const pullVec = (id, useTarget) => {
   const a = useTarget ? (S.tgt[id] || 0) : (S.cur[id] || 0);
   return axisVector(P(), [0, PULL * a, SPREAD * ((parseInt(DEVS[id].u, 10) || 1) - 1) * a]);
 };
-function camAll(instant) {
+// One zoom level for the whole explorer: clicks pan the camera, they never zoom it.
+// The width fits the whole rack, so it changes only when the window is resized.
+function rackBox() {
   const p = P(), pts = [];
   for (const c of boxCorners({ x: -92, y: -88, w: 184, d: 176 }, 0, K.TOP_Z + 8)) pts.push(iso(c, p));
-  const e = S.exploded || Object.keys(S.cur).some((k) => S.cur[k] > 0.05) ? 1 : 0;
-  if (e && S.view === "front") for (const c of boxCorners({ x: -92, y: 60, w: 184, d: 10 }, 0, K.TOP_Z)) pts.push(iso([c[0], c[1] + 120, c[2]], p));
-  const b = pts2box(pts);
-  camTo(b.cx, b.cy, fitW(b, 1.1), instant);
+  return pts2box(pts);
+}
+const baseW = () => fitW(rackBox(), 1.1);
+function camAll(instant) {
+  const b = rackBox();
+  camTo(b.cx, b.cy, baseW(), instant);
 }
 function faceBox(id) {
   const a = ANCH[id] && ANCH[id][S.view];
@@ -2140,14 +2144,9 @@ function faceBox(id) {
 }
 function camDev(id, ports, instant) {
   const b = faceBox(id);
-  if (!b) return camAll(instant);
-  if (id === "rack") return camAll(instant);
-  const boost = DEVS[id] && DEVS[id].u && String(DEVS[id].u).length < 4 ? 1 : 1;
-  let w = 470;
-  if (ports) w = Math.max(120, w * 0.42);
-  const pv = [0, 0];
-  const cx = b.cx + (ports ? b.w * 0.18 : 70);
-  camTo(cx, b.cy + (ports ? 0 : 40), w, instant);
+  if (!b || id === "rack") return camAll(instant);
+  if (ports) return camTo(b.cx + b.w * 0.18, b.cy, Math.max(120, 470 * 0.42), instant);
+  camTo(b.cx, b.cy, baseW(), instant);
 }
 function camNode(id) {
   if (DEVS[id]) camDev(id, false);
