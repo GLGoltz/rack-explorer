@@ -1,0 +1,35 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Network Diagram</title><style>{{CSS}}</style></head><body>
+<header class="bar">
+ <div class="brand"><b>Network Diagram</b><small>Cyber Hub</small></div>
+ <label class="company"><span>Company</span><input id="company" placeholder="Your company name" autocomplete="off"></label>
+ <div class="seg" role="tablist" aria-label="View">
+  <button role="tab" id="t-canvas" aria-selected="true">Diagram</button>
+  <button role="tab" id="t-list" aria-selected="false">List</button>
+ </div>
+ <div class="acts">
+  <button id="b-undo" title="Undo (Ctrl+Z)">Undo</button>
+  <button id="b-redo" title="Redo (Ctrl+Shift+Z)">Redo</button>
+  <button id="b-share" class="primary">Copy share link<span class="dot" hidden></span></button>
+  <button id="b-png">Export PNG</button>
+  <div class="menu"><button id="b-more" aria-haspopup="true" aria-expanded="false">More</button>
+   <div class="menu-list" id="more" hidden>
+    <button id="b-json">Download .json backup</button>
+    <button id="b-open">Open .json file</button>
+    <button id="b-print">Print</button>
+    <button id="b-new">Start a new diagram</button>
+   </div></div>
+  <input type="file" id="file" accept=".json,application/json" hidden>
+ </div>
+</header>
+<div class="savebar"><span id="saved" role="status"></span><span class="sep">·</span><span>The share link is your real save. Copy it after each lab and paste it on your Team Log cover page.</span></div>
+<main class="main">
+ <section class="stage" id="v-canvas">
+  <svg id="svg" viewBox="0 0 1500 840" role="application" aria-label="Network diagram. Select a device to edit it."></svg>
+ </section>
+ <section class="list" id="v-list" hidden></section>
+ <aside class="panel" id="panel" aria-label="Editor"></aside>
+</main>
+<div class="toast" id="toast" role="status" hidden></div>
+<div class="modal" id="modal" hidden><div class="card" role="dialog" aria-modal="true" aria-labelledby="m-title"><h2 id="m-title"></h2><div id="m-body"></div><div class="m-acts" id="m-acts"></div></div></div>
+<script>{{JS}}</script></body></html>

@@ -40,3 +40,7 @@ because `live.js` looks for them:
 
 x across the rack, y front (+) to back (-), z up. 1U = 14 units; a device in U n sits at
 z = 12 + (n - 1) × 14. Device fronts are at y = 68; the rack posts' front faces at y = 75.
+
+## Network Diagram app
+
+The `diagram/` folder holds a separate app: see `diagram/README.md`. It is published at `/diagram/`.
