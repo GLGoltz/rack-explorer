@@ -8,7 +8,7 @@
 (() => {
 const SCHEMA = 1;
 const KEY = "cyberhub-diagram";
-const VB = { w: 1500, h: 840 };
+const VB = { w: 1470, h: 760 };
 const SW_PORTS = ["XG1","XG2","XG3","XG4","XG5","XG6","XG7","XG8","XG9","XG10","XG11","XG12","OOB"];
 const FW_IFS = ["wan1", "internal", "dmz", "guest Wi-Fi"];
 const SERVICES = ["ALL", "PING", "HTTP", "HTTPS", "SSH", "FTP", "DNS"];
@@ -18,7 +18,10 @@ const KINDS = {
   pi: "Raspberry Pi", laptop: "Laptop", vm: "Virtual machine", generic: "Device",
 };
 const ENDPOINT = new Set(["hypervisor", "nas", "pi", "laptop", "vm", "generic"]);
-const BOX_W = 210;
+const BOX_W = 250;
+// Every rack has the same devices, so the layout is fixed. Teams add only laptops and virtual machines.
+const FIXED = ["isp", "fw", "sw", "hv", "nas", "lap", "pi", "isplap", "guest"];
+const removable = (d) => d.kind === "vm" || !FIXED.includes(d.id);
 
 const $ = (id) => document.getElementById(id);
 const svg = $("svg"), panel = $("panel"), listView = $("v-list");
@@ -162,15 +165,27 @@ function valueLines(d) {
 const VM_H = 42;
 function boxSize(d) {
   const lines = valueLines(d).length;
-  let h = 38 + lines * 18 + (lines ? 6 : 0);
+  let h = 42 + lines * 19 + (lines ? 8 : 0);
   if (d.kind === "hypervisor") h += vmsOf(d.id).length * (VM_H + 6) + (vmsOf(d.id).length ? 6 : 0);
-  return { w: d.kind === "hypervisor" ? 260 : BOX_W, h: Math.max(h, 48) };
+  return { w: d.kind === "hypervisor" ? 290 : BOX_W, h: Math.max(h, 84) };
 }
 function edgePoint(d, tx, ty) {
   const { w, h } = boxSize(d), cx = d.x + w / 2, cy = d.y + h / 2, dx = tx - cx, dy = ty - cy;
   if (!dx && !dy) return [cx, cy];
   const s = Math.min(Math.abs((w / 2) / (dx || 1e-9)), Math.abs((h / 2) / (dy || 1e-9)));
   return [cx + dx * s, cy + dy * s];
+}
+function layout() {
+  let y = 30;
+  const col = [...["hv", "nas", "pi", "lap"].map(dev).filter(Boolean),
+    ...doc.devices.filter((d) => d.kind !== "vm" && !FIXED.includes(d.id))];
+  for (const d of col) { d.x = 1160; d.y = y; y += boxSize(d).h + 26; }
+  const mid = 330, row = (id, x) => { const d = dev(id); if (d) { d.x = x; d.y = Math.round(mid - boxSize(d).h / 2); } };
+  row("isp", 40); row("fw", 420); row("sw", 790);
+  const low = (id, x) => { const d = dev(id); if (d) { d.x = x; d.y = 590; } };
+  low("isplap", 40); low("guest", 420);
+  VB.h = Math.max(760, y + 10);
+  svg.setAttribute("viewBox", `0 0 ${VB.w} ${VB.h}`);
 }
 const center = (d) => { const { w, h } = boxSize(d); return [d.x + w / 2, d.y + h / 2]; };
 function portLabel(d, port) {
@@ -229,10 +244,10 @@ function drawInto(root, ui) {
       transform: `translate(${d.x},${d.y})`, ...(ui ? { tabindex: 0, role: "button", "aria-label": `${d.name}, ${KINDS[d.kind]}` } : {}) }, gd);
     el("rect", { width: w, height: h, rx: 9, class: "d-box" + (d.kind === "isp" ? " fixed" : "") }, g);
     const lines = valueLines(d), alone = !lines.length && !(d.kind === "hypervisor" && vmsOf(d.id).length);
-    text(g, w / 2, alone ? h / 2 + 6 : 25, "d-name", d.name || KINDS[d.kind], "middle");
-    lines.forEach((s, i) => text(g, w / 2, 46 + i * 18, "d-val", s, "middle"));
+    text(g, w / 2, alone ? h / 2 + 6 : 28, "d-name", d.name || KINDS[d.kind], "middle");
+    lines.forEach((s, i) => text(g, w / 2, 51 + i * 19, "d-val", s, "middle"));
     if (d.kind === "hypervisor") {
-      let y = 38 + lines.length * 18 + (lines.length ? 6 : 0) + 2;
+      let y = 42 + lines.length * 19 + (lines.length ? 8 : 0) + 2;
       for (const v of vmsOf(d.id)) {
         const vg = el("g", { class: "vm" + (ui && sel?.type === "dev" && sel.id === v.id ? " sel" : ""), "data-vm": v.id,
           ...(ui ? { tabindex: 0, role: "button", "aria-label": `${v.name}, virtual machine` } : {}) }, g);
@@ -248,13 +263,14 @@ function drawInto(root, ui) {
   }
 }
 function renderSvg() {
+  layout();
   svg.replaceChildren();
   drawInto(svg, true);
   if (!hasContent()) {
     const g = el("g", { class: "ghint" }, svg);
     ["Drag from the dot on a device's right edge to another device to record a cable.",
       "Select a device to enter its addresses, VLANs, routes and policies.",
-      "Add only what you have built. Update it at the end of every lab."].forEach((s, i) => text(g, 30, 760 + i * 24, "ghint", s));
+      "Record only what you have built. Update it at the end of every lab."].forEach((s, i) => text(g, 40, VB.h - 82 + i * 24, "ghint", s));
   }
 }
 
@@ -271,14 +287,7 @@ svg.addEventListener("pointerdown", (e) => {
   const vmEl = e.target.closest("[data-vm]");
   if (vmEl) { select({ type: "dev", id: vmEl.dataset.vm }); e.stopPropagation(); return; }
   const g = e.target.closest("[data-dev]");
-  if (g) {
-    const d = dev(g.dataset.dev), p = toSvg(e);
-    drag = { mode: "move", id: d.id, dx: p.x - d.x, dy: p.y - d.y, moved: false, g };
-    svg.setPointerCapture(e.pointerId);
-    if (!(sel?.type === "dev" && sel.id === d.id)) select({ type: "dev", id: d.id });
-    drag.g = svg.querySelector(`[data-dev="${d.id}"]`); drag.g?.classList.add("dragging");
-    return;
-  }
+  if (g) { select({ type: "dev", id: g.dataset.dev }); return; }
   const lk = e.target.closest("[data-link]");
   if (lk) { select({ type: "link", id: lk.dataset.link }); return; }
   if (sel) select(null);
@@ -286,13 +295,7 @@ svg.addEventListener("pointerdown", (e) => {
 svg.addEventListener("pointermove", (e) => {
   if (!drag) return;
   const p = toSvg(e);
-  if (drag.mode === "move") {
-    const d = dev(drag.id), { w, h } = boxSize(d);
-    d.x = Math.round(Math.max(0, Math.min(VB.w - w, p.x - drag.dx)));
-    d.y = Math.round(Math.max(0, Math.min(VB.h - h, p.y - drag.dy)));
-    drag.moved = true; renderSvg();
-    svg.querySelector(`[data-dev="${d.id}"]`)?.classList.add("dragging");
-  } else {
+  {
     drag.line.setAttribute("x2", p.x); drag.line.setAttribute("y2", p.y);
     svg.querySelectorAll(".drop").forEach((n) => n.classList.remove("drop"));
     const over = document.elementFromPoint(e.clientX, e.clientY)?.closest("[data-dev]");
@@ -302,7 +305,6 @@ svg.addEventListener("pointermove", (e) => {
 svg.addEventListener("pointerup", (e) => {
   if (!drag) return;
   const dr = drag; drag = null;
-  if (dr.mode === "move") { svg.querySelectorAll(".dragging").forEach((n) => n.classList.remove("dragging")); if (dr.moved) commit(); return; }
   dr.line.remove();
   const over = document.elementFromPoint(e.clientX, e.clientY)?.closest("[data-dev]");
   if (over && over.dataset.dev !== dr.from) addLink(dr.from, over.dataset.dev); else renderSvg();
@@ -314,12 +316,6 @@ svg.addEventListener("keydown", (e) => {
   if (e.key === "Enter" || e.key === " ") {
     e.preventDefault(); select({ type: "dev", id });
     svg.querySelector(g.dataset.vm ? `[data-vm="${id}"]` : `[data-dev="${id}"]`)?.focus(); return;
-  }
-  const mv = { ArrowLeft: [-10, 0], ArrowRight: [10, 0], ArrowUp: [0, -10], ArrowDown: [0, 10] }[e.key];
-  if (mv && g.dataset.dev) {
-    e.preventDefault(); const d = dev(id), { w, h } = boxSize(d);
-    d.x = Math.max(0, Math.min(VB.w - w, d.x + mv[0])); d.y = Math.max(0, Math.min(VB.h - h, d.y + mv[1]));
-    commit(); renderSvg(); svg.querySelector(`[data-dev="${id}"]`)?.focus();
   }
 });
 function addLink(a, b) {
@@ -401,12 +397,12 @@ function rows(arr, cols, make, label, rerender) {
 // ------------------------------------------------------------------ editors
 function editor(d, rerender) {
   const out = [];
-  out.push(field("Name", inp(d, "name", { label: "Name" })));
+  out.push(field("Name", inp(d, "name", { label: "Name", ph: "Device name" })));
   if (ENDPOINT.has(d.kind)) {
-    out.push(h("div", { class: "row2" }, field("Address", inp(d, "address", { kind: "ip", label: "Address" })),
+    out.push(h("div", { class: "row2" }, field("Address", inp(d, "address", { kind: "ip", ph: "a.b.c.d", label: "Address" })),
       field("Mask", inp(d, "mask", { kind: "mask", ph: "/nn", label: "Mask" }))));
-    out.push(field("Gateway", inp(d, "gateway", { kind: "ip", label: "Gateway" })));
-    if (d.kind === "vm") out.push(field("VLAN tag (blank means untagged)", inp(d, "vlanTag", { kind: "num", label: "VLAN tag" })));
+    out.push(field("Gateway", inp(d, "gateway", { kind: "ip", ph: "a.b.c.d", label: "Gateway" })));
+    if (d.kind === "vm") out.push(field("VLAN tag (blank means untagged)", inp(d, "vlanTag", { kind: "num", ph: "none", label: "VLAN tag" })));
     out.push(chk(d, "dhcp", "Gets its address by DHCP"));
     if (d.kind === "vm") {
       const hosts = doc.devices.filter((x) => x.kind === "hypervisor");
@@ -421,12 +417,12 @@ function editor(d, rerender) {
       out.push(h("button", { class: "small", onclick: () => addVM(d.id) }, "Add a virtual machine"));
     }
   }
-  if (d.kind === "isp") out.push(h("div", { class: "row2" }, field("Address", inp(d, "address", { kind: "ip", label: "Address" })),
+  if (d.kind === "isp") out.push(h("div", { class: "row2" }, field("Address", inp(d, "address", { kind: "ip", ph: "a.b.c.d", label: "Address" })),
     field("Mask", inp(d, "mask", { kind: "mask", ph: "/nn", label: "Mask" }))));
   if (d.kind === "switch") {
     out.push(h("div", { class: "sec" }, "VLANs"), ...rows(d.vlans, [{ key: "id", label: "ID", kind: "num", w: "30%" }, { key: "name", label: "Name" }], () => ({ id: "", name: "" }), "VLAN", rerender));
-    out.push(h("div", { class: "sec" }, "VLAN interfaces (SVIs)"), ...rows(d.svis, [{ key: "vlan", label: "VLAN", kind: "num", w: "20%" }, { key: "address", label: "Address", kind: "ip" }, { key: "mask", label: "Mask", kind: "mask", w: "20%", ph: "/nn" }], () => ({ vlan: "", address: "", mask: "" }), "SVI", rerender));
-    out.push(h("div", { class: "sec" }, "Static routes"), ...rows(d.routes, [{ key: "dest", label: "Destination", kind: "cidr" }, { key: "nextHop", label: "Next hop", kind: "ip" }], () => ({ dest: "", nextHop: "" }), "route", rerender));
+    out.push(h("div", { class: "sec" }, "VLAN interfaces (SVIs)"), ...rows(d.svis, [{ key: "vlan", label: "VLAN", kind: "num", w: "20%" }, { key: "address", label: "Address", kind: "ip", ph: "a.b.c.d" }, { key: "mask", label: "Mask", kind: "mask", w: "20%", ph: "/nn" }], () => ({ vlan: "", address: "", mask: "" }), "SVI", rerender));
+    out.push(h("div", { class: "sec" }, "Static routes"), ...rows(d.routes, [{ key: "dest", label: "Destination", kind: "cidr", ph: "a.b.c.d/nn" }, { key: "nextHop", label: "Next hop", kind: "ip", ph: "a.b.c.d" }], () => ({ dest: "", nextHop: "" }), "route", rerender));
     out.push(h("div", { class: "sec" }, "Ports"));
     out.push(h("table", { class: "t" }, h("thead", {}, h("tr", {}, ["Port", "Mode", "Untagged", "Tagged", "Off"].map((c) => h("th", {}, c)))),
       h("tbody", {}, d.ports.map((p) => h("tr", {}, h("td", { class: "n" }, p.name),
@@ -437,27 +433,27 @@ function editor(d, rerender) {
           onchange: (e) => { p.shutdown = e.target.checked; commit(); renderSvg(); } })))))));
     // mode changes show or hide the tagged column
     out.at(-1).querySelectorAll("select").forEach((s) => s.addEventListener("change", rerender));
-    out.push(h("div", { class: "sec" }, "DHCP pools"), ...rows(d.dhcpPools, [{ key: "vlan", label: "VLAN", kind: "num", w: "16%" }, { key: "start", label: "Start", kind: "ip" }, { key: "end", label: "End", kind: "ip" }, { key: "router", label: "Router", kind: "ip" }], () => ({ vlan: "", start: "", end: "", router: "" }), "pool", rerender));
+    out.push(h("div", { class: "sec" }, "DHCP pools"), ...rows(d.dhcpPools, [{ key: "vlan", label: "VLAN", kind: "num", w: "16%" }, { key: "start", label: "Start", kind: "ip", ph: "a.b.c.d" }, { key: "end", label: "End", kind: "ip", ph: "a.b.c.d" }, { key: "router", label: "Router", kind: "ip", ph: "a.b.c.d" }], () => ({ vlan: "", start: "", end: "", router: "" }), "pool", rerender));
   }
   if (d.kind === "firewall") {
     out.push(h("div", { class: "sec" }, "Interfaces"));
     for (const i of d.interfaces) {
       out.push(h("div", { class: "card-b" }, h("h3", {}, i.name),
-        h("div", { class: "row2" }, field("Address", inp(i, "address", { kind: "ip", label: `${i.name} address` })),
+        h("div", { class: "row2" }, field("Address", inp(i, "address", { kind: "ip", ph: "a.b.c.d", label: `${i.name} address` })),
           field("Mask", inp(i, "mask", { kind: "mask", ph: "/nn", label: `${i.name} mask` }))),
         i.name === "guest Wi-Fi" ? field("SSID", inp(i, "ssid", { label: "SSID" })) : null,
         h("span", { class: "f" }, h("span", {}, "Administrative access")), multi(i, "access", ACCESS)));
     }
-    out.push(h("div", { class: "sec" }, "Static routes"), ...rows(d.routes, [{ key: "dest", label: "Destination", kind: "cidr" }, { key: "gateway", label: "Gateway", kind: "ip" },
+    out.push(h("div", { class: "sec" }, "Static routes"), ...rows(d.routes, [{ key: "dest", label: "Destination", kind: "cidr", ph: "a.b.c.d/nn" }, { key: "gateway", label: "Gateway", kind: "ip", ph: "a.b.c.d" },
       { key: "interface", label: "Interface", w: "28%", render: (r) => selectBox(r, "interface", FW_IFS, "Route interface", "—") }], () => ({ dest: "", gateway: "", interface: "" }), "route", rerender));
-    out.push(h("div", { class: "sec" }, "Virtual IPs (port forwards)"), ...rows(d.vips, [{ key: "name", label: "Name" }, { key: "external", label: "External", kind: "ip" }, { key: "port", label: "Port", kind: "num", w: "16%" }, { key: "mapped", label: "Mapped to", kind: "ip" }], () => ({ name: "", external: "", port: "", mapped: "" }), "VIP", rerender));
+    out.push(h("div", { class: "sec" }, "Virtual IPs (port forwards)"), ...rows(d.vips, [{ key: "name", label: "Name" }, { key: "external", label: "External", kind: "ip", ph: "a.b.c.d" }, { key: "port", label: "Port", kind: "num", w: "16%" }, { key: "mapped", label: "Mapped to", kind: "ip", ph: "a.b.c.d" }], () => ({ name: "", external: "", port: "", mapped: "" }), "VIP", rerender));
     out.push(h("div", { class: "sec" }, "Policies"));
     d.policies.forEach((p, n) => {
       out.push(h("div", { class: "card-b" },
         h("h3", {}, h("span", {}, `Policy ${n + 1}`), h("button", { class: "small danger", onclick: () => { d.policies.splice(n, 1); commit(); renderSvg(); rerender(); } }, "Remove")),
         field("Name", inp(p, "name", { label: `Policy ${n + 1} name` })),
         h("div", { class: "row2" }, field("From", selectBox(p, "from", FW_IFS, "From interface", "—")), field("To", selectBox(p, "to", FW_IFS, "To interface", "—"))),
-        h("div", { class: "row2" }, field("Source (blank is any)", inp(p, "source", { kind: "cidr", label: "Source" })), field("Destination (blank is any)", inp(p, "dest", { kind: "cidr", label: "Destination" }))),
+        h("div", { class: "row2" }, field("Source (blank is any)", inp(p, "source", { kind: "cidr", ph: "any", label: "Source" })), field("Destination (blank is any)", inp(p, "dest", { kind: "cidr", ph: "any", label: "Destination" }))),
         h("span", { class: "f" }, h("span", {}, "Services")), multi(p, "services", SERVICES),
         h("div", { class: "checks" }, chk(p, "nat", "NAT"), chk(p, "log", "Logging"))));
     });
@@ -486,8 +482,7 @@ function addVM(hostId) {
   setTimeout(() => panel.querySelector("input")?.select(), 0);
 }
 function addDevice(kind) {
-  const n = doc.devices.filter((d) => d.kind !== "vm").length;
-  const d = { id: newId("d"), kind, name: kind === "laptop" ? "Laptop" : "New device", x: 560 + (n % 4) * 30, y: 60 + (n % 6) * 30, ...ep() };
+  const d = { id: newId("d"), kind, name: "Laptop " + (doc.devices.filter((x) => x.kind === "laptop").length + 1), x: 0, y: 0, ...ep() };
   doc.devices.push(d); commit(); select({ type: "dev", id: d.id });
   setTimeout(() => panel.querySelector("input")?.select(), 0);
 }
@@ -510,7 +505,7 @@ function renderPanel() {
       h("p", {}, "Record what your team has built on the rack: every cable, address, VLAN, route and policy. Update it at the end of every lab."),
       h("p", {}, "Select a device to edit it. To record a cable, drag from the dot on a device's right edge to another device."),
       h("div", { class: "sec" }, "Add"),
-      h("div", { class: "add" }, h("button", { onclick: () => addVM() }, "Virtual machine"), h("button", { onclick: () => addDevice("laptop") }, "Laptop"), h("button", { onclick: () => addDevice("generic") }, "Other device")),
+      h("div", { class: "add" }, h("button", { onclick: () => addVM() }, "Virtual machine"), h("button", { onclick: () => addDevice("laptop") }, "Laptop")),
       h("div", { class: "sec" }, "Summary"),
       h("p", { class: "muted" }, `${doc.devices.filter((d) => d.kind !== "vm").length} devices, ${doc.devices.filter((d) => d.kind === "vm").length} virtual machines, ${doc.links.length} cables.`));
   } else if (sel.type === "dev") {
@@ -518,7 +513,7 @@ function renderPanel() {
     kids.push(...editor(s, renderPanel));
     kids.push(h("div", { class: "foot" },
       s.kind !== "vm" ? h("button", { onclick: () => { const g = svg.querySelector(`[data-dev="${s.id}"] .handle`); toast("Drag from the dot on its right edge to another device, or use List view."); g?.focus?.(); } }, "How do I connect it?") : null,
-      h("button", { class: "danger", onclick: () => removeDevice(s) }, "Delete " + (s.kind === "vm" ? "VM" : "device"))));
+      removable(s) ? h("button", { class: "danger", onclick: () => removeDevice(s) }, "Delete " + (s.kind === "vm" ? "VM" : "laptop")) : null));
   } else {
     kids.push(h("h2", {}, "Cable"), h("p", { class: "kind" }, `${dev(s.a.device)?.name} to ${dev(s.b.device)?.name}`));
     kids.push(...linkEditor(s));
@@ -534,7 +529,8 @@ function renderList() {
   const cards = [];
   const real = doc.devices.filter((d) => d.kind !== "vm");
   for (const d of real) {
-    cards.push(h("div", { class: "card-b" }, h("h3", {}, h("span", {}, d.name), h("span", { class: "muted", style: "font-weight:400;font-size:12px" }, KINDS[d.kind])), ...editor(d, renderList)));
+    cards.push(h("div", { class: "card-b" }, h("h3", {}, h("span", {}, d.name), h("span", { class: "muted", style: "font-weight:400;font-size:12px" }, KINDS[d.kind])), ...editor(d, renderList),
+      removable(d) ? h("button", { class: "small danger", onclick: () => removeDevice(d) }, "Delete laptop") : null));
     for (const v of vmsOf(d.id)) cards.push(h("div", { class: "card-b" }, h("h3", {}, h("span", {}, v.name), h("span", { class: "muted", style: "font-weight:400;font-size:12px" }, "VM on " + d.name)), ...editor(v, renderList),
       h("button", { class: "small danger", onclick: () => removeDevice(v) }, "Delete VM")));
   }
@@ -552,7 +548,7 @@ function renderList() {
     h("button", { class: "small", onclick: () => { if (real.length < 2) return; doc.links.push({ id: newId("l"), a: { device: real[0].id, port: "" }, b: { device: real[1].id, port: "" } }); commit(); renderSvg(); renderList(); } }, "Add cable"));
   listView.replaceChildren(h("h2", {}, "Everything on the diagram"),
     h("p", { class: "muted" }, "The same information as the diagram, as forms. Changes here show on the diagram right away."),
-    h("div", { class: "add" }, h("button", { class: "small", onclick: () => { addVM(); setView("list"); } }, "Add a virtual machine"), h("button", { class: "small", onclick: () => { addDevice("laptop"); setView("list"); } }, "Add a laptop"), h("button", { class: "small", onclick: () => { addDevice("generic"); setView("list"); } }, "Add another device")),
+    h("div", { class: "add" }, h("button", { class: "small", onclick: () => { addVM(); setView("list"); } }, "Add a virtual machine"), h("button", { class: "small", onclick: () => { addDevice("laptop"); setView("list"); } }, "Add a laptop")),
     h("div", { class: "grid" }, links, ...cards));
   listView.scrollTop = top;
 }

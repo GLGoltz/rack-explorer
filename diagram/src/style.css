@@ -68,8 +68,8 @@ table.t input,table.t select{padding:4px 5px}
 /* drawing: these rules are also copied into PNG exports */
 .d-box{fill:#fff;stroke:var(--navy);stroke-width:1.5}
 .d-box.fixed{fill:#eef2f7}
-.d-name{font:600 16px system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;fill:#0f172a}
-.d-val{font:13.5px ui-monospace,Consolas,Menlo,monospace;fill:#b45309}
+.d-name{font:600 17px system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;fill:#0f172a}
+.d-val{font:14px ui-monospace,Consolas,Menlo,monospace;fill:#b45309}
 .d-vm{fill:#fff;stroke:#94a3b8;stroke-width:1}
 .d-vmname{font:600 13.5px system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;fill:#0f172a}
 .d-link{stroke:#1e3a8a;stroke-width:2;fill:none}
@@ -78,8 +78,7 @@ table.t input,table.t select{padding:4px 5px}
 .d-title{font:700 20px system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;fill:#003366}
 .d-sub{font:13px system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;fill:#64748b}
 /* interface only, never exported */
-.dev{cursor:grab}
-.dev.dragging{cursor:grabbing}
+.dev{cursor:pointer}
 .dev.sel .d-box{stroke:var(--sel);stroke-width:3}
 .vm.sel .d-vm{stroke:var(--sel);stroke-width:2.5}
 .vm{cursor:pointer}

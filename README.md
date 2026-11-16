@@ -43,4 +43,4 @@ z = 12 + (n - 1) × 14. Device fronts are at y = 68; the rack posts' front faces
 
 ## Network Diagram app
 
-The `diagram/` folder holds a separate app: see `diagram/README.md`. It is published at `/diagram/`.
+The Network Diagram app now lives in its own repository, GLGoltz/network-diagram. `diagram/` here only redirects to it.
