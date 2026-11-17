@@ -588,7 +588,7 @@ function showTip(ev) {
 // ---------- logical topology ----------
 const TOPO = {
   nodes: [
-    { id: "net", x: 400, y: 34, w: 170, t: "The internet", a: "203.0.113.0/24", info: "Everything outside your rack. In the lab, a laptop on an Internet jack stands in for it, and the lab's DNS and time server lives here at 203.0.113.10." },
+    { id: "net", x: 400, y: 34, w: 210, t: "The internet", a: "CyberHub-Internet Wi-Fi", info: "Everything outside your rack. In the lab, a laptop on the instructor rack's Wi-Fi, CyberHub-Internet, stands in for it, and the lab's DNS and time server lives here at 203.0.113.10." },
     { id: "isp", x: 400, y: 112, w: 210, t: "Provider (instructor rack)", a: "10.R.200.1", info: "The instructor rack plays your internet provider. Your rack's wall jack leads to it, and your firewall's default route points here." },
     { id: "fw", x: 400, y: 222, w: 250, t: "Perimeter firewall", a: "wan1 .2 · internal .1 · dmz .1", dev: "bk", info: "The FortiWiFi 60E. Every packet between the internet, the DMZ, the guest network and your internal networks passes one of its policies." },
     { id: "guest", x: 110, y: 222, w: 170, t: "Guest laptops", a: "DHCP 10.R.50.x", info: "Guest Wi-Fi lives on the firewall itself. Its only policy allows HTTP to the web server, so guests cannot reach anything else." },
@@ -615,7 +615,7 @@ const TOPO = {
     ["core", "pve", ""], ["core", "lap", ""], ["core", "nas", ""],
   ],
   policy: {
-    "net-isp": { t: "The internet to your provider", p: ["Every rack's WAN address can be reached from the Internet jacks, as a real one can from the whole internet.", "Nothing from here gets into your network unless your firewall allows it."] },
+    "net-isp": { t: "The internet to your provider", p: ["Every rack's WAN address can be reached from CyberHub-Internet, as a real one can from the whole internet.", "Nothing from here gets into your network unless your firewall allows it."] },
     "isp-fw": { t: "Provider to firewall (wan1)", p: ["Out: Outbound_General_Access (HTTP, HTTPS, DNS) and Outbound_Ping, both with NAT.", "Out: Upstream_Services, so the switch and Proxmox host get time and names from 203.0.113.10.", "In: only the three VIPs, through Allow_Inbound_Services, with NAT off.", "Everything else: blocked by the firewall's implicit deny."] },
     "fw-guest": { t: "Firewall to guest Wi-Fi", p: ["Guest_to_DMZ_Web allows HTTP to the web server.", "Nothing else from guests is allowed, so they never see your internal networks."] },
     "fw-web": { t: "Firewall to the DMZ", p: ["Internal_to_DMZ allows HTTP, SSH and FTP from the Data and Management VLANs.", "Scanner_to_DMZ lets the scanner VM, and only it, test every port.", "In Cyber Hub 12, a temporary Assessor_to_DMZ policy does the same for the visiting assessors' appliance.", "Allow_Inbound_Services allows the VIPs from the internet side.", "DMZ to internal: no policy at all, so a broken-into server cannot reach inside."] },
@@ -645,7 +645,7 @@ const TOPO = {
       { n: "fw", ok: true, x: "The policy allows it, and the firewall sends it out of its DMZ port." },
       { n: "web", ok: false, x: "The VM never answers. Check its VLAN tag (40), that VLAN 40 is tagged on XG3, and that vmbr0 is VLAN-aware." } ] },
     { t: "Outside visitors cannot open the web page", s: [
-      { n: "net", ok: true, x: "A visitor on an Internet jack asks for http://www.rackR.lab, which resolves to your WAN address, 10.R.200.2." },
+      { n: "net", ok: true, x: "A visitor on CyberHub-Internet asks for http://www.rackR.lab, which resolves to your WAN address, 10.R.200.2." },
       { n: "isp", ok: true, x: "Your provider delivers it to the firewall." },
       { n: "fw", ok: false, x: "The firewall drops it. Check that VIP-HTTP maps to 10.R.40.10 and that Allow_Inbound_Services allows it, with NAT off." } ] },
   ],

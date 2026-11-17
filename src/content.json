@@ -609,7 +609,7 @@
     "hv"
    ],
    "steps": [
-    "A laptop on an Internet jack asks for http://www.rackR.lab. The lab's DNS server answers with 10.R.200.2, the firewall's WAN address.",
+    "A laptop on the CyberHub-Internet Wi-Fi asks for http://www.rackR.lab. The lab's DNS server answers with 10.R.200.2, the firewall's WAN address.",
     "Your provider, the instructor rack, delivers the request to the firewall's WAN port.",
     "VIP-HTTP maps port 80 to the web server, 10.R.40.10, and Allow_Inbound_Services lets it into the DMZ and nowhere else.",
     "The web server VM answers, and the reply goes back out through the firewall."
@@ -1207,7 +1207,7 @@
   {
    "id": "wan",
    "name": "The internet side",
-   "note": "Past your provider, the instructor rack, at 10.R.200.1. A laptop on an Internet jack stands in for the outside world."
+   "note": "Past your provider, the instructor rack, at 10.R.200.1. A laptop on the CyberHub-Internet Wi-Fi stands in for the outside world."
   },
   {
    "id": "attacker",
