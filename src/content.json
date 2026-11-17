@@ -13,7 +13,7 @@
    "uses": [
     "Cyber Hub 00: rack and stack a server",
     "Cyber Hub 15: every cable out, rack back to its starting state",
-    "Nightly shutdown ends with an instructor check"
+    "Shutting down at the end of every lab ends with an instructor check"
    ],
    "leds": []
   },
@@ -30,7 +30,7 @@
    "uses": [
     "Cyber Hub 07: install Proxmox on the hypervisor host",
     "Read a server's screen when the network is down",
-    "Nightly shutdown: switch the KVM off, fold it, slide it into the rack"
+    "Shutting down: switch the KVM off, fold it, slide it into the rack"
    ],
    "leds": [
     [
@@ -294,7 +294,7 @@
    "how": "Wall power charges the battery. If the voltage drops or fails, an inverter switches to battery in milliseconds so equipment keeps running long enough for a safe shutdown. It also smooths surges and out-of-range voltage.",
    "uses": [
     "Powers the whole rack through the PDU",
-    "Nightly shutdown: hold its power button, then unplug it from the wall",
+    "Shutting down: hold its power button, then unplug it from the wall",
     "Protects the NAS and servers from unclean power-offs"
    ],
    "leds": [
@@ -1064,7 +1064,7 @@
    "id": "power",
    "kind": "outage",
    "name": "Power failure and safe shutdown",
-   "goal": "Nightly shutdown procedure",
+   "goal": "End-of-lab shutdown procedure",
    "summary": "The UPS buys time for an orderly shutdown.",
    "steps": [
     {
