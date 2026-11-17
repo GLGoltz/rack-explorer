@@ -152,17 +152,15 @@
   {
    "id": "fw",
    "num": 6,
-   "name": "ISP Router",
+   "name": "Spare Firewall",
    "make": "Fortinet",
    "model": "FortiGate 50E",
    "u": "10",
-   "role": "Acts as a mock ISP for your rack",
-   "what": "A compact FortiGate. In this lab it acts as a mock ISP at 10.R.200.1, so the perimeter firewall has a real next hop.",
-   "how": "Its internal side answers at 10.R.200.1. The perimeter firewall's WAN port connects to it, and a laptop plugged into it can test your servers from the internet side.",
+   "role": "Not used. The instructor rack is your provider",
+   "what": "A compact FortiGate that once acted as each rack's mock ISP. Now every rack's firewall connects through its wall jack to the instructor rack, which plays the internet provider, so this unit is not used.",
+   "how": "Leave it in place and powered off. Your firewall's wan1 cables to the wall jack labeled with your rack number instead.",
    "uses": [
-    "Cyber Hub 02: set up as the ISP at 10.R.200.1",
-    "Cyber Hubs 08 and 12: test port forwards from the outside",
-    "Cyber Hub 15: factory reset"
+    "Not used in Cyber Hub 1.0"
    ],
    "leds": [
     [
@@ -403,9 +401,9 @@
   {
    "id": "fw-unit",
    "host": "fw",
-   "name": "FortiGate 50E (ISP router)",
+   "name": "FortiGate 50E (spare)",
    "side": "up",
-   "what": "The ISP router, a desktop-size FortiGate resting on the tray.",
+   "what": "A spare desktop-size FortiGate resting on the tray. Not used in the labs.",
    "how": "Network ports are on the back; the front shows power, status and port LEDs and a USB port."
   },
   {
@@ -522,7 +520,7 @@
    "id": "fw",
    "at": 2,
    "dur": 3,
-   "note": "ISP router boots"
+   "note": "Spare FortiGate boots (not used in the labs)"
   },
   {
    "id": "bk",
@@ -611,8 +609,8 @@
     "hv"
    ],
    "steps": [
-    "A laptop on the ISP router asks for http://10.R.200.2, the firewall's WAN address.",
-    "The ISP router delivers the request to the firewall's WAN port.",
+    "A laptop on an Internet jack asks for http://www.rackR.lab. The lab's DNS server answers with 10.R.200.2, the firewall's WAN address.",
+    "Your provider, the instructor rack, delivers the request to the firewall's WAN port.",
     "VIP-HTTP maps port 80 to the web server, 10.R.40.10, and Allow_Inbound_Services lets it into the DMZ and nowhere else.",
     "The web server VM answers, and the reply goes back out through the firewall."
    ],
@@ -639,7 +637,7 @@
     "The laptop sends a packet to an outside address. Its default gateway is the switch.",
     "The core switch's default route points to the firewall's internal address, so it forwards the packet there.",
     "The firewall matches Outbound_General_Access, then NAT replaces the private source address with its WAN address, 10.R.200.2.",
-    "The packet reaches the ISP router at 10.R.200.1, the mock ISP."
+    "The packet leaves wan1 for your provider, the instructor rack, at 10.R.200.1."
    ],
    "hit": {
     "laptop": "use",
@@ -1209,7 +1207,7 @@
   {
    "id": "wan",
    "name": "The internet side",
-   "note": "Past the ISP router at 10.R.200.1. A laptop plugged into the ISP router stands in for the outside world."
+   "note": "Past your provider, the instructor rack, at 10.R.200.1. A laptop on an Internet jack stands in for the outside world."
   },
   {
    "id": "attacker",
