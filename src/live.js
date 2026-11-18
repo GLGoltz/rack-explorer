@@ -588,7 +588,7 @@ function showTip(ev) {
 // ---------- logical topology ----------
 const TOPO = {
   nodes: [
-    { id: "net", x: 400, y: 34, w: 210, t: "The internet", a: "CyberHub-Internet Wi-Fi", info: "Everything outside your rack. In the lab, a laptop on the instructor rack's Wi-Fi, CyberHub-Internet, stands in for it, and the lab's DNS and time server lives here at 203.0.113.10." },
+    { id: "net", x: 400, y: 34, w: 210, t: "The internet", a: "CyberHub-Internet Wi-Fi", info: "Everything outside your rack. In the lab, a laptop on the instructor rack's Wi-Fi, CyberHub-Internet, stands in for it, and the lab's DNS, time and package repository (repo.lab) live here at 203.0.113.10." },
     { id: "isp", x: 400, y: 112, w: 210, t: "Provider (instructor rack)", a: "10.R.200.1", info: "The instructor rack plays your internet provider. Your rack's wall jack leads to it, and your firewall's default route points here." },
     { id: "fw", x: 400, y: 222, w: 250, t: "Perimeter firewall", a: "wan1 .2 · internal .1 · dmz .1", dev: "bk", info: "The FortiWiFi 60E. Every packet between the internet, the DMZ, the guest network and your internal networks passes one of its policies." },
     { id: "guest", x: 110, y: 222, w: 170, t: "Guest laptops", a: "DHCP 10.R.50.x", info: "Guest Wi-Fi lives on the firewall itself. Its only policy allows HTTP to the web server, so guests cannot reach anything else." },

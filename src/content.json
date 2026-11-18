@@ -473,10 +473,10 @@
   {
    "id": "usb-b",
    "host": "drawer",
-   "name": "USB stick B (transfer)",
+   "name": "USB stick B (backups)",
    "side": "up",
-   "what": "Transfer stick for moving files into and out of the air-gapped rack.",
-   "how": "The only sanctioned way data leaves the lab."
+   "what": "Holds your firewall configuration backups. Software comes from your provider's package repository, http://repo.lab.",
+   "how": "Label it with your rack number, and keep it in the drawer."
   },
   {
    "id": "console",
