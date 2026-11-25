@@ -315,7 +315,7 @@ function partsOf(id) { return M.parts.filter((p) => p.host === id); }
 function learnHtml() {
   const id = S.sel;
   if (!id) {
-    const pg = S.page ? `<div class="pagebar"><b>Cyber Hub ${S.page.n}: ${esc(S.page.t)}</b><span>Highlighted: the devices this page uses.</span></div>` : "";
+    const pg = S.page ? `<div class="pagebar"><b>Cyber Hub ${S.page.n}: ${esc(S.page.t)}</b><span>The highlighted devices are the ones this page uses.</span></div>` : "";
     return pg + `<div class="intro"><h3>Cyber Hub · Your lab rack</h3>
 <p>This is the rack your team works on, drawn to match the room. Hover any label for a quick summary, or click a device to see it on its own and read its lights.</p>
 <ul class="how"><li><b>Click a device</b> to slide it out and see it on its own.</li><li><b>Power on</b> to watch the boot order and the lights come up.</li><li><b>Traffic</b> shows how a request moves between devices.</li><li><b>Topology</b> shows how the networks connect.</li></ul>

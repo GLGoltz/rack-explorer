@@ -30,7 +30,7 @@
    "uses": [
     "Cyber Hub 07: install Proxmox on the hypervisor host",
     "Read a server's screen when the network is down",
-    "Shutting down: switch the KVM off, fold it, slide it into the rack"
+    "When shutting down, switch the KVM off, fold it, and slide it into the rack."
    ],
    "leds": [
     [
@@ -47,7 +47,7 @@
    "model": "PowerEdge R420",
    "u": "18",
    "role": "Not used in Cyber Hub",
-   "what": "A 1U, two-socket Intel Xeon server from Dell's 12th generation. Hot-swap drive bays and an LCD status panel are on the front; two power supplies, iDRAC and gigabit NICs are at the back.",
+   "what": "A 1U, two-socket Intel Xeon server from Dell's 12th generation. The hot-swap drive bays and LCD status panel are on the front, and the two power supplies, iDRAC and gigabit NICs are at the back.",
    "how": "Two redundant power supplies share the load, so one can fail without a shutdown. The iDRAC port is a tiny separate computer that lets an admin power the server on or off and see its screen over the network, even when the main system is off.",
    "uses": [
     "Not used in Cyber Hub. It stays in the rack."
@@ -190,7 +190,7 @@
    "u": "8",
    "role": "Your firewall between the lab and the internet. The Netgate beside it is retired.",
    "what": "A rack tray holding a Fortinet FortiWiFi 60E, a FortiGate with built-in Wi-Fi, and a retired Netgate SG-3100.",
-   "how": "Every packet is compared with policies from top to bottom: source, destination, service, action. The first match wins and the default is deny. NAT swaps private addresses for the WAN address, Virtual IPs (VIPs) forward chosen outside ports to DMZ servers, and static routes tell it where the internal VLANs live. Its Wi-Fi radio serves the guest network.",
+   "how": "Every packet is checked against the policies from top to bottom, by source, destination, service and action. The first match wins and the default is deny. NAT swaps private addresses for the WAN address, Virtual IPs (VIPs) forward chosen outside ports to DMZ servers, and static routes tell it where the internal VLANs live. Its Wi-Fi radio serves the guest network.",
    "uses": [
     "Cyber Hub 02: interfaces, routes and configuration backups",
     "Cyber Hub 03: policies, NAT, port forwards and guest Wi-Fi",
@@ -217,7 +217,7 @@
    "u": "6",
    "role": "Not used in Cyber Hub",
    "what": "A second 1U R440, the same hardware as the hypervisor host.",
-   "how": "Same design: redundant power supplies, iDRAC remote management, two gigabit NICs and front drive carriers. Having two identical servers makes exercises possible that need a second host.",
+   "how": "It has the same design, with redundant power supplies, iDRAC remote management, two gigabit NICs and front drive carriers. Having two identical servers makes room for exercises that need a second host.",
    "uses": [
     "Not used in Cyber Hub. It stays in the rack."
    ],
@@ -277,7 +277,7 @@
    "what": "A sliding 1U shelf with an open top. It stores the Raspberry Pi, cables, adapters and USB sticks.",
    "how": "Telescoping rails let the shelf slide out of the rack so you can reach the contents, then lock back in. Nothing in the drawer is powered while it is stored.",
    "uses": [
-    "Inventory check at the start of every lab: tell the instructor about anything missing",
+    "Check the inventory at the start of every lab, and tell the instructor if anything is missing.",
     "Holds the vulnerable Pi (Cyber Hub 11), the console cable, dongle, KVM cable and two USB sticks"
    ],
    "leds": []
@@ -294,7 +294,7 @@
    "how": "Wall power charges the battery. If the voltage drops or fails, an inverter switches to battery in milliseconds so equipment keeps running long enough for a safe shutdown. It also smooths surges and out-of-range voltage.",
    "uses": [
     "Powers the whole rack through the PDU",
-    "Shutting down: hold its power button, then unplug it from the wall",
+    "When shutting down, hold its power button, then unplug it from the wall.",
     "Protects the NAS and servers from unclean power-offs"
    ],
    "leds": [
@@ -325,7 +325,7 @@
    "u": "rear rail",
    "role": "Power strip along the rear rail",
    "what": "A vertical strip of outlets mounted at the back of the rack. It spreads one power feed to every device.",
-   "how": "One input feeds all outlets in parallel; each device's power cord uses one outlet. It has no battery of its own, so it depends on the UPS.",
+   "how": "One input feeds all of the outlets, and each device's power cord uses one outlet. It has no battery of its own, so it depends on the UPS.",
    "uses": [
     "Distributes power from the UPS to all devices",
     "Keeps power cords tidy along the rail"
@@ -364,7 +364,7 @@
    "name": "Power supply 2",
    "side": "rear",
    "what": "The redundant second power supply.",
-   "how": "Shares the load with supply 1; either one alone can run the server."
+   "how": "It shares the load with supply 1, and either one can run the server on its own."
   },
   {
    "id": "hv-psu1",
@@ -404,7 +404,7 @@
    "name": "FortiGate 50E (spare)",
    "side": "up",
    "what": "A spare desktop-size FortiGate resting on the tray. Not used in the labs.",
-   "how": "Network ports are on the back; the front shows power, status and port LEDs and a USB port."
+   "how": "The network ports are on the back. The front has the power, status and port LEDs and a USB port."
   },
   {
    "id": "sg3100",
@@ -412,7 +412,7 @@
    "name": "Netgate SG-3100 (retired)",
    "side": "up",
    "what": "A retired pfSense appliance. Not used in Cyber Hub.",
-   "how": "ARM-based, runs pfSense. Ports on the back; three status LEDs on the front."
+   "how": "It's ARM-based and runs pfSense. The ports are on the back, and there are three status LEDs on the front."
   },
   {
    "id": "fw60e",
@@ -739,7 +739,7 @@
     "kvm": "use",
     "hv": "use"
    },
-   "why": "Out-of-network access: the reason a rack has a KVM."
+   "why": "This is why a rack has a KVM. It gives you access even when the network is down."
   }
  ],
  "attacks": [
@@ -943,7 +943,7 @@
     }
    ],
    "defend": [
-    "Enable SSH and HTTPS only; disable Telnet and HTTP",
+    "Enable only SSH and HTTPS, and disable Telnet and HTTP.",
     "Use the out-of-band management port",
     "Restrict who can reach management addresses"
    ]
@@ -953,7 +953,7 @@
    "kind": "attack",
    "name": "Rogue USB device (HID attack)",
    "goal": "Goal 8 · Physical security",
-   "summary": "A USB device that pretends to be a keyboard. Theory only: the lab forbids plugging these in.",
+   "summary": "A USB device that pretends to be a keyboard. This is theory only, since plugging these in isn't allowed in the lab.",
    "steps": [
     {
      "title": "Trigger",
